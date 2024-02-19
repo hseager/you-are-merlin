@@ -1,4 +1,3 @@
-use colored::Colorize;
 use std::io;
 
 mod actions;
@@ -11,7 +10,7 @@ fn main() {
     let mut game_state = init_game();
 
     println!("You are Merlin.");
-    println!("You are currently at {}.", game_state.current_location.as_str().bold());
+    println!("You are currently at {}.", game_state.current_location.display_label());
     println!("What would you like to do?");
     println!("Options: {}", game_state.get_actions_list());
 

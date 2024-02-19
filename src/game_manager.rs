@@ -1,12 +1,12 @@
-use colored::{Color, Colorize};
+use colored::Color;
 
 use crate::{
     actions::{Action, ActionItem},
-    location::Location,
+    location::{ get_locations_list, Location, LocationItem},
 };
 
 pub struct GameState {
-    pub current_location: Location,
+    pub current_location: LocationItem,
     pub actions: Vec<ActionItem>,
 }
 
@@ -44,11 +44,11 @@ impl GameState {
                     ActionItem::new(Action::Attack, "Attack", Color::Red),
                     ActionItem::new(Action::CastSpell, "Cast Spell", Color::Magenta)
                 ];
-                println!("You begin to explore {}, but a giant spider appears.", self.current_location.as_str().bold());
+                println!("You begin to explore {}, but a giant spider appears.", self.current_location.display_label());
                 println!("Options: {}", self.get_actions_list());
             },
             Action::Travel => {
-                println!("Where would you like to go?")
+                println!("Where would you like to go? {}", get_locations_list())
             },
             Action::Attack => {
                 println!("You attack with your dagger. You did {} damage.", 3)
@@ -66,8 +66,13 @@ pub fn init_game() -> GameState {
         ActionItem::new(Action::Travel, "Travel", Color::Blue),
     ];
 
+    // TODO start in random place
     GameState {
-        current_location: Location::DarklingWoods,
+        current_location: LocationItem {
+            class: Location::DarklingWoods,
+            label: "Darkling Woods",
+            label_color: Color::BrightMagenta
+        },
         actions: initial_actions,
     }
 }
