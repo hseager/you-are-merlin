@@ -9,24 +9,23 @@ use crate::game_manager::init_game;
 
 fn main() {
     let game_state = init_game();
-    let current_location = game_state.current_location.as_str().bold();
 
     println!("You are Merlin.");
-    println!("You are currently at {current_location}.");
+    println!("You are currently at {}.", game_state.current_location.as_str().bold());
     println!("What would you like to do?");
+    println!("Options: {}", game_state.get_actions_list());
 
-    let options = game_state.get_actions_list();
-    println!("Options: {options}");
+    loop {
+        let mut input = String::new();
 
-    let mut input = String::new();
-
-    io::stdin()
+        io::stdin()
         .read_line(&mut input)
         .expect("Failed to read line");
 
-    if input.trim() == String::from("Travel") {
-        println!("Where would you like to go?");
-    } else {
-        println!("Didn't get that...");
+        if game_state.has_action(&input.trim()) {
+            println!("Where would you like to go?");
+        } else {
+            println!("This isn't the time to use that! Options: {}", game_state.get_actions_list());
+        }
     }
 }

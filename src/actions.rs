@@ -1,5 +1,4 @@
-use colored::Colorize;
-use std::str::FromStr;
+use colored::{Color, Colorize};
 
 pub enum Action {
     Travel,
@@ -9,33 +8,22 @@ pub enum Action {
     CastSpell,
 }
 
-impl Action {
-    pub fn to_string(&self) -> String {
-        match self {
-            Action::Travel => "Travel".blue().to_string(),
-            Action::Explore => "Explore".yellow().to_string(),
-            Action::UseItem => "Use item".purple().to_string(),
-            Action::Attack => "Attack".red().to_string(),
-            Action::CastSpell => "Cast spell".cyan().to_string(),
-        }
-    }
+pub struct ActionItem {
+    pub action: Action,
+    pub label: &'static str,
+    pub label_color: Color,
 }
 
-impl FromStr for Action {
-    type Err = ();
-
-    fn from_str(input: &str) -> Result<Action, Self::Err> {
-        match input {
-            "Travel" => Ok(Action::Travel),
-            "Explore" => Ok(Action::Explore),
-            "Use item" => Ok(Action::UseItem),
-            "Attack" => Ok(Action::Attack),
-            "Cast spell" => Ok(Action::CastSpell),
-            _ => Err(()),
+impl ActionItem {
+    pub fn new(action: Action, label: &'static str, label_color: Color) -> Self {
+        Self {
+            action,
+            label,
+            label_color
         }
     }
-}
 
-pub fn get_map_actions() -> Vec<Action> {
-    vec![Action::Travel, Action::Explore]
+    pub fn display_label(&self) -> String {
+        self.label.color(self.label_color).to_string()
+    }
 }
