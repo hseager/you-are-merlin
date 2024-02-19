@@ -1,4 +1,4 @@
-use colored::Color;
+use colored::{Color, Colorize};
 
 use crate::{
     actions::{Action, ActionItem},
@@ -26,7 +26,7 @@ impl GameState {
     }
 
     // TODO better error handling
-    pub fn find_action(&self, search: &str) -> &ActionItem {
+    fn find_action(&mut self, search: &str) -> &ActionItem {
         match self.actions
             .iter()
             .find(|action| action.label.to_lowercase() == search.to_lowercase()) {
@@ -35,14 +35,17 @@ impl GameState {
             }
     }
 
-    pub fn execute_action(&mut self, action: &Action) -> () {
-        match action {
+    pub fn execute_action(&mut self, search: &str) -> () {
+        let action = self.find_action(search);
+        
+        match action.class {
             Action::Explore => {
                 self.actions = vec![
                     ActionItem::new(Action::Attack, "Attack", Color::Red),
                     ActionItem::new(Action::CastSpell, "Cast Spell", Color::Magenta)
                 ];
-                println!("You begin to explore {}, but a giant spider appears.", self.current_location.as_str());
+                println!("You begin to explore {}, but a giant spider appears.", self.current_location.as_str().bold());
+                println!("Options: {}", self.get_actions_list());
             },
             Action::Travel => {
                 println!("Where would you like to go?")
