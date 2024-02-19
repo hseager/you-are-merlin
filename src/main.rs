@@ -22,8 +22,9 @@ fn main() {
         .read_line(&mut input)
         .expect("Failed to read line");
 
-        if game_state.has_action(&input.trim()) {
-            println!("Where would you like to go?");
+        if game_state.has_action(input.trim()) {
+            let action = game_state.find_action(input.trim());
+            game_state.execute_action(&action.class);
         } else {
             println!("This isn't the time to use that! Options: {}", game_state.get_actions_list());
         }

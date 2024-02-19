@@ -3,21 +3,20 @@ use colored::{Color, Colorize};
 pub enum Action {
     Travel,
     Explore,
-    UseItem,
     Attack,
     CastSpell,
 }
 
 pub struct ActionItem {
-    pub action: Action,
+    pub class: Action,
     pub label: &'static str,
     pub label_color: Color,
 }
 
 impl ActionItem {
-    pub fn new(action: Action, label: &'static str, label_color: Color) -> Self {
+    pub fn new(class: Action, label: &'static str, label_color: Color) -> Self {
         Self {
-            action,
+            class,
             label,
             label_color
         }
