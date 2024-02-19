@@ -35,10 +35,14 @@ impl GameState {
             }
     }
 
-    pub fn execute_action(&self, action: &Action) -> () {
+    pub fn execute_action(&mut self, action: &Action) -> () {
         match action {
             Action::Explore => {
-                println!("You begin to explore {}, but a giant spider appears.", self.current_location.as_str())
+                self.actions = vec![
+                    ActionItem::new(Action::Attack, "Attack", Color::Red),
+                    ActionItem::new(Action::CastSpell, "Cast Spell", Color::Magenta)
+                ];
+                println!("You begin to explore {}, but a giant spider appears.", self.current_location.as_str());
             },
             Action::Travel => {
                 println!("Where would you like to go?")
@@ -57,8 +61,6 @@ pub fn init_game() -> GameState {
     let initial_actions = vec![
         ActionItem::new(Action::Explore, "Explore", Color::Yellow),
         ActionItem::new(Action::Travel, "Travel", Color::Blue),
-        ActionItem::new(Action::Attack, "Attack", Color::Red),
-        ActionItem::new(Action::CastSpell, "Cast Spell", Color::Magenta)
     ];
 
     GameState {
