@@ -7,7 +7,7 @@ pub struct Theme {
 }
 
 // Please ChatGPT, fill in the below Rust struct values with the lore from
-// Merlin
+// Game of Thrones
 pub fn load_theme() -> Theme {
     Theme {
         main_character: "Merlin",
@@ -95,6 +95,7 @@ pub fn load_theme() -> Theme {
     }
 }
 
+#[derive(Clone, Copy)]
 pub struct ThemeLocation {
     pub name: &'static str,
     pub description: &'static str,

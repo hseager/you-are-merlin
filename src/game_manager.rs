@@ -1,5 +1,5 @@
 use crate::{
-    actions::Action,
+    actions::{get_exploring_actions, get_visiting_actions, Action, ActionType},
     // event::{Event, EventItem},
     location::Location,
     player::Player,
@@ -27,7 +27,7 @@ impl GameState {
     }
 
     pub fn get_current_prompt(&self) -> () {
-        let current_location = self.get_current_location();
+        let current_location = &self.get_current_location();
 
         match &self.state {
             State::Visiting => {
@@ -42,47 +42,96 @@ impl GameState {
                 println!("Where would you like to go?")
             }
             State::Exploring => {
-                println!("You are exploring")
+                println!("A Thief appears, what do you do?")
             }
+        }
+
+        println!("{}", &self.get_actions_display_list());
+    }
+
+    pub fn handle_action(&mut self, search: &str) -> () {
+        match &self.find_action(search) {
+            Some(action) => match action.class {
+                ActionType::Travel => {
+                    self.state = State::Travelling;
+                    self.actions = self.get_actions(&self.state);
+                }
+                ActionType::Explore => {
+                    self.state = State::Exploring;
+                    self.actions = self.get_actions(&self.state);
+                }
+                ActionType::MoveToLocation => {
+                    self.state = State::Visiting;
+                    self.actions = self.get_actions(&self.state);
+                    self.current_location = self
+                        .locations
+                        .iter()
+                        .position(|location| location.name.to_lowercase() == search.to_lowercase())
+                        .unwrap();
+                }
+                ActionType::Attack => println!("You attack for {} damage.", 5),
+            },
+            None => println!("This isn't the time to use {}!", search),
         }
     }
 
-    pub fn handle_action(&self, action: &str) -> () {
-        println!("You chose: {}", action);
+    fn find_action(&self, search: &str) -> Option<&Action> {
+        self.actions
+            .iter()
+            .find(|action| action.name.trim().to_lowercase() == search.to_lowercase())
+    }
+
+    fn get_actions(&self, state: &State) -> Vec<Action> {
+        let locations: Vec<Action> = self
+            .locations
+            .map(|location| {
+                Action::new(
+                    ActionType::MoveToLocation,
+                    &location.name,
+                    location.name_color,
+                )
+            })
+            .to_vec();
+
+        match state {
+            State::Visiting => get_visiting_actions(),
+            State::Exploring => get_exploring_actions(),
+            State::Travelling => locations,
+        }
+    }
+
+    fn get_actions_display_list(&self) -> String {
+        self.get_actions(&self.state)
+            .iter()
+            .map(|action| action.display_name())
+            .collect::<Vec<String>>()
+            .join(", ")
     }
 }
 
 pub fn init_game() -> GameState {
     let theme = load_theme();
+    let name = theme.main_character;
+    let locations = build_game_locations(&theme);
 
-    // Create Player
     let player = Player {
-        name: theme.main_character,
+        name,
         life: 100,
         attack: 4,
     };
 
-    // let initial_actions = vec![
-    //     ActionItem::new(Action::Explore, "Explore", Color::Yellow),
-    //     ActionItem::new(Action::Travel, "Travel", Color::Blue),
-    // ];
-
-    // // TODO fix unwrap & clone
-    // let inital_event = EventItem {
-    //     class: Event::Visiting,
-    //     location: get_location("The White Mountains").unwrap().clone(),
-    //     actions: initial_actions,
-    // };
+    let state = State::Visiting;
 
     GameState {
         player,
-        state: State::Visiting,
-        current_location: get_random_array_index(&theme.locations),
-        locations: build_game_world(theme),
+        state,
+        current_location: get_random_array_index(&locations),
+        locations,
+        actions: get_visiting_actions(),
     }
 }
 
-fn build_game_world(theme: Theme) -> [Location; 6] {
+fn build_game_locations(theme: &Theme) -> [Location; 6] {
     theme.locations.map(|theme_location| Location {
         name: theme_location.name,
         description: theme_location.description,
