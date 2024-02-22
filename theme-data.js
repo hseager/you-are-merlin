@@ -1,4 +1,4 @@
-// Please fill in the below object with the lore from
+// Please fill in the below Rust object with the lore from
 // Merlin
 const theme = {
   mainCharacter: "Merlin",
