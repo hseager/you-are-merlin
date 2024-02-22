@@ -43,8 +43,8 @@ const theme = {
     enemies: [
         {
             name: "Morgana's Shadow Assassin",
-            life: "18", // Range 16 - 24
-            attack: "6" // Range 4 - 7
+            life: "18", // Range 12 - 24
+            attack: "6" // Range 4 - 8
         },
         {
             name: "Uther's Undead Knight",
@@ -59,7 +59,7 @@ const theme = {
         {
             name: "The Great Dragon Kilgharrah",
             life: "22",
-            attack: "6"
+            attack: "8"
         },
         {
             name: "The Dorocha",

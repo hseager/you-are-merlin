@@ -1,5 +1,6 @@
 use std::io;
 
+mod theme;
 mod game_manager;
 mod actions;
 mod location;
