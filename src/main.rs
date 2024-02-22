@@ -1,7 +1,7 @@
 use std::io;
 
-// mod actions;
 // mod event;
+mod actions;
 mod game_manager;
 mod location;
 mod player;

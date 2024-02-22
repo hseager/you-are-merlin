@@ -1,5 +1,5 @@
 use crate::{
-    // actions::{Action, ActionItem},
+    actions::Action,
     // event::{Event, EventItem},
     location::Location,
     player::Player,
@@ -12,9 +12,11 @@ pub struct GameState {
     pub state: State,
     pub current_location: usize,
     pub locations: [Location; 6],
+    pub actions: Vec<Action>,
 }
 
 pub enum State {
+    Travelling,
     Visiting,
     Exploring,
 }
@@ -36,8 +38,11 @@ impl GameState {
                 );
                 println!("What would you like to do?")
             }
+            State::Travelling => {
+                println!("Where would you like to go?")
+            }
             State::Exploring => {
-                println!("You are exploring");
+                println!("You are exploring")
             }
         }
     }
