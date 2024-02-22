@@ -60,7 +60,7 @@ pub fn load_theme() -> Theme {
             "The Crystal of Neahtid",
             "The Horn of Cathbhadh",
         ],
-        enemies: [
+        enemies: [ // TODO Maybe move life & attack to building game world
             ThemeEnemy {
                 name: "Morgana's Shadow Assassin",
                 life: 18,  // Range 12 - 24

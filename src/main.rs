@@ -6,6 +6,7 @@ mod game_manager;
 mod location;
 mod player;
 mod theme;
+mod utilities;
 
 use crate::game_manager::init_game;
 

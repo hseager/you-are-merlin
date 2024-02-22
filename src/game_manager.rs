@@ -1,11 +1,10 @@
-use colored::Color;
-
 use crate::{
     // actions::{Action, ActionItem},
     // event::{Event, EventItem},
     location::Location,
     player::Player,
     theme::{load_theme, Theme},
+    utilities::{get_random_array_index, get_random_color},
 };
 
 pub struct GameState {
@@ -15,7 +14,7 @@ pub struct GameState {
     pub locations: [Location; 6],
 }
 
-enum State {
+pub enum State {
     Visiting,
     Exploring,
 }
@@ -73,7 +72,7 @@ pub fn init_game() -> GameState {
     GameState {
         player,
         state: State::Visiting,
-        current_location: 2, // TODO random start position
+        current_location: get_random_array_index(&theme.locations),
         locations: build_game_world(theme),
     }
 }
@@ -82,6 +81,6 @@ fn build_game_world(theme: Theme) -> [Location; 6] {
     theme.locations.map(|theme_location| Location {
         name: theme_location.name,
         description: theme_location.description,
-        name_color: Color::Blue, // TODO random color
+        name_color: get_random_color(),
     })
 }
