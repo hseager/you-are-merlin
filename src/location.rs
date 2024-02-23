@@ -7,6 +7,7 @@ pub struct Location {
     pub name: &'static str,
     pub name_color: Color,
     pub description: &'static str,
+    pub current_encounter: usize,
     pub encounters: Vec<Encounter>,
 }
 

@@ -28,6 +28,7 @@ impl GameState {
 
     pub fn get_current_prompt(&self) -> () {
         let current_location = &self.get_current_location();
+        let current_encounter = &self.get_current_encounter();
 
         match &self.state {
             State::Visiting => {
@@ -38,12 +39,31 @@ impl GameState {
                 );
                 println!("What would you like to do?")
             }
-            State::Travelling => {
-                println!("Where would you like to go?")
-            }
-            State::Exploring => {
-                println!("A Thief appears, what do you do?")
-            }
+            State::Travelling => println!("Where would you like to go?"),
+            State::Exploring => match current_encounter.class {
+                EncounterType::Battle => {
+                    let Enemy { name, life, attack } = current_encounter.enemy;
+
+                    println!(
+                        "A wild {} appears! (life: {}, attack: {})",
+                        name, life, attack
+                    )
+
+                    // let enemy = self
+                    //     .locations
+                    //     .get(0)
+                    //     .unwrap()
+                    //     .encounters
+                    //     .get(0)
+                    //     .unwrap()
+                    //     .enemy;
+
+                    // println!(
+                    //     "A wild {} appears! (life: {}, attack: {})",
+                    //     enemy.name, enemy.life, enemy.attack
+                    // )
+                }
+            },
         }
 
         println!("{}", &self.get_actions_display_list());
@@ -69,7 +89,13 @@ impl GameState {
                         .position(|location| location.name.to_lowercase() == search.to_lowercase())
                         .unwrap();
                 }
-                ActionType::Attack => println!("You attack for {} damage.", 5),
+                ActionType::Attack => {
+                    let current_encounter = &mut self.get_current_encounter_mut();
+
+                    current_encounter.enemy.life -= self.player.attack;
+
+                    println!("You attack for {} damage.", self.player.attack)
+                }
                 ActionType::Run => {
                     self.state = State::Visiting;
                     self.actions = self.get_actions(&self.state);
@@ -112,6 +138,16 @@ impl GameState {
             .collect::<Vec<String>>()
             .join(", ")
     }
+
+    fn get_current_encounter(&self) -> &Encounter {
+        let current_location = &self.get_current_location();
+        &current_location.encounters[current_location.current_encounter]
+    }
+
+    fn get_current_encounter_mut(&mut self) -> &mut Encounter {
+        let current_location = &mut self.locations[self.current_location];
+        &mut current_location.encounters[current_location.current_encounter]
+    }
 }
 
 pub fn init_game() -> GameState {
@@ -141,6 +177,7 @@ fn build_game_locations(theme: &Theme) -> Vec<Location> {
             name: theme_location.name,
             description: theme_location.description,
             name_color: map_text_color(i),
+            current_encounter: 0,
             encounters: build_game_encounters(theme_location),
         })
     }
