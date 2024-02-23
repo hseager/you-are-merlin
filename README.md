@@ -9,6 +9,8 @@ A text adventure game, built with Rust.
 - Inventory/Items
 - Win/Lose conditions
 
+- Review .unwrap and .clone()
+
 ## Dev
 
 - cargo install

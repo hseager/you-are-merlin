@@ -4,14 +4,14 @@ use crate::{
     location::Location,
     player::Player,
     theme::{load_theme, Theme, ThemeLocation},
-    utilities::{get_random_array_index, get_random_color},
+    utilities::{get_random_array_index, map_text_color},
 };
 
 pub struct GameState {
     pub player: Player,
     pub state: State,
     pub current_location: usize,
-    pub locations: [Location; 6],
+    pub locations: Vec<Location>,
     pub actions: Vec<Action>,
 }
 
@@ -88,6 +88,7 @@ impl GameState {
     fn get_actions(&self, state: &State) -> Vec<Action> {
         let locations: Vec<Action> = self
             .locations
+            .iter()
             .map(|location| {
                 Action::new(
                     ActionType::MoveToLocation,
@@ -95,7 +96,7 @@ impl GameState {
                     location.name_color,
                 )
             })
-            .to_vec();
+            .collect();
 
         match state {
             State::Visiting => get_visiting_actions(),
@@ -133,16 +134,20 @@ pub fn init_game() -> GameState {
     }
 }
 
-fn build_game_locations(theme: &Theme) -> [Location; 6] {
-    theme.locations.map(|theme_location| Location {
-        name: theme_location.name,
-        description: theme_location.description,
-        name_color: get_random_color(),
-        encounters: build_game_encounters(theme_location),
-    })
+fn build_game_locations(theme: &Theme) -> Vec<Location> {
+    let mut locations = Vec::new();
+    for (i, theme_location) in theme.locations.iter().enumerate() {
+        locations.push(Location {
+            name: theme_location.name,
+            description: theme_location.description,
+            name_color: map_text_color(i),
+            encounters: build_game_encounters(theme_location),
+        })
+    }
+    locations
 }
 
-fn build_game_encounters(theme_location: ThemeLocation) -> Vec<Encounter> {
+fn build_game_encounters(theme_location: &ThemeLocation) -> Vec<Encounter> {
     theme_location
         .enemies
         .map(|enemy| Encounter {

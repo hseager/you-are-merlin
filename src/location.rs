@@ -2,7 +2,7 @@ use colored::{Color, Colorize};
 
 use crate::encounter::Encounter;
 
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub struct Location {
     pub name: &'static str,
     pub name_color: Color,

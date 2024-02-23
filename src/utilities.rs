@@ -1,14 +1,12 @@
 use colored::Color;
-use rand::seq::SliceRandom;
 use rand::Rng;
 
-pub fn get_random_color() -> Color {
-    let mut rng = rand::thread_rng();
+pub fn map_text_color(index: usize) -> Color {
     let colors = [
-        Color::Red,
+        Color::Blue,
         Color::Green,
         Color::Yellow,
-        Color::Blue,
+        Color::Red,
         Color::Magenta,
         Color::Cyan,
         Color::BrightBlue,
@@ -18,7 +16,7 @@ pub fn get_random_color() -> Color {
         Color::BrightMagenta,
         Color::BrightGreen,
     ];
-    *colors.choose(&mut rng).unwrap()
+    *colors.get(index).unwrap()
 }
 
 pub fn get_random_array_index<T>(array: &[T]) -> usize {
