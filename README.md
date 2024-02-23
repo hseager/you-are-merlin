@@ -4,9 +4,10 @@ A text adventure game, built with Rust.
 
 ## To do
 
-- Event
-  - Location
-  - Actions
+- Battle
+- Quests
+- Inventory/Items
+- Win/Lose conditions
 
 ## Dev
 

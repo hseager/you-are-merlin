@@ -70,6 +70,10 @@ impl GameState {
                         .unwrap();
                 }
                 ActionType::Attack => println!("You attack for {} damage.", 5),
+                ActionType::Run => {
+                    self.state = State::Visiting;
+                    self.actions = self.get_actions(&self.state);
+                }
             },
             None => println!("This isn't the time to use {}!", search),
         }
@@ -120,11 +124,9 @@ pub fn init_game() -> GameState {
         attack: 4,
     };
 
-    let state = State::Visiting;
-
     GameState {
         player,
-        state,
+        state: State::Visiting,
         current_location: get_random_array_index(&locations),
         locations,
         actions: get_visiting_actions(),

@@ -5,6 +5,7 @@ pub enum ActionType {
     Travel,
     Explore,
     Attack,
+    Run,
     MoveToLocation,
 }
 
@@ -36,5 +37,8 @@ pub fn get_visiting_actions() -> Vec<Action> {
     ]
 }
 pub fn get_exploring_actions() -> Vec<Action> {
-    vec![Action::new(ActionType::Attack, "Attack", Color::Red)]
+    vec![
+        Action::new(ActionType::Attack, "Attack", Color::Red),
+        Action::new(ActionType::Run, "Run", Color::Cyan),
+    ]
 }
