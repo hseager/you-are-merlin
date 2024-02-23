@@ -176,5 +176,5 @@ pub struct ThemeLocation {
 pub struct ThemeEnemy {
     pub name: &'static str,
     pub life: i16,
-    pub attack: i8,
+    pub attack: u8,
 }

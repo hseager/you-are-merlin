@@ -1,10 +1,13 @@
 use colored::{Color, Colorize};
 
-#[derive(Copy, Clone)]
+use crate::encounter::Encounter;
+
+#[derive(Clone, Copy)]
 pub struct Location {
     pub name: &'static str,
     pub name_color: Color,
     pub description: &'static str,
+    pub encounters: Vec<Encounter>,
 }
 
 impl Location {

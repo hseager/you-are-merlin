@@ -1,6 +1,7 @@
 use std::io;
 
 mod actions;
+mod encounter;
 mod game_manager;
 mod location;
 mod player;

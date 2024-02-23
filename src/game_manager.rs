@@ -1,9 +1,9 @@
 use crate::{
     actions::{get_exploring_actions, get_visiting_actions, Action, ActionType},
-    // event::{Event, EventItem},
+    encounter::{Encounter, EncounterType, Enemy},
     location::Location,
     player::Player,
-    theme::{load_theme, Theme},
+    theme::{load_theme, Theme, ThemeLocation},
     utilities::{get_random_array_index, get_random_color},
 };
 
@@ -138,5 +138,21 @@ fn build_game_locations(theme: &Theme) -> [Location; 6] {
         name: theme_location.name,
         description: theme_location.description,
         name_color: get_random_color(),
+        encounters: build_game_encounters(theme_location),
     })
+}
+
+fn build_game_encounters(theme_location: ThemeLocation) -> Vec<Encounter> {
+    theme_location
+        .enemies
+        .map(|enemy| Encounter {
+            class: EncounterType::Battle,
+            enemy: Enemy {
+                name: enemy.name,
+                attack: enemy.attack,
+                life: enemy.life,
+            },
+            reward: 2,
+        })
+        .to_vec()
 }
