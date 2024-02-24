@@ -1,5 +1,6 @@
 use crate::{
     actions::{get_exploring_actions, get_visiting_actions, Action, ActionType},
+    battle_manager,
     encounter::{Encounter, EncounterType, Enemy},
     location::Location,
     player::Player,
@@ -26,6 +27,10 @@ impl GameState {
         &self.locations[self.current_location] // TODO check out of bounds
     }
 
+    fn get_current_location_mut(&mut self) -> &mut Location {
+        &mut self.locations[self.current_location] // TODO check out of bounds
+    }
+
     pub fn get_current_prompt(&self) -> () {
         let current_location = &self.get_current_location();
         let current_encounter = &self.get_current_encounter();
@@ -48,20 +53,6 @@ impl GameState {
                         "A wild {} appears! (life: {}, attack: {})",
                         name, life, attack
                     )
-
-                    // let enemy = self
-                    //     .locations
-                    //     .get(0)
-                    //     .unwrap()
-                    //     .encounters
-                    //     .get(0)
-                    //     .unwrap()
-                    //     .enemy;
-
-                    // println!(
-                    //     "A wild {} appears! (life: {}, attack: {})",
-                    //     enemy.name, enemy.life, enemy.attack
-                    // )
                 }
             },
         }
@@ -90,11 +81,10 @@ impl GameState {
                         .unwrap();
                 }
                 ActionType::Attack => {
-                    let current_encounter = &mut self.get_current_encounter_mut();
+                    let player_attack = self.player.attack;
+                    let current_location = self.get_current_location_mut();
 
-                    current_encounter.enemy.life -= self.player.attack;
-
-                    println!("You attack for {} damage.", self.player.attack)
+                    battle_manager::handle_battle(current_location, player_attack);
                 }
                 ActionType::Run => {
                     self.state = State::Visiting;
@@ -142,11 +132,6 @@ impl GameState {
     fn get_current_encounter(&self) -> &Encounter {
         let current_location = &self.get_current_location();
         &current_location.encounters[current_location.current_encounter]
-    }
-
-    fn get_current_encounter_mut(&mut self) -> &mut Encounter {
-        let current_location = &mut self.locations[self.current_location];
-        &mut current_location.encounters[current_location.current_encounter]
     }
 }
 
