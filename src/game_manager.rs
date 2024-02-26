@@ -23,38 +23,37 @@ pub enum State {
 }
 
 impl GameState {
-    fn get_current_location(&self) -> &Location {
-        &self.locations[self.current_location] // TODO check out of bounds
-    }
-
-    fn get_current_location_mut(&mut self) -> &mut Location {
-        &mut self.locations[self.current_location] // TODO check out of bounds
-    }
-
     pub fn get_current_prompt(&self) -> () {
-        let current_location = &self.get_current_location();
-        let current_encounter = &self.get_current_encounter();
-
-        match &self.state {
-            State::Visiting => {
-                println!(
-                    "You are currently visiting {}. {}",
-                    current_location.display_name(),
-                    current_location.description
-                );
-                println!("What would you like to do?")
-            }
-            State::Travelling => println!("Where would you like to go?"),
-            State::Exploring => match current_encounter.class {
-                EncounterType::Battle => {
-                    let Enemy { name, life, attack } = current_encounter.enemy;
-
+        if let Some(location) = self.locations.get(self.current_location) {
+            match &self.state {
+                State::Visiting => {
                     println!(
-                        "A wild {} appears! (life: {}, attack: {})",
-                        name, life, attack
-                    )
+                        "You are currently visiting {}. {}",
+                        location.display_name(),
+                        location.description
+                    );
+                    println!("What would you like to do?")
                 }
-            },
+                State::Travelling => println!("Where would you like to go?"),
+                State::Exploring => {
+                    if let Some(encounter) = location.encounters.get(location.current_encounter) {
+                        match encounter.class {
+                            EncounterType::Battle => {
+                                let Enemy { name, life, attack } = encounter.enemy;
+
+                                println!(
+                                    "A wild {} appears! (life: {}, attack: {})",
+                                    name, life, attack
+                                )
+                            }
+                        }
+                    } else {
+                        println!("Completed encounter");
+                    }
+                }
+            }
+        } else {
+            println!("Couldn't find location.");
         }
 
         println!("{}", &self.get_actions_display_list());
@@ -81,10 +80,9 @@ impl GameState {
                         .unwrap();
                 }
                 ActionType::Attack => {
-                    let player_attack = self.player.attack;
-                    let current_location = self.get_current_location_mut();
+                    let game_state = self;
 
-                    battle_manager::handle_battle(current_location, player_attack);
+                    battle_manager::handle_battle(game_state);
                 }
                 ActionType::Run => {
                     self.state = State::Visiting;
@@ -127,11 +125,6 @@ impl GameState {
             .map(|action| action.display_name())
             .collect::<Vec<String>>()
             .join(", ")
-    }
-
-    fn get_current_encounter(&self) -> &Encounter {
-        let current_location = &self.get_current_location();
-        &current_location.encounters[current_location.current_encounter]
     }
 }
 
