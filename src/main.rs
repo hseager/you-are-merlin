@@ -11,7 +11,7 @@ mod utilities;
 
 use colored::Colorize;
 
-use crate::game_manager::init_game;
+use crate::game_manager::{init_game, State};
 
 fn main() {
     let mut game_state = init_game();
@@ -20,6 +20,11 @@ fn main() {
 
     loop {
         let mut input = String::new();
+
+        if let State::GameOver = game_state.state {
+            print!("Game Over...");
+            break;
+        }
 
         game_state.get_current_prompt();
 

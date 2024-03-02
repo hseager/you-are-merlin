@@ -20,6 +20,7 @@ pub enum State {
     Travelling,
     Visiting,
     Exploring,
+    GameOver,
 }
 
 impl GameState {
@@ -51,6 +52,7 @@ impl GameState {
                         println!("Completed encounter");
                     }
                 }
+                _ => (),
             }
         } else {
             println!("Couldn't find location.");
@@ -87,6 +89,12 @@ impl GameState {
                 ActionType::Run => {
                     self.state = State::Visiting;
                     self.actions = self.get_actions(&self.state);
+
+                    // Reset encounters when running
+                    self.locations
+                        .get_mut(self.current_location)
+                        .unwrap()
+                        .reset_encounters();
                 }
             },
             None => println!("This isn't the time to use {}!", search),
@@ -116,6 +124,7 @@ impl GameState {
             State::Visiting => get_visiting_actions(),
             State::Exploring => get_exploring_actions(),
             State::Travelling => locations,
+            _ => vec![],
         }
     }
 
@@ -136,7 +145,7 @@ pub fn init_game() -> GameState {
     let player = Player {
         name,
         life: 100,
-        attack: 4,
+        attack: 8,
     };
 
     GameState {
