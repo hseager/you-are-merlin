@@ -3,6 +3,7 @@ use std::io;
 mod actions;
 mod battle_manager;
 mod encounter;
+mod enemy;
 mod game_manager;
 mod location;
 mod player;

@@ -1,7 +1,8 @@
 use crate::{
     actions::{get_exploring_actions, get_visiting_actions, Action, ActionType},
     battle_manager,
-    encounter::{Encounter, EncounterType, Enemy},
+    encounter::{Encounter, EncounterType},
+    enemy::Enemy,
     location::Location,
     player::Player,
     theme::{load_theme, Theme, ThemeLocation},
@@ -40,7 +41,9 @@ impl GameState {
                     if let Some(encounter) = location.encounters.get(location.current_encounter) {
                         match encounter.class {
                             EncounterType::Battle => {
-                                let Enemy { name, life, attack } = encounter.enemy;
+                                let Enemy {
+                                    name, life, attack, ..
+                                } = encounter.enemy;
 
                                 println!(
                                     "A wild {} appears! (life: {}, attack: {})",
@@ -181,7 +184,6 @@ fn build_game_encounters(theme_location: &ThemeLocation) -> Vec<Encounter> {
                 attack: enemy.attack,
                 life: enemy.life,
             },
-            reward: 2,
         })
         .to_vec()
 }

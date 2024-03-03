@@ -1,3 +1,5 @@
+use crate::enemy::Enemy;
+
 #[derive(Clone, Copy)]
 pub enum EncounterType {
     Battle,
@@ -7,12 +9,5 @@ pub enum EncounterType {
 pub struct Encounter {
     pub class: EncounterType,
     pub enemy: Enemy,
-    pub reward: u8,
-}
-
-#[derive(Clone, Copy)]
-pub struct Enemy {
-    pub name: &'static str,
-    pub life: i16,
-    pub attack: i16,
+    // pub reward: u8, TODO Rewards
 }
