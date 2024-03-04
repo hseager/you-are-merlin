@@ -1,13 +1,15 @@
 use crate::{
     actions::{get_exploring_actions, get_visiting_actions, Action, ActionType},
     battle_manager,
-    encounter::{Encounter, EncounterType},
+    encounter::EncounterType,
     enemy::Enemy,
     location::Location,
     player::Player,
-    theme::{load_theme, Theme, ThemeLocation},
-    utilities::{get_random_array_index, map_text_color},
+    theme::load_theme,
+    utilities::get_random_array_index,
 };
+
+mod world_builder;
 
 pub struct GameState {
     pub player: Player,
@@ -52,7 +54,7 @@ impl GameState {
                             }
                         }
                     } else {
-                        println!("Completed encounter");
+                        println!("Completed encounters");
                     }
                 }
                 _ => (),
@@ -143,7 +145,7 @@ impl GameState {
 pub fn init_game() -> GameState {
     let theme = load_theme();
     let name = theme.main_character;
-    let locations = build_game_locations(&theme);
+    let locations = world_builder::build_world(&theme);
 
     let player = Player {
         name,
@@ -158,32 +160,4 @@ pub fn init_game() -> GameState {
         locations,
         actions: get_visiting_actions(),
     }
-}
-
-fn build_game_locations(theme: &Theme) -> Vec<Location> {
-    let mut locations = Vec::new();
-    for (i, theme_location) in theme.locations.iter().enumerate() {
-        locations.push(Location {
-            name: theme_location.name,
-            description: theme_location.description,
-            name_color: map_text_color(i),
-            current_encounter: 0,
-            encounters: build_game_encounters(theme_location),
-        })
-    }
-    locations
-}
-
-fn build_game_encounters(theme_location: &ThemeLocation) -> Vec<Encounter> {
-    theme_location
-        .enemies
-        .map(|enemy| Encounter {
-            class: EncounterType::Battle,
-            enemy: Enemy {
-                name: enemy.name,
-                attack: enemy.attack,
-                life: enemy.life,
-            },
-        })
-        .to_vec()
 }
