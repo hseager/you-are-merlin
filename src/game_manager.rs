@@ -148,7 +148,7 @@ pub fn init_game() -> GameState {
     let player = Player {
         name,
         life: 100,
-        attack: 8,
+        attack: 5,
     };
 
     GameState {

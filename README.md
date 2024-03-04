@@ -4,7 +4,8 @@ A text adventure game, built with Rust.
 
 ## To do
 
-- Battle
+- Rest to regen health
+- Rewards (gold) and trade
 - Quests
 - Inventory/Items
 - Win/Lose conditions

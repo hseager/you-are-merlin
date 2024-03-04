@@ -30,13 +30,13 @@ pub fn load_theme() -> Theme {
                     },
                     ThemeEnemy {
                         name: "Enchanted Armor",
-                        life: 25, // Range 15 - 25
-                        attack: 6 // Range 2 - 6
+                        life: 25,
+                        attack: 6
                     },
                     ThemeEnemy {
                         name: "Sir Balin's Shade",
-                        life: 18, // Range 8 - 18
-                        attack: 10 // Range 5 - 10
+                        life: 18,
+                        attack: 10
                     }
                 ]
             },
@@ -47,18 +47,18 @@ pub fn load_theme() -> Theme {
                 enemies: [
                     ThemeEnemy {
                         name: "Rogue Bandit",
-                        life: 15, // Range 8 - 15
-                        attack: 7 // Range 3 - 7
+                        life: 15,
+                        attack: 7
                     },
                     ThemeEnemy {
                         name: "Rowdy Drunkard",
-                        life: 12, // Range 5 - 12
-                        attack: 5 // Range 2 - 5
+                        life: 12,
+                        attack: 5
                     },
                     ThemeEnemy {
                         name: "Tavern Brawler",
-                        life: 18, // Range 10 - 18
-                        attack: 9 // Range 4 - 9
+                        life: 18,
+                        attack: 9
                     }
                 ]
             },
@@ -69,18 +69,18 @@ pub fn load_theme() -> Theme {
                 enemies: [
                     ThemeEnemy {
                         name: "Shadow Spirit",
-                        life: 22, // Range 12 - 22
-                        attack: 8 // Range 3 - 8
+                        life: 22,
+                        attack: 7
                     },
                     ThemeEnemy {
                         name: "Cursed Druid",
-                        life: 20, // Range 10 - 20
-                        attack: 7 // Range 4 - 7
+                        life: 20,
+                        attack: 8
                     },
                     ThemeEnemy {
                         name: "Ancient Treant",
-                        life: 30, // Range 15 - 30
-                        attack: 10 // Range 5 - 10
+                        life: 30,
+                        attack: 10 
                     }
                 ]
             },
@@ -91,19 +91,19 @@ pub fn load_theme() -> Theme {
                 enemies: [
                     ThemeEnemy {
                         name: "Shade Stalker",
-                        life: 18, // Range 10 - 18
-                        attack: 7 // Range 3 - 7
-                    },
-                    ThemeEnemy {
-                        name: "Nightmare Hound",
-                        life: 20, // Range 12 - 20
-                        attack: 8 // Range 4 - 8
+                        life: 18,
+                        attack: 7
                     },
                     ThemeEnemy {
                         name: "Wraith Wisp",
-                        life: 15, // Range 8 - 15
-                        attack: 6 // Range 2 - 6
-                    }
+                        life: 15,
+                        attack: 6
+                    },
+                    ThemeEnemy {
+                        name: "Nightmare Hound",
+                        life: 20,
+                        attack: 8
+                    },
                 ]
             },
             ThemeLocation {
@@ -113,19 +113,19 @@ pub fn load_theme() -> Theme {
                 enemies: [
                     ThemeEnemy {
                         name: "Guardian of the Lake",
-                        life: 25, // Range 15 - 25
-                        attack: 8 // Range 4 - 8
-                    },
-                    ThemeEnemy {
-                        name: "Holy Warden",
-                        life: 30, // Range 20 - 30
-                        attack: 10 // Range 6 - 10
+                        life: 25,
+                        attack: 8
                     },
                     ThemeEnemy {
                         name: "Lady's Sentinel",
-                        life: 20, // Range 10 - 20
-                        attack: 7 // Range 3 - 7
-                    }
+                        life: 20,
+                        attack: 7
+                    },
+                    ThemeEnemy {
+                        name: "Holy Warden",
+                        life: 30,
+                        attack: 10
+                    },
                 ]
             },
             ThemeLocation {
@@ -133,20 +133,20 @@ pub fn load_theme() -> Theme {
                 description: "A mysterious cavern rumored to be the home of a fearsome dragon.",
                 enemies: [
                     ThemeEnemy {
-                        name: "The Great Dragon Kilgharrah",
-                        life: 30, // Range 12 - 30
-                        attack: 10 // Range 3 - 10
-                    },
-                    ThemeEnemy {
                         name: "Shadow Spirit",
-                        life: 22, // Range 12 - 22
-                        attack: 8 // Range 3 - 8
+                        life: 22,
+                        attack: 8
                     },
                     ThemeEnemy {
                         name: "Ancient Treant",
-                        life: 30, // Range 15 - 30
-                        attack: 10 // Range 5 - 10
-                    }
+                        life: 27,
+                        attack: 9
+                    },
+                    ThemeEnemy {
+                        name: "The Great Dragon Kilgharrah",
+                        life: 30,
+                        attack: 10
+                    },
                 ]
             },
         ],

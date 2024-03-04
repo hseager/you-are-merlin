@@ -1,5 +1,7 @@
 use std::{thread::sleep, time::Duration};
 
+use rand::Rng;
+
 use crate::game_manager::{GameState, State};
 
 pub fn handle_battle(game_state: &mut GameState) {
@@ -11,11 +13,13 @@ pub fn handle_battle(game_state: &mut GameState) {
             let enemy = &mut encounter.enemy;
 
             while enemy.life > 0 || player.life > 0 {
-                enemy.life -= player.attack;
+                let player_damage = calculate_damage(player.attack);
+
+                enemy.life -= player_damage;
 
                 println!(
                     "You attack {} for {} damage. (Enemy life: {})",
-                    enemy.name, player.attack, enemy.life
+                    enemy.name, player_damage, enemy.life
                 );
 
                 if enemy.life <= 0 {
@@ -24,10 +28,11 @@ pub fn handle_battle(game_state: &mut GameState) {
 
                 sleep(Duration::from_secs(1));
 
-                player.life -= enemy.attack;
+                let enemy_damage = calculate_damage(enemy.attack);
+                player.life -= enemy_damage;
                 println!(
                     "{} attacks you for {} damage. (Your life: {})",
-                    enemy.name, enemy.attack, player.life
+                    enemy.name, enemy_damage, player.life
                 );
 
                 if player.life <= 0 {
@@ -52,5 +57,18 @@ pub fn handle_battle(game_state: &mut GameState) {
         }
     } else {
         println!("Couldn't find location.");
+    }
+}
+
+fn calculate_damage(damage: i16) -> i16 {
+    let range = rand::thread_rng().gen_range(0..4);
+
+    match range {
+        0 => damage - 2,
+        1 => damage - 1,
+        2 => damage,
+        3 => damage + 1,
+        4 => damage + 2,
+        _ => damage,
     }
 }
