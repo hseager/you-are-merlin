@@ -1,6 +1,5 @@
 use crate::{
     actions::{get_exploring_actions, get_visiting_actions, Action, ActionType},
-    battle_manager,
     encounter::EncounterType,
     enemy::Enemy,
     location::Location,
@@ -9,6 +8,7 @@ use crate::{
     utilities::get_random_array_index,
 };
 
+mod battle_manager;
 mod world_builder;
 
 pub struct GameState {

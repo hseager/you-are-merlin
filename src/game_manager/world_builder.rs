@@ -1,12 +1,11 @@
 use crate::{
-    encounter::{Encounter, EncounterType},
-    enemy::Enemy,
+    encounter::{Battle, Encounter},
     location::Location,
-    theme::{self, Theme, ThemeLocation},
+    theme::{Theme, ThemeLocation},
     utilities::map_text_color,
 };
 
-const QUEST_COUNT: u8 = 2;
+// const QUEST_COUNT: u8 = 2;
 
 pub fn build_world(theme: &Theme) -> Vec<Location> {
     let mut locations = Vec::new();
@@ -31,24 +30,26 @@ fn build_encounters(
     theme_location: &ThemeLocation,
     location_index: usize,
     theme: &Theme,
-) -> Vec<Encounter> {
-    // Fill encounters with each location enemy by default
+) -> Vec<Battle> {
+    // Fill encounters with battles by default
     let encounters = theme_location
         .enemies
-        .map(|enemy| Encounter {
-            class: EncounterType::Battle,
-            enemy: Enemy {
+        .map(|enemy| {
+            Encounter::Battle(Enemy(Enemy {
                 name: enemy.name,
                 attack: enemy.attack,
                 life: enemy.life,
-            },
+            }))
         })
         .to_vec();
 
-    let quest = Encounter {
-        class: EncounterType::Quest,
-        character: theme.characters.first(),
-    }
+    encounters
 
-    encounters.append(quest)
+    // TODO Quests
+    // let quest = Encounter {
+    //     class: EncounterType::Quest,
+    //     character: theme.characters.first(),
+    // }
+
+    // encounters.append(quest)
 }

@@ -1,6 +1,6 @@
 use colored::{Color, Colorize};
 
-use crate::encounter::Encounter;
+use crate::encounter::Battle;
 
 #[derive(Clone)]
 pub struct Location {
@@ -8,7 +8,7 @@ pub struct Location {
     pub name_color: Color,
     pub description: &'static str,
     pub current_encounter: usize,
-    pub encounters: Vec<Encounter>,
+    pub encounters: Vec<Battle>,
 }
 
 impl Location {
