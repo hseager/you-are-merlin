@@ -1,6 +1,6 @@
 use crate::{
     actions::{get_exploring_actions, get_visiting_actions, Action, ActionType},
-    encounter::EncounterType,
+    encounter::Encounter,
     enemy::Enemy,
     location::Location,
     player::Player,
@@ -41,15 +41,21 @@ impl GameState {
                 State::Travelling => println!("Where would you like to go?"),
                 State::Exploring => {
                     if let Some(encounter) = location.encounters.get(location.current_encounter) {
-                        match encounter.class {
-                            EncounterType::Battle => {
+                        match encounter {
+                            Encounter::Battle(battle) => {
                                 let Enemy {
                                     name, life, attack, ..
-                                } = encounter.enemy;
+                                } = battle.enemy;
 
                                 println!(
                                     "A wild {} appears! (life: {}, attack: {})",
                                     name, life, attack
+                                )
+                            }
+                            Encounter::Quest(quest) => {
+                                println!(
+                                    "You find a calm area. {} wants to ask you something.",
+                                    quest.character
                                 )
                             }
                         }
@@ -95,11 +101,12 @@ impl GameState {
                     self.state = State::Visiting;
                     self.actions = self.get_actions(&self.state);
 
+                    // TODO remove old reset
                     // Reset encounters when running
-                    self.locations
-                        .get_mut(self.current_location)
-                        .unwrap()
-                        .reset_encounters();
+                    // self.locations
+                    //     .get_mut(self.current_location)
+                    //     .unwrap()
+                    //     .reset_encounters();
                 }
             },
             None => println!("This isn't the time to use {}!", search),

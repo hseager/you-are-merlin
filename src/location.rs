@@ -1,6 +1,6 @@
 use colored::{Color, Colorize};
 
-use crate::encounter::Battle;
+use crate::encounter::Encounter;
 
 #[derive(Clone)]
 pub struct Location {
@@ -8,7 +8,7 @@ pub struct Location {
     pub name_color: Color,
     pub description: &'static str,
     pub current_encounter: usize,
-    pub encounters: Vec<Battle>,
+    pub encounters: Vec<Encounter>,
 }
 
 impl Location {
@@ -16,10 +16,10 @@ impl Location {
         self.name.color(self.name_color).to_string()
     }
 
-    pub fn reset_encounters(&mut self) -> () {
-        self.current_encounter = 0;
-        for encounter in &mut self.encounters {
-            encounter.enemy.life = 20; // TODO reset to original enemy life somehow
-        }
-    }
+    // pub fn reset_encounters(&mut self) -> () {
+    //     self.current_encounter = 0;
+    //     for encounter in &mut self.encounters {
+    //         encounter.enemy.life = 20; // TODO reset to original enemy life somehow
+    //     }
+    // }
 }
