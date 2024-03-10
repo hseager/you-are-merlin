@@ -14,4 +14,5 @@ pub struct Battle {
 #[derive(Clone)]
 pub struct Quest {
     pub character: &'static str,
+    pub item: &'static str,
 }

@@ -15,7 +15,7 @@ pub fn load_theme() -> Theme {
             "Mordred",
             "Arthur Pendragon",
             "Gaius",
-            "Guinevere (Gwen)",
+            "Guinevere",
             "Uther Pendragon",
         ], // Excluding main_character
         locations: [

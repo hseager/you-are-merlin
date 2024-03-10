@@ -19,4 +19,8 @@ impl Location {
     pub fn reset_encounters(&mut self) -> () {
         self.current_encounter = 0;
     }
+
+    pub fn get_current_encounter(&self) -> &Encounter {
+        &self.encounters.get(self.current_encounter).unwrap()
+    }
 }

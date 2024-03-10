@@ -3,7 +3,7 @@ use crate::{
     enemy::Enemy,
     location::Location,
     theme::{Theme, ThemeLocation},
-    utilities::map_text_color,
+    utilities::{get_random_array_index, map_text_color},
 };
 
 // TODO generate quests
@@ -33,23 +33,36 @@ fn build_encounters(theme_location: &ThemeLocation, theme: &Theme) -> Vec<Encoun
     let mut encounters = theme_location
         .enemies
         .map(|enemy| {
-            let enemy: Enemy = Enemy {
-                name: enemy.name,
-                attack: enemy.attack,
-                life: enemy.life,
+            let battle: Battle = Battle {
+                enemy: Enemy {
+                    name: enemy.name,
+                    attack: enemy.attack,
+                    life: enemy.life,
+                },
             };
-
-            let battle: Battle = Battle { enemy };
 
             Encounter::Battle(battle)
         })
         .to_vec();
 
-    let quest = Quest {
-        character: theme.characters.first().unwrap(),
-    };
+    let quest = build_quest(&theme);
 
-    encounters.append(vec![Encounter::Quest(quest)].as_mut());
+    encounters.insert(0, quest);
 
     encounters
+}
+
+fn build_quest(theme: &Theme) -> Encounter {
+    let quest = Quest {
+        character: theme
+            .characters
+            .get(get_random_array_index(&theme.characters))
+            .unwrap(),
+        item: theme
+            .items
+            .get(get_random_array_index(&theme.items))
+            .unwrap(),
+    };
+
+    Encounter::Quest(quest)
 }

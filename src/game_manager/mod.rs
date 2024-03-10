@@ -1,5 +1,8 @@
 use crate::{
-    actions::{get_exploring_actions, get_visiting_actions, Action, ActionType},
+    actions::{
+        get_battle_actions, get_locations_as_actions, get_quest_actions, get_visiting_actions,
+        Action, ActionType,
+    },
     encounter::Encounter,
     enemy::Enemy,
     location::Location,
@@ -27,6 +30,10 @@ pub enum State {
 }
 
 impl GameState {
+    pub fn get_current_location(&self) -> &Location {
+        &self.locations.get(self.current_location).unwrap()
+    }
+
     pub fn get_current_prompt(&self) -> () {
         if let Some(location) = self.locations.get(self.current_location) {
             match &self.state {
@@ -56,6 +63,10 @@ impl GameState {
                                 println!(
                                     "You find a calm area. {} wants to ask you something.",
                                     quest.character
+                                );
+                                println!(
+                                    "\"Will you find {} and bring it back to me? I will make it worth your while...\"",
+                                    quest.item
                                 )
                             }
                         }
@@ -82,6 +93,8 @@ impl GameState {
                 ActionType::Explore => {
                     self.state = State::Exploring;
                     self.actions = self.get_actions(&self.state);
+
+                    // TODO Handle Accepting quest etc
                 }
                 ActionType::MoveToLocation => {
                     self.state = State::Visiting;
@@ -92,11 +105,7 @@ impl GameState {
                         .position(|location| location.name.to_lowercase() == search.to_lowercase())
                         .unwrap();
                 }
-                ActionType::Attack => {
-                    let game_state = self;
-
-                    battle_manager::handle_battle(game_state);
-                }
+                ActionType::Attack => battle_manager::handle_battle(self),
                 ActionType::Run => {
                     self.state = State::Visiting;
                     self.actions = self.get_actions(&self.state);
@@ -118,22 +127,16 @@ impl GameState {
     }
 
     fn get_actions(&self, state: &State) -> Vec<Action> {
-        let locations: Vec<Action> = self
-            .locations
-            .iter()
-            .map(|location| {
-                Action::new(
-                    ActionType::MoveToLocation,
-                    &location.name,
-                    location.name_color,
-                )
-            })
-            .collect();
-
         match state {
             State::Visiting => get_visiting_actions(),
-            State::Exploring => get_exploring_actions(),
-            State::Travelling => locations,
+            State::Exploring => {
+                let current_encounter = self.get_current_location().get_current_encounter();
+                match current_encounter {
+                    Encounter::Battle(_) => get_battle_actions(),
+                    Encounter::Quest(_) => get_quest_actions(),
+                }
+            }
+            State::Travelling => get_locations_as_actions(&self.locations),
             _ => vec![],
         }
     }
@@ -152,6 +155,7 @@ pub fn init_game() -> GameState {
     let name = theme.main_character;
     let locations = world_builder::build_world(&theme);
 
+    // TODO move initial values to config
     let player = Player {
         name,
         life: 100,

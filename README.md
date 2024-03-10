@@ -10,7 +10,7 @@ A text adventure game, built with Rust.
 - Rewards (gold) and trade
 - Quests
 - Inventory/Items
-- Win/Lose conditions
+- Win condition = Boss
 - Better visuals for life/attack
 
 ### Refactor

@@ -77,7 +77,6 @@ fn start_battle(player: &mut Player, enemy: Enemy) -> BattleResult {
     }
 
     if enemy_life <= 0 {
-        enemy_life = 0;
         return BattleResult::Win(enemy);
     }
 

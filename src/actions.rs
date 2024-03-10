@@ -1,5 +1,7 @@
 use colored::{Color, Colorize};
 
+use crate::location::Location;
+
 #[derive(Clone)]
 pub enum ActionType {
     Travel,
@@ -36,9 +38,29 @@ pub fn get_visiting_actions() -> Vec<Action> {
         Action::new(ActionType::Explore, "Explore", Color::Blue),
     ]
 }
-pub fn get_exploring_actions() -> Vec<Action> {
+pub fn get_battle_actions() -> Vec<Action> {
     vec![
         Action::new(ActionType::Attack, "Attack", Color::Red),
         Action::new(ActionType::Run, "Run", Color::Cyan),
     ]
+}
+
+pub fn get_quest_actions() -> Vec<Action> {
+    vec![
+        Action::new(ActionType::Attack, "Accept", Color::Green),
+        Action::new(ActionType::Run, "Run", Color::Cyan),
+    ]
+}
+
+pub fn get_locations_as_actions(locations: &Vec<Location>) -> Vec<Action> {
+    locations
+        .iter()
+        .map(|location| {
+            Action::new(
+                ActionType::MoveToLocation,
+                &location.name,
+                location.name_color,
+            )
+        })
+        .collect()
 }
