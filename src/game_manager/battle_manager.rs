@@ -21,7 +21,7 @@ pub fn handle_battle(game_state: &mut GameState) {
         if let Some(encounter) = location.encounters.get_mut(location.current_encounter) {
             match encounter {
                 Encounter::Battle(battle) => {
-                    match start_battle(&mut game_state.player, &mut battle.enemy) {
+                    match start_battle(&mut game_state.player, battle.enemy) {
                         BattleResult::Win(enemy) => {
                             println!("You defeated {}!", enemy.name);
                             location.current_encounter += 1;
@@ -42,18 +42,21 @@ pub fn handle_battle(game_state: &mut GameState) {
     }
 }
 
-fn start_battle(player: &mut Player, enemy: &mut Enemy) -> BattleResult {
-    while enemy.life > 0 || player.life > 0 {
+fn start_battle(player: &mut Player, enemy: Enemy) -> BattleResult {
+    // Don't directly mut enemy.life so that we can reset it after running and coming back
+    let mut enemy_life = enemy.life;
+
+    while enemy_life > 0 || player.life > 0 {
         let player_damage = calculate_damage(player.attack);
 
-        enemy.life -= player_damage;
+        enemy_life -= player_damage;
 
         println!(
             "You attack {} for {} damage. (Enemy life: {})",
-            enemy.name, player_damage, enemy.life
+            enemy.name, player_damage, enemy_life
         );
 
-        if enemy.life <= 0 {
+        if enemy_life <= 0 {
             break;
         }
 
@@ -73,16 +76,15 @@ fn start_battle(player: &mut Player, enemy: &mut Enemy) -> BattleResult {
         sleep(Duration::from_secs(1));
     }
 
-    // TODO don't mut enemy.life so we can reset after running
-    if enemy.life <= 0 {
-        enemy.life = 0;
-        return BattleResult::Win(*enemy);
+    if enemy_life <= 0 {
+        enemy_life = 0;
+        return BattleResult::Win(enemy);
     }
 
     if player.life <= 0 {
         BattleResult::Lose
     } else {
-        BattleResult::Win(*enemy)
+        BattleResult::Win(enemy)
     }
 }
 

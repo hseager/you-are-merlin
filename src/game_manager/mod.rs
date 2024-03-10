@@ -101,12 +101,10 @@ impl GameState {
                     self.state = State::Visiting;
                     self.actions = self.get_actions(&self.state);
 
-                    // TODO remove old reset
-                    // Reset encounters when running
-                    // self.locations
-                    //     .get_mut(self.current_location)
-                    //     .unwrap()
-                    //     .reset_encounters();
+                    self.locations
+                        .get_mut(self.current_location)
+                        .unwrap()
+                        .reset_encounters();
                 }
             },
             None => println!("This isn't the time to use {}!", search),

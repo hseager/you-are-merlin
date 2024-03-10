@@ -11,7 +11,7 @@ A text adventure game, built with Rust.
 - Quests
 - Inventory/Items
 - Win/Lose conditions
-
+- Better visuals for life/attack
 
 ### Refactor
 
