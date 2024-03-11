@@ -24,7 +24,7 @@ pub fn handle_battle(game_state: &mut GameState) {
                     match start_battle(&mut game_state.player, battle.enemy) {
                         BattleResult::Win(enemy) => {
                             println!("You defeated {}!", enemy.name);
-                            location.current_encounter += 1;
+                            location.go_to_next_encounter();
                         }
                         BattleResult::Lose => {
                             println!("{} died!", game_state.player.name);

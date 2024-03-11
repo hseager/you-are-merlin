@@ -1,6 +1,7 @@
 use std::io;
 
 mod actions;
+mod config;
 mod encounter;
 mod enemy;
 mod game_manager;

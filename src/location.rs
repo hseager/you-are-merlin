@@ -2,7 +2,7 @@ use colored::{Color, Colorize};
 
 use crate::encounter::Encounter;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Location {
     pub name: &'static str,
     pub name_color: Color,
@@ -21,6 +21,10 @@ impl Location {
     }
 
     pub fn get_current_encounter(&self) -> &Encounter {
-        &self.encounters.get(self.current_encounter).unwrap()
+        self.encounters.get(self.current_encounter).unwrap()
+    }
+
+    pub fn go_to_next_encounter(&mut self) -> () {
+        self.current_encounter += 1;
     }
 }
