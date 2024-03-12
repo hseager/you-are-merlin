@@ -1,3 +1,5 @@
+use colored::Colorize;
+
 use crate::{
     actions::{
         get_battle_actions, get_locations_as_actions, get_quest_actions, get_visiting_actions,
@@ -65,11 +67,11 @@ impl GameState {
                     Encounter::Quest(quest) => {
                         println!(
                             "You find a calm area. {} wants to ask you something.",
-                            quest.character
+                            quest.character.bold()
                         );
                         println!(
                             "\"Will you find {} and bring it back to me? I will make it worth your while...\"",
-                            quest.item
+                            quest.item.bold()
                         )
                     }
                     _ => (),
@@ -155,9 +157,6 @@ pub fn init_game() -> GameState {
     let name = theme.main_character;
     let locations = world_builder::build_world(&theme);
 
-    println!("{:#?}", locations);
-
-    // TODO move initial values to config
     let player = Player {
         name,
         life: PLAYER_LIFE,

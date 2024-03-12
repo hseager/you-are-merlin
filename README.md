@@ -23,3 +23,8 @@ A text adventure game, built with Rust.
 
 - cargo install
 - cargo run
+
+
+# Tips
+- Some areas have quests
+- There is a boss in each world
