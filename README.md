@@ -21,7 +21,7 @@ A text adventure game, built with Rust.
 
 ## Dev
 
-- cargo install
+- cargo build
 - cargo run
 
 
