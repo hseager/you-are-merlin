@@ -17,7 +17,7 @@ pub const THEME_DATA: Theme = Theme {
         name: "The Sorceress Morgana",
         life: 50,
         attack: 12
-    },
+    }, // TODO add description to enemies
     locations: [
         ThemeLocation {
             name: "Camelot Castle",

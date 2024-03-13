@@ -74,7 +74,7 @@ impl GameState {
                                 println!(
                                     "\"There is a great evil in this world... {}... They must be stopped...\"", "BOSS_NAME", // TODO get boss into
                                 )
-                            },
+                            }
                             Quest::SideQuest(quest) => {
                                 println!(
                                     "You find a calm area. {} wants to ask you something.",
@@ -86,7 +86,6 @@ impl GameState {
                                 )
                             }
                         }
-
                     }
                     _ => (),
                 },
@@ -105,7 +104,7 @@ impl GameState {
                 ActionType::Travel => self.state = State::Travelling,
                 ActionType::Explore => match self.get_current_location().get_current_encounter() {
                     Encounter::Battle(_) => self.state = State::Battle,
-                    Encounter::Quest(_) => self.state = State::Quest
+                    Encounter::Quest(_) => self.state = State::Quest,
                 },
                 ActionType::MoveToLocation => {
                     self.state = State::Visiting;
@@ -170,6 +169,8 @@ pub fn init_game() -> GameState {
     let theme = load_theme();
     let name = theme.main_character;
     let locations = world_builder::build_world(&theme);
+
+    // println!("{:#?}", locations);
 
     let player = Player {
         name,

@@ -19,11 +19,11 @@ pub enum Quest {
 
 #[derive(Clone, Debug)]
 pub struct SideQuest {
-    pub character: &'static str,
-    pub item: &'static str,
+    pub character: String,
+    pub item: String,
 }
 
 #[derive(Clone, Debug)]
 pub struct MainQuest {
-    pub character: &'static str,
+    pub character: String,
 }
