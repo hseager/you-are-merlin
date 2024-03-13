@@ -6,7 +6,7 @@ use crate::{
         Action, ActionType,
     },
     config::{PLAYER_ATTACK, PLAYER_LIFE},
-    encounter::Encounter,
+    encounter::{Encounter, Quest},
     enemy::Enemy,
     location::Location,
     player::Player,
@@ -65,14 +65,28 @@ impl GameState {
                 },
                 State::Quest => match self.get_current_location().get_current_encounter() {
                     Encounter::Quest(quest) => {
-                        println!(
-                            "You find a calm area. {} wants to ask you something.",
-                            quest.character.bold()
-                        );
-                        println!(
-                            "\"Will you find {} and bring it back to me? I will make it worth your while...\"",
-                            quest.item.bold()
-                        )
+                        match quest {
+                            Quest::MainQuest(quest) => {
+                                println!(
+                                    "You find a calm area. {} wants to ask you something.",
+                                    quest.character.bold()
+                                );
+                                println!(
+                                    "\"There is a great evil in this world... {}... They must be stopped...\"", "BOSS_NAME", // TODO get boss into
+                                )
+                            },
+                            Quest::SideQuest(quest) => {
+                                println!(
+                                    "You find a calm area. {} wants to ask you something.",
+                                    quest.character.bold()
+                                );
+                                println!(
+                                    "\"Will you find {} and bring it back to me? I will make it worth your while...\"",
+                                    quest.item.bold()
+                                )
+                            }
+                        }
+
                     }
                     _ => (),
                 },
@@ -91,7 +105,7 @@ impl GameState {
                 ActionType::Travel => self.state = State::Travelling,
                 ActionType::Explore => match self.get_current_location().get_current_encounter() {
                     Encounter::Battle(_) => self.state = State::Battle,
-                    Encounter::Quest(_) => self.state = State::Quest,
+                    Encounter::Quest(_) => self.state = State::Quest
                 },
                 ActionType::MoveToLocation => {
                     self.state = State::Visiting;

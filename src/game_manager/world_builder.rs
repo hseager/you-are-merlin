@@ -1,8 +1,8 @@
 use rand::{seq::SliceRandom, thread_rng};
 
 use crate::{
-    config::QUEST_COUNT,
-    encounter::{Battle, Encounter, Quest},
+    config::SIDE_QUEST_COUNT,
+    encounter::{Battle, Encounter, Quest, SideQuest},
     enemy::Enemy,
     location::Location,
     theme::{Theme, ThemeLocation},
@@ -14,7 +14,7 @@ use crate::{
 pub fn build_world(theme: &Theme) -> Vec<Location> {
     let locations = build_locations(&theme);
 
-    generate_quests(&theme, locations, QUEST_COUNT)
+    generate_side_quests(&theme, locations, SIDE_QUEST_COUNT)
 }
 
 fn build_locations(theme: &Theme) -> Vec<Location> {
@@ -33,23 +33,6 @@ fn build_locations(theme: &Theme) -> Vec<Location> {
             encounters: build_encounters(theme_location),
         })
     }
-    locations
-}
-
-fn generate_quests(
-    theme: &Theme,
-    mut locations: Vec<Location>,
-    quest_count: usize,
-) -> Vec<Location> {
-    let mut rng = thread_rng();
-
-    for location in locations.iter_mut().take(quest_count) {
-        let quest = build_quest(theme);
-        location.encounters.insert(0, quest);
-    }
-
-    locations.shuffle(&mut rng);
-
     locations
 }
 
@@ -73,8 +56,26 @@ fn build_encounters(theme_location: &ThemeLocation) -> Vec<Encounter> {
     encounters
 }
 
-fn build_quest(theme: &Theme) -> Encounter {
-    let quest = Quest {
+fn generate_side_quests(
+    theme: &Theme,
+    mut locations: Vec<Location>,
+    quest_count: usize,
+) -> Vec<Location> {
+    let mut rng = thread_rng();
+
+    for location in locations.iter_mut().take(quest_count) {
+        let quest = build_side_quest(theme);
+        location.encounters.insert(0, quest);
+    }
+
+    locations.shuffle(&mut rng);
+
+    locations
+}
+
+
+fn build_side_quest(theme: &Theme) -> Encounter {
+    let side_quest = SideQuest {
         character: theme
             .characters
             .get(get_random_array_index(&theme.characters))
@@ -85,5 +86,5 @@ fn build_quest(theme: &Theme) -> Encounter {
             .unwrap(),
     };
 
-    Encounter::Quest(quest)
+    Encounter::Quest(Quest::SideQuest(side_quest))
 }

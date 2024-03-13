@@ -12,7 +12,18 @@ pub struct Battle {
 }
 
 #[derive(Clone, Debug)]
-pub struct Quest {
+pub enum Quest {
+    MainQuest(MainQuest),
+    SideQuest(SideQuest),
+}
+
+#[derive(Clone, Debug)]
+pub struct SideQuest {
     pub character: &'static str,
     pub item: &'static str,
+}
+
+#[derive(Clone, Debug)]
+pub struct MainQuest {
+    pub character: &'static str,
 }
