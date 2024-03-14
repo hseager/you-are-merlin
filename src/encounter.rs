@@ -1,3 +1,5 @@
+use colored::ColoredString;
+
 use crate::enemy::Enemy;
 
 #[derive(Clone, Debug)]
@@ -27,5 +29,5 @@ pub struct SideQuest {
 #[derive(Clone, Debug)]
 pub struct MainQuest {
     pub character: String,
-    pub boss_name: String,
+    pub boss_name: ColoredString,
 }

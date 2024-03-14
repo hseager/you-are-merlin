@@ -91,7 +91,7 @@ impl GameState {
                                     quest.character.bold()
                                 );
                                 println!(
-                                    "\"There is a great danger in this world... {}... They must be stopped...\"", quest.boss_name.bold().red(),
+                                    "\"There is a great danger in this world... {}... They must be stopped...\"", quest.boss_name,
                                 )
 
                                 // TODO change world to world_name in theme, like Camelot

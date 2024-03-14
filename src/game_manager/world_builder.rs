@@ -51,7 +51,7 @@ fn add_quests(
 ) {
     let mut quests: Vec<Encounter> = Vec::new();
 
-    quests.push(build_main_quest(characters, &boss.name.to_string()));
+    quests.push(build_main_quest(characters, &boss));
 
     for _ in 0..quest_count {
         quests.push(build_side_quest(characters, items));
@@ -77,7 +77,7 @@ fn build_locations(theme: &Theme) -> Vec<Location> {
             name,
             description,
             name_color: map_text_color(i),
-            current_encounter: 3,
+            current_encounter: 0,
             encounters: build_battles(theme_location),
         })
     }
@@ -103,7 +103,7 @@ fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
         .to_vec()
 }
 
-fn build_main_quest(characters: &mut Vec<&str>, boss_name: &String) -> Encounter {
+fn build_main_quest(characters: &mut Vec<&str>, boss: &Enemy) -> Encounter {
     let mut rng = thread_rng();
 
     // Choose a random character and remove it from the list to make sure it's unique
@@ -112,7 +112,7 @@ fn build_main_quest(characters: &mut Vec<&str>, boss_name: &String) -> Encounter
 
     Encounter::Quest(Quest::MainQuest(MainQuest {
         character,
-        boss_name: boss_name.to_owned(),
+        boss_name: boss.name.clone(),
     }))
 }
 
