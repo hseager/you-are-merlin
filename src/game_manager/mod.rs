@@ -31,6 +31,7 @@ pub enum State {
     Battle,
     Quest,
     GameOver,
+    Win,
 }
 
 impl GameState {
@@ -58,14 +59,25 @@ impl GameState {
                             attack,
                             description,
                             ..
-                        } = battle.enemy;
+                        } = &battle.enemy;
 
                         println!(
                             "A wild {} appears! (life: {}, attack: {})",
-                            name.to_string().bold(),
-                            life,
-                            attack
+                            name, life, attack
                         );
+                        println!("{description}")
+                    }
+                    Encounter::BossFight(battle) => {
+                        let Enemy {
+                            name,
+                            life,
+                            attack,
+                            description,
+                            ..
+                        } = &battle.enemy;
+
+                        println!("A great danger approaches...");
+                        println!("{} (life: {}, attack: {})", name, life, attack);
                         println!("{description}")
                     }
                     _ => (),
@@ -113,7 +125,7 @@ impl GameState {
                 ActionType::Travel => self.state = State::Travelling,
                 ActionType::Explore => match self.get_current_location().get_current_encounter() {
                     Encounter::Battle(_) => self.state = State::Battle,
-                    Encounter::BossBattle(_) => self.state = State::Battle,
+                    Encounter::BossFight(_) => self.state = State::Battle,
                     Encounter::Quest(_) => self.state = State::Quest,
                 },
                 ActionType::MoveToLocation => {
@@ -177,13 +189,12 @@ impl GameState {
 
 pub fn init_game() -> GameState {
     let theme = load_theme();
-    let name = theme.main_character;
     let locations = world_builder::build_world(&theme);
 
     println!("{:#?}", locations);
 
     let player = Player {
-        name,
+        name: theme.main_character.bold(),
         life: PLAYER_LIFE,
         attack: PLAYER_ATTACK,
     };

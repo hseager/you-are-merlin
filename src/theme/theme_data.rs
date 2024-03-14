@@ -18,7 +18,7 @@ pub const THEME_DATA: Theme = Theme {
         description: "A powerful sorceress, skilled in dark magic and harboring deep-seated resentment towards Camelot and those who dwell within it.",
         life: 50,
         attack: 12
-    }, // TODO add description to enemies
+    },
     locations: [
         ThemeLocation {
             name: "Camelot Castle",

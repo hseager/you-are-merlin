@@ -2,21 +2,14 @@ use crate::enemy::Enemy;
 
 #[derive(Clone, Debug)]
 pub enum Encounter {
-    Combat(Combat),
+    BossFight(Battle),
+    Battle(Battle),
     Quest(Quest),
 }
 
-// TODO change Battle to enum and have BossBattles and EnemyFight
-
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub struct Battle {
     pub enemy: Enemy,
-}
-
-#[derive(Clone, Copy, Debug)]
-pub enum Combat {
-    BossFight(Battle),
-    Skirmish(Battle),
 }
 
 #[derive(Clone, Debug)]

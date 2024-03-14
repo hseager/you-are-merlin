@@ -21,10 +21,22 @@ pub fn handle_battle(game_state: &mut GameState) {
         if let Some(encounter) = location.encounters.get_mut(location.current_encounter) {
             match encounter {
                 Encounter::Battle(battle) => {
-                    match start_battle(&mut game_state.player, battle.enemy) {
+                    match start_battle(&mut game_state.player, &battle.enemy) {
                         BattleResult::Win(enemy) => {
                             println!("You defeated {}!", enemy.name);
                             location.go_to_next_encounter();
+                        }
+                        BattleResult::Lose => {
+                            println!("{} died!", game_state.player.name);
+                            game_state.state = State::GameOver;
+                        }
+                    }
+                }
+                Encounter::BossFight(battle) => {
+                    match start_battle(&mut game_state.player, &battle.enemy) {
+                        BattleResult::Win(enemy) => {
+                            println!("You defeated {}! The world is saved!", enemy.name); // TODO world name
+                            game_state.state = State::Win;
                         }
                         BattleResult::Lose => {
                             println!("{} died!", game_state.player.name);
@@ -42,7 +54,7 @@ pub fn handle_battle(game_state: &mut GameState) {
     }
 }
 
-fn start_battle(player: &mut Player, enemy: Enemy) -> BattleResult {
+fn start_battle(player: &mut Player, enemy: &Enemy) -> BattleResult {
     // Don't directly mut enemy.life so that we can reset it after running and coming back
     let mut enemy_life = enemy.life;
 
@@ -77,13 +89,13 @@ fn start_battle(player: &mut Player, enemy: Enemy) -> BattleResult {
     }
 
     if enemy_life <= 0 {
-        return BattleResult::Win(enemy);
+        return BattleResult::Win(enemy.clone());
     }
 
     if player.life <= 0 {
         BattleResult::Lose
     } else {
-        BattleResult::Win(enemy)
+        BattleResult::Win(enemy.clone())
     }
 }
 

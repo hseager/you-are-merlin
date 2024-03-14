@@ -10,20 +10,23 @@ mod player;
 mod theme;
 mod utilities;
 
-use colored::Colorize;
-
 use crate::game_manager::{init_game, State};
 
 fn main() {
     let mut game_state = init_game();
 
-    println!("You are {}.", &game_state.player.name.bold());
+    println!("You are {}.", &game_state.player.name);
 
     loop {
         let mut input = String::new();
 
         if let State::GameOver = game_state.state {
             print!("Game Over...");
+            break;
+        }
+
+        if let State::Win = game_state.state {
+            print!("You Win!");
             break;
         }
 

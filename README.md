@@ -8,9 +8,8 @@ A text adventure game, built with Rust.
 
 - Rest to regen health
 - Rewards (gold) and trade
-- Quests
+- Quests Rewards
 - Inventory/Items
-- Win condition = Boss
 - Better visuals for life/attack
 - Chance for Run to fail
 

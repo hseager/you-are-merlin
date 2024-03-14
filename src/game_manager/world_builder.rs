@@ -1,3 +1,4 @@
+use colored::Colorize;
 use rand::{seq::SliceRandom, thread_rng};
 
 use crate::{
@@ -14,7 +15,7 @@ pub fn build_world(theme: &Theme) -> Vec<Location> {
     let mut characters = theme.characters.to_vec();
     let mut items = theme.items.to_vec();
     let boss = Enemy {
-        name: theme.boss.name,
+        name: theme.boss.name.bold().red(),
         description: theme.boss.description,
         life: theme.boss.life,
         attack: theme.boss.attack,
@@ -29,12 +30,12 @@ pub fn build_world(theme: &Theme) -> Vec<Location> {
         &mut characters,
         &mut items,
         SIDE_QUEST_COUNT,
-        boss,
+        &boss,
     );
 
     locations.shuffle(&mut rng);
 
-    add_boss_encounter(&mut locations, boss);
+    add_boss_encounter(&mut locations, &boss);
 
     locations.shuffle(&mut rng);
 
@@ -46,11 +47,11 @@ fn add_quests(
     characters: &mut Vec<&str>,
     items: &mut Vec<&str>,
     quest_count: usize,
-    boss: Enemy,
+    boss: &Enemy,
 ) {
     let mut quests: Vec<Encounter> = Vec::new();
 
-    quests.push(build_main_quest(characters, boss.name.to_string()));
+    quests.push(build_main_quest(characters, &boss.name.to_string()));
 
     for _ in 0..quest_count {
         quests.push(build_side_quest(characters, items));
@@ -76,7 +77,7 @@ fn build_locations(theme: &Theme) -> Vec<Location> {
             name,
             description,
             name_color: map_text_color(i),
-            current_encounter: 0,
+            current_encounter: 3,
             encounters: build_battles(theme_location),
         })
     }
@@ -90,7 +91,7 @@ fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
         .map(|enemy| {
             let battle: Battle = Battle {
                 enemy: Enemy {
-                    name: enemy.name,
+                    name: enemy.name.bold(),
                     description: enemy.description,
                     attack: enemy.attack,
                     life: enemy.life,
@@ -102,7 +103,7 @@ fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
         .to_vec()
 }
 
-fn build_main_quest(characters: &mut Vec<&str>, boss_name: String) -> Encounter {
+fn build_main_quest(characters: &mut Vec<&str>, boss_name: &String) -> Encounter {
     let mut rng = thread_rng();
 
     // Choose a random character and remove it from the list to make sure it's unique
@@ -111,7 +112,7 @@ fn build_main_quest(characters: &mut Vec<&str>, boss_name: String) -> Encounter 
 
     Encounter::Quest(Quest::MainQuest(MainQuest {
         character,
-        boss_name,
+        boss_name: boss_name.to_owned(),
     }))
 }
 
@@ -133,9 +134,9 @@ fn build_side_quest(characters: &mut Vec<&str>, items: &mut Vec<&str>) -> Encoun
     Encounter::Quest(Quest::SideQuest(SideQuest { character, item }))
 }
 
-fn add_boss_encounter(locations: &mut Vec<Location>, boss: Enemy) -> () {
+fn add_boss_encounter(locations: &mut Vec<Location>, boss: &Enemy) -> () {
     let location = locations.get_mut(0).unwrap();
-    location
-        .encounters
-        .push(Encounter::Battle(Battle { enemy: boss }));
+    location.encounters.push(Encounter::BossFight(Battle {
+        enemy: boss.clone(),
+    }));
 }
