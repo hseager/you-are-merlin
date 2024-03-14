@@ -53,13 +53,14 @@ impl GameState {
                 State::Battle => match self.get_current_location().get_current_encounter() {
                     Encounter::Battle(battle) => {
                         let Enemy {
-                            name, life, attack, ..
+                            name, life, attack, description, ..
                         } = battle.enemy;
 
                         println!(
                             "A wild {} appears! (life: {}, attack: {})",
-                            name, life, attack
-                        )
+                            name.to_string().bold(), life, attack
+                        );
+                        println!("{description}")
                     }
                     _ => (),
                 },
@@ -72,8 +73,10 @@ impl GameState {
                                     quest.character.bold()
                                 );
                                 println!(
-                                    "\"There is a great evil in this world... {}... They must be stopped...\"", "BOSS_NAME", // TODO get boss into
+                                    "\"There is a great danger in this world... {}... They must be stopped...\"", quest.boss_name.bold().red(),
                                 )
+
+                                // TODO change world to world_name in theme, like Camelot
                             }
                             Quest::SideQuest(quest) => {
                                 println!(
@@ -123,8 +126,8 @@ impl GameState {
                         .unwrap()
                         .reset_encounters();
                 }
-                ActionType::Accept => {
-                    println!("You agree to the request and continue exploring the area.");
+                ActionType::Continue => {
+                    println!("You acknowledge their request and continue exploring the area.");
 
                     self.locations
                         .get_mut(self.current_location)

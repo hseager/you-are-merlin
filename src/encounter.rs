@@ -26,4 +26,5 @@ pub struct SideQuest {
 #[derive(Clone, Debug)]
 pub struct MainQuest {
     pub character: String,
+    pub boss_name: String
 }

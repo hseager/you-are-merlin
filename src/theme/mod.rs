@@ -24,6 +24,7 @@ pub struct ThemeLocation {
 #[derive(Clone, Copy)]
 pub struct ThemeEnemy {
     pub name: &'static str,
+    pub description: &'static str,
     pub life: i16,
     pub attack: i16,
 }

@@ -12,6 +12,7 @@ A text adventure game, built with Rust.
 - Inventory/Items
 - Win condition = Boss
 - Better visuals for life/attack
+- Chance for Run to fail
 
 ### Refactor
 

@@ -13,6 +13,12 @@ pub fn build_world(theme: &Theme) -> Vec<Location> {
     let mut locations = build_locations(&theme);
     let mut characters = theme.characters.to_vec();
     let mut items = theme.items.to_vec();
+    let boss = Enemy {
+        name: theme.boss.name,
+        description: theme.boss.description,
+        life: theme.boss.life,
+        attack: theme.boss.attack
+    };
 
     let mut rng = thread_rng();
 
@@ -23,6 +29,7 @@ pub fn build_world(theme: &Theme) -> Vec<Location> {
         &mut characters,
         &mut items,
         SIDE_QUEST_COUNT,
+        boss
     );
 
     locations.shuffle(&mut rng);
@@ -35,10 +42,11 @@ fn add_quests(
     characters: &mut Vec<&str>,
     items: &mut Vec<&str>,
     quest_count: usize,
+    boss: Enemy
 ) {
     let mut quests: Vec<Encounter> = Vec::new();
 
-    quests.push(build_main_quest(characters));
+    quests.push(build_main_quest(characters, boss.name.to_string()));
 
     for _ in 0..quest_count {
         quests.push(build_side_quest(characters, items));
@@ -81,6 +89,7 @@ fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
             let battle: Battle = Battle {
                 enemy: Enemy {
                     name: enemy.name,
+                    description: enemy.description,
                     attack: enemy.attack,
                     life: enemy.life,
                 },
@@ -91,16 +100,14 @@ fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
         .to_vec()
 }
 
-fn build_main_quest(characters: &mut Vec<&str>) -> Encounter {
+fn build_main_quest(characters: &mut Vec<&str>, boss_name: String) -> Encounter {
     let mut rng = thread_rng();
-
-    // TODO add boss encounter
 
     // Choose a random character and remove it from the list to make sure it's unique
     let character = characters.choose_mut(&mut rng).unwrap().to_owned();
     characters.retain(|c| *c != character);
 
-    Encounter::Quest(Quest::MainQuest(MainQuest { character }))
+    Encounter::Quest(Quest::MainQuest(MainQuest { character, boss_name }))
 }
 
 fn build_side_quest(characters: &mut Vec<&str>, items: &mut Vec<&str>) -> Encounter {
