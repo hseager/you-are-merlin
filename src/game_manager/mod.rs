@@ -53,12 +53,18 @@ impl GameState {
                 State::Battle => match self.get_current_location().get_current_encounter() {
                     Encounter::Battle(battle) => {
                         let Enemy {
-                            name, life, attack, description, ..
+                            name,
+                            life,
+                            attack,
+                            description,
+                            ..
                         } = battle.enemy;
 
                         println!(
                             "A wild {} appears! (life: {}, attack: {})",
-                            name.to_string().bold(), life, attack
+                            name.to_string().bold(),
+                            life,
+                            attack
                         );
                         println!("{description}")
                     }
@@ -107,6 +113,7 @@ impl GameState {
                 ActionType::Travel => self.state = State::Travelling,
                 ActionType::Explore => match self.get_current_location().get_current_encounter() {
                     Encounter::Battle(_) => self.state = State::Battle,
+                    Encounter::BossBattle(_) => self.state = State::Battle,
                     Encounter::Quest(_) => self.state = State::Quest,
                 },
                 ActionType::MoveToLocation => {
@@ -173,7 +180,7 @@ pub fn init_game() -> GameState {
     let name = theme.main_character;
     let locations = world_builder::build_world(&theme);
 
-    // println!("{:#?}", locations);
+    println!("{:#?}", locations);
 
     let player = Player {
         name,

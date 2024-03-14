@@ -17,7 +17,7 @@ pub fn build_world(theme: &Theme) -> Vec<Location> {
         name: theme.boss.name,
         description: theme.boss.description,
         life: theme.boss.life,
-        attack: theme.boss.attack
+        attack: theme.boss.attack,
     };
 
     let mut rng = thread_rng();
@@ -29,8 +29,12 @@ pub fn build_world(theme: &Theme) -> Vec<Location> {
         &mut characters,
         &mut items,
         SIDE_QUEST_COUNT,
-        boss
+        boss,
     );
+
+    locations.shuffle(&mut rng);
+
+    add_boss_encounter(&mut locations, boss);
 
     locations.shuffle(&mut rng);
 
@@ -42,7 +46,7 @@ fn add_quests(
     characters: &mut Vec<&str>,
     items: &mut Vec<&str>,
     quest_count: usize,
-    boss: Enemy
+    boss: Enemy,
 ) {
     let mut quests: Vec<Encounter> = Vec::new();
 
@@ -58,8 +62,6 @@ fn add_quests(
             .encounters
             .insert(0, quests.get(i).unwrap().to_owned());
     }
-
-    println!("{:#?}", locations);
 }
 
 fn build_locations(theme: &Theme) -> Vec<Location> {
@@ -107,7 +109,10 @@ fn build_main_quest(characters: &mut Vec<&str>, boss_name: String) -> Encounter 
     let character = characters.choose_mut(&mut rng).unwrap().to_owned();
     characters.retain(|c| *c != character);
 
-    Encounter::Quest(Quest::MainQuest(MainQuest { character, boss_name }))
+    Encounter::Quest(Quest::MainQuest(MainQuest {
+        character,
+        boss_name,
+    }))
 }
 
 fn build_side_quest(characters: &mut Vec<&str>, items: &mut Vec<&str>) -> Encounter {
@@ -126,4 +131,11 @@ fn build_side_quest(characters: &mut Vec<&str>, items: &mut Vec<&str>) -> Encoun
     items.retain(|i| *i != item);
 
     Encounter::Quest(Quest::SideQuest(SideQuest { character, item }))
+}
+
+fn add_boss_encounter(locations: &mut Vec<Location>, boss: Enemy) -> () {
+    let location = locations.get_mut(0).unwrap();
+    location
+        .encounters
+        .push(Encounter::Battle(Battle { enemy: boss }));
 }

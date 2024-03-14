@@ -21,10 +21,19 @@ impl Location {
     }
 
     pub fn get_current_encounter(&self) -> &Encounter {
-        self.encounters.get(self.current_encounter).unwrap()
+        self.encounters
+            .get(self.current_encounter)
+            .expect("Couldn't get encounter")
     }
 
     pub fn go_to_next_encounter(&mut self) -> () {
-        self.current_encounter += 1;
+        // TODO what happens at the end of all encounters?
+        let next_encounter = self.current_encounter + 1;
+
+        if next_encounter < self.encounters.len() {
+            self.current_encounter = next_encounter;
+        } else {
+            self.reset_encounters();
+        }
     }
 }
