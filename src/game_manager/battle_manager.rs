@@ -15,7 +15,10 @@ enum BattleResult {
 }
 
 pub fn handle_battle(game_state: &mut GameState) {
-    let location = game_state.locations.get_mut(game_state.current_location);
+    let location = game_state
+        .world
+        .locations
+        .get_mut(game_state.world.current_location);
 
     if let Some(location) = location {
         if let Some(encounter) = location.encounters.get_mut(location.current_encounter) {
@@ -35,7 +38,10 @@ pub fn handle_battle(game_state: &mut GameState) {
                 Encounter::BossFight(battle) => {
                     match start_battle(&mut game_state.player, &battle.enemy) {
                         BattleResult::Win(enemy) => {
-                            println!("You defeated {}! The world is saved!", enemy.name); // TODO world name
+                            println!(
+                                "You defeated {}! The {} is saved!",
+                                enemy.name, game_state.world.name
+                            );
                             game_state.state = State::Win;
                         }
                         BattleResult::Lose => {

@@ -5,6 +5,7 @@ use crate::theme::{Theme, ThemeEnemy, ThemeLocation};
 // Game of Thrones
 pub const THEME_DATA: Theme = Theme {
     main_character: "Merlin",
+    world_name: "Camelot",
     characters: [
         "Lancelot",
         "Mordred",

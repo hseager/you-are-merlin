@@ -4,6 +4,7 @@ mod theme_data;
 
 pub struct Theme {
     pub main_character: &'static str,
+    pub world_name: &'static str,
     pub characters: [&'static str; 6],
     pub locations: [ThemeLocation; 6],
     pub items: [&'static str; 10],

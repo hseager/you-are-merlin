@@ -9,6 +9,7 @@ mod location;
 mod player;
 mod theme;
 mod utilities;
+mod world;
 
 use crate::game_manager::{init_game, State};
 

@@ -8,10 +8,10 @@ use crate::{
     config::{PLAYER_ATTACK, PLAYER_LIFE},
     encounter::{Encounter, Quest},
     enemy::Enemy,
-    location::Location,
     player::Player,
     theme::load_theme,
     utilities::get_random_array_index,
+    world::World,
 };
 
 mod battle_manager;
@@ -20,8 +20,7 @@ mod world_builder;
 pub struct GameState {
     pub player: Player,
     pub state: State,
-    pub current_location: usize,
-    pub locations: Vec<Location>,
+    pub world: World,
     pub actions: Vec<Action>,
 }
 
@@ -35,12 +34,8 @@ pub enum State {
 }
 
 impl GameState {
-    pub fn get_current_location(&self) -> &Location {
-        &self.locations.get(self.current_location).unwrap()
-    }
-
     pub fn get_current_prompt(&self) -> () {
-        if let Some(location) = self.locations.get(self.current_location) {
+        if let Some(location) = self.world.locations.get(self.world.current_location) {
             match &self.state {
                 State::Visiting => {
                     println!(
@@ -51,7 +46,7 @@ impl GameState {
                     println!("What would you like to do?")
                 }
                 State::Travelling => println!("Where would you like to go?"),
-                State::Battle => match self.get_current_location().get_current_encounter() {
+                State::Battle => match self.world.get_current_location().get_current_encounter() {
                     Encounter::Battle(battle) => {
                         let Enemy {
                             name,
@@ -82,32 +77,29 @@ impl GameState {
                     }
                     _ => (),
                 },
-                State::Quest => match self.get_current_location().get_current_encounter() {
-                    Encounter::Quest(quest) => {
-                        match quest {
-                            Quest::MainQuest(quest) => {
-                                println!(
-                                    "You find a calm area. {} wants to ask you something.",
-                                    quest.character.bold()
-                                );
-                                println!(
-                                    "\"There is a great danger in this world... {}... They must be stopped...\"", quest.boss_name,
-                                )
-
-                                // TODO change world to world_name in theme, like Camelot
-                            }
-                            Quest::SideQuest(quest) => {
-                                println!(
-                                    "You find a calm area. {} wants to ask you something.",
-                                    quest.character.bold()
-                                );
-                                println!(
+                State::Quest => match self.world.get_current_location().get_current_encounter() {
+                    Encounter::Quest(quest) => match quest {
+                        Quest::MainQuest(quest) => {
+                            println!(
+                                "You find a calm area. {} wants to ask you something.",
+                                quest.character.bold()
+                            );
+                            println!(
+                                "\"{} is in great danger... {}... They must be stopped...\"",
+                                self.world.name, quest.boss_name,
+                            )
+                        }
+                        Quest::SideQuest(quest) => {
+                            println!(
+                                "You find a calm area. {} wants to ask you something.",
+                                quest.character.bold()
+                            );
+                            println!(
                                     "\"Will you find {} and bring it back to me? I will make it worth your while...\"",
                                     quest.item.bold()
                                 )
-                            }
                         }
-                    }
+                    },
                     _ => (),
                 },
                 _ => (),
@@ -123,14 +115,17 @@ impl GameState {
         match &self.find_action(search) {
             Some(action) => match action.class {
                 ActionType::Travel => self.state = State::Travelling,
-                ActionType::Explore => match self.get_current_location().get_current_encounter() {
-                    Encounter::Battle(_) => self.state = State::Battle,
-                    Encounter::BossFight(_) => self.state = State::Battle,
-                    Encounter::Quest(_) => self.state = State::Quest,
-                },
+                ActionType::Explore => {
+                    match self.world.get_current_location().get_current_encounter() {
+                        Encounter::Battle(_) => self.state = State::Battle,
+                        Encounter::BossFight(_) => self.state = State::Battle,
+                        Encounter::Quest(_) => self.state = State::Quest,
+                    }
+                }
                 ActionType::MoveToLocation => {
                     self.state = State::Visiting;
-                    self.current_location = self
+                    self.world.current_location = self
+                        .world
                         .locations
                         .iter()
                         .position(|location| location.name.to_lowercase() == search.to_lowercase())
@@ -140,16 +135,18 @@ impl GameState {
                 ActionType::Run => {
                     self.state = State::Visiting;
 
-                    self.locations
-                        .get_mut(self.current_location)
+                    self.world
+                        .locations
+                        .get_mut(self.world.current_location)
                         .unwrap()
                         .reset_encounters();
                 }
                 ActionType::Continue => {
                     println!("You acknowledge their request and continue exploring the area.");
 
-                    self.locations
-                        .get_mut(self.current_location)
+                    self.world
+                        .locations
+                        .get_mut(self.world.current_location)
                         .unwrap()
                         .go_to_next_encounter();
 
@@ -173,7 +170,7 @@ impl GameState {
             State::Visiting => get_visiting_actions(),
             State::Battle => get_battle_actions(),
             State::Quest => get_quest_actions(),
-            State::Travelling => get_locations_as_actions(&self.locations),
+            State::Travelling => get_locations_as_actions(&self.world.locations),
             _ => vec![],
         }
     }
@@ -199,11 +196,16 @@ pub fn init_game() -> GameState {
         attack: PLAYER_ATTACK,
     };
 
+    let world: World = World {
+        name: &theme.world_name,
+        current_location: get_random_array_index(&locations),
+        locations,
+    };
+
     GameState {
         player,
         state: State::Visiting,
-        current_location: get_random_array_index(&locations),
-        locations,
+        world,
         actions: get_visiting_actions(),
     }
 }
