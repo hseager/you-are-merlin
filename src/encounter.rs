@@ -1,6 +1,6 @@
 use colored::ColoredString;
 
-use crate::enemy::Enemy;
+use crate::characters::Enemy;
 
 #[derive(Clone, Debug)]
 pub enum Encounter {

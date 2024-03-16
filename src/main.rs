@@ -1,12 +1,11 @@
 use std::io;
 
 mod actions;
+mod characters;
 mod config;
 mod encounter;
-mod enemy;
 mod game_manager;
 mod location;
-mod player;
 mod theme;
 mod utilities;
 mod world;

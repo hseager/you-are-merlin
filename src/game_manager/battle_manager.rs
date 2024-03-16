@@ -1,12 +1,9 @@
 use std::{thread::sleep, time::Duration};
 
-use rand::Rng;
-
 use crate::{
+    characters::{Enemy, Fighter, Player},
     encounter::Encounter,
-    enemy::Enemy,
     game_manager::{GameState, State},
-    player::Player,
 };
 
 enum BattleResult {
@@ -61,59 +58,32 @@ pub fn handle_battle(game_state: &mut GameState) {
 }
 
 fn start_battle(player: &mut Player, enemy: &Enemy) -> BattleResult {
-    // Don't directly mut enemy.life so that we can reset it after running and coming back
-    let mut enemy_life = enemy.life;
+    // Don't directly mut enemy.life so that we can reset it after running from encounter and coming back
+    let mut enemy_copy = enemy.clone();
 
-    while enemy_life > 0 || player.life > 0 {
-        let player_damage = calculate_damage(player.attack);
+    while enemy_copy.is_alive() || player.is_alive() {
+        player.attack(&mut enemy_copy);
 
-        enemy_life -= player_damage;
-
-        println!(
-            "You attack {} for {} damage. (Enemy life: {})",
-            enemy.name, player_damage, enemy_life
-        );
-
-        if enemy_life <= 0 {
+        if !enemy_copy.is_alive() {
             break;
         }
 
         sleep(Duration::from_secs(1));
 
-        let enemy_damage = calculate_damage(enemy.attack);
-        player.life -= enemy_damage;
-        println!(
-            "{} attacks you for {} damage. (Your life: {})",
-            enemy.name, enemy_damage, player.life
-        );
+        enemy_copy.attack(player);
 
-        if player.life <= 0 {
+        if !player.is_alive() {
             break;
         }
 
         sleep(Duration::from_secs(1));
     }
 
-    if enemy_life <= 0 {
-        return BattleResult::Win(enemy.clone());
-    }
-
-    if player.life <= 0 {
+    if !enemy_copy.is_alive() {
+        BattleResult::Win(enemy.clone())
+    } else if !player.is_alive() {
         BattleResult::Lose
     } else {
-        BattleResult::Win(enemy.clone())
-    }
-}
-
-fn calculate_damage(damage: i16) -> i16 {
-    let range = rand::thread_rng().gen_range(0..4);
-
-    match range {
-        0 => damage - 2,
-        1 => damage - 1,
-        2 => damage,
-        3 => damage + 1,
-        4 => damage + 2,
-        _ => damage,
+        panic!("Battle ended without anyone dying?..");
     }
 }

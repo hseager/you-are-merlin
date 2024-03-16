@@ -1,14 +1,15 @@
 use colored::Colorize;
 
+// TODO split game_manager out and use a trait for handling actions
+
 use crate::{
     actions::{
         get_battle_actions, get_locations_as_actions, get_quest_actions, get_visiting_actions,
         Action, ActionType,
     },
+    characters::{Enemy, Player},
     config::{PLAYER_ATTACK, PLAYER_LIFE},
     encounter::{Encounter, Quest},
-    enemy::Enemy,
-    player::Player,
     theme::load_theme,
     utilities::get_random_array_index,
     world::World,

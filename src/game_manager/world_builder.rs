@@ -2,9 +2,9 @@ use colored::Colorize;
 use rand::{seq::SliceRandom, thread_rng};
 
 use crate::{
+    characters::Enemy,
     config::SIDE_QUEST_COUNT,
     encounter::{Battle, Encounter, MainQuest, Quest, SideQuest},
-    enemy::Enemy,
     location::Location,
     theme::{Theme, ThemeLocation},
     utilities::map_text_color,
