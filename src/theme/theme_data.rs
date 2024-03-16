@@ -1,187 +1,180 @@
-
 use crate::theme::{Theme, ThemeEnemy, ThemeLocation};
 
-// TODO probably best to calculate life and attack in game rather than theme, easy, medium, hard enemies
-
 // Please ChatGPT, fill in the below Rust struct values with the lore from
-// Game of Thrones
+// "The Legend of Zelda: Ocarina of Time"
 pub const THEME_DATA: Theme = Theme {
-    main_character: "Merlin",
-    world_name: "Camelot",
+    main_character: "Link",
+    world_name: "Hyrule",
     characters: [
-        "Lancelot",
-        "Mordred",
-        "Arthur Pendragon",
-        "Gaius",
-        "Guinevere",
-        "Uther Pendragon",
-    ], // Allied characters to main_character
+        "Princess Zelda",
+        "Navi",
+        "Skullkid",
+        "Impa",
+        "Saria",
+        "Ruto",
+    ],
     boss: ThemeEnemy {
-        name: "The Sorceress Morgana",
-        description: "A powerful sorceress, skilled in dark magic and harboring deep-seated resentment towards Camelot and those who dwell within it.",
+        name: "Ganon",
+        description: "The King of Thieves and the ultimate evil, seeking the power of the Triforce to conquer Hyrule.",
         life: 50,
-        attack: 12
+        attack: 12,
     },
     locations: [
         ThemeLocation {
-            name: "Camelot Castle",
-            description: "A majestic fortress atop rugged cliffs, echoing tales of chivalry.",
+            name: "Gerudo Valley",
+            description: "A desert canyon inhabited by the fierce Gerudo tribe, known for their skilled horseback archery and thievery.",
             enemies: [
                 ThemeEnemy {
-                    name: "Black Knight",
-                    description: "Clad in dark armor, a formidable foe wielding a deadly sword.",
-                    life: 20, // Range 10 - 20
-                    attack: 8 // Range 4 - 8
+                    name: "Gerudo Guard",
+                    description: "Elite warriors of the Gerudo, wielding curved swords and swift horse mounts.",
+                    life: 22,
+                    attack: 8,
                 },
                 ThemeEnemy {
-                    name: "Enchanted Armor",
-                    description: "An animated suit of armor, powered by mystical forces.",
-                    life: 25,
-                    attack: 6
+                    name: "Leevers",
+                    description: "Sandy creatures emerging from the ground to attack travelers, making navigation treacherous.",
+                    life: 20,
+                    attack: 7,
                 },
                 ThemeEnemy {
-                    name: "Sir Balin's Shade",
-                    description: "The lingering spirit of a once noble knight, seeking vengeance.",
+                    name: "Gerudo Thief",
+                    description: "Sneaky bandits lurking in the shadows, attempting to steal valuable items from passersby.",
                     life: 18,
-                    attack: 10
-                }
-            ]
+                    attack: 9,
+                },
+            ],
         },
         ThemeLocation {
-            name: "Camelot Tavern",
-            description:
-                "A lively hub in Camelot's heart, offering hearty meals and merry company.",
+            name: "Death Mountain",
+            description: "A towering volcano shrouded in smoke and lava, home to the proud Goron tribe and the terrifying Fire Temple.",
             enemies: [
                 ThemeEnemy {
-                    name: "Rogue Bandit",
-                    description: "A skilled thief and fighter, always ready to strike from the shadows.",
-                    life: 15,
-                    attack: 7
+                    name: "Goron Warrior",
+                    description: "Mighty rock-eaters wielding massive hammers, rolling down slopes with incredible force.",
+                    life: 25,
+                    attack: 10,
                 },
                 ThemeEnemy {
-                    name: "Rowdy Drunkard",
-                    description: "Unpredictable and belligerent, swinging fists with reckless abandon.",
+                    name: "Fire Keese",
+                    description: "Fiery bats swarming around the volcanic caverns, attacking with scorching flames.",
+                    life: 15,
+                    attack: 7,
+                },
+                ThemeEnemy {
+                    name: "Fire Dancer",
+                    description: "Agile creatures leaping through the flames, performing deadly dances to summon infernal energy.",
+                    life: 18,
+                    attack: 8,
+                },
+            ],
+        },
+        ThemeLocation {
+            name: "Zora's Domain",
+            description: "A serene waterfall kingdom ruled by the aquatic Zora tribe, famed for their elegant architecture and beautiful music.",
+            enemies: [
+                ThemeEnemy {
+                    name: "River Zora",
+                    description: "Aquatic monsters lurking in the waters, shooting deadly projectiles with precision accuracy.",
+                    life: 20,
+                    attack: 9,
+                },
+                ThemeEnemy {
+                    name: "Electric Octorok",
+                    description: "Electrified cephalopods swimming in the domain's rivers, shocking unsuspecting travelers.",
+                    life: 18,
+                    attack: 7,
+                },
+                ThemeEnemy {
+                    name: "Zora Sentry",
+                    description: "Vigilant guards patrolling the domain's boundaries, armed with tridents and keen senses.",
+                    life: 22,
+                    attack: 8,
+                },
+            ],
+        },
+        ThemeLocation {
+            name: "Lost Woods",
+            description: "An enchanted forest filled with winding paths and mystical illusions, hiding the entrance to the sacred forest temple.",
+            enemies: [
+                ThemeEnemy {
+                    name: "Skull Kid",
+                    description: "Mischievous spirits playing pranks on travelers, leading them astray with their flute melodies.",
+                    life: 18,
+                    attack: 7,
+                },
+                ThemeEnemy {
+                    name: "Deku Scrub",
+                    description: "Small plant-like creatures attacking from the underbrush, spitting nuts with surprising accuracy.",
+                    life: 15,
+                    attack: 6,
+                },
+                ThemeEnemy {
+                    name: "Forest Wolfos",
+                    description: "Aggressive wolf-like creatures prowling the woods, attacking with feral ferocity.",
+                    life: 20,
+                    attack: 8,
+                },
+            ],
+        },
+        ThemeLocation {
+            name: "Hyrule Field",
+            description: "Vast plains stretching across the kingdom of Hyrule, connecting its various regions and landmarks.",
+            enemies: [
+                ThemeEnemy {
+                    name: "Stalchild",
+                    description: "Restless undead emerging from the ground at night, attacking travelers with chilling claws.",
+                    life: 15,
+                    attack: 7,
+                },
+                ThemeEnemy {
+                    name: "Peahat",
+                    description: "Flying creatures hovering above the fields, attacking with razor-sharp blades and gusts of wind.",
+                    life: 18,
+                    attack: 8,
+                },
+                ThemeEnemy {
+                    name: "Stalfos Knight",
+                    description: "Powerful skeletal warriors rising to challenge those who dare to wander the fields at night.",
+                    life: 22,
+                    attack: 9,
+                },
+            ],
+        },
+        ThemeLocation {
+            name: "Hyrule Castle Town",
+            description: "A bustling hub of commerce and culture within the shadow of Hyrule Castle, where travelers from all corners of the kingdom converge.",
+            enemies: [
+                ThemeEnemy {
+                    name: "Poe",
+                    description: "Ghostly spirits haunting the streets at night, stealing the souls of unsuspecting victims.",
+                    life: 20,
+                    attack: 8,
+                },
+                ThemeEnemy {
+                    name: "Gossip Stone",
+                    description: "Mysterious stone monuments scattered throughout the town, revealing secrets to those who listen.",
                     life: 12,
-                    attack: 5
+                    attack: 5,
                 },
                 ThemeEnemy {
-                    name: "Tavern Brawler",
-                    description: "A burly fighter, accustomed to barroom brawls and quick to anger.",
-                    life: 18,
-                    attack: 9
-                }
-            ]
-        },
-        ThemeLocation {
-            name: "Forest of Balor",
-            description:
-                "A verdant labyrinth cloaked in ancient mystery, hiding forgotten secrets.",
-            enemies: [
-                ThemeEnemy {
-                    name: "Shadow Spirit",
-                    description: "A wraith-like creature, blending with the darkness and striking with ethereal power.",
-                    life: 22,
-                    attack: 7
-                },
-                ThemeEnemy {
-                    name: "Cursed Druid",
-                    description: "A wielder of dark magic, twisted by ancient curses and filled with malice.",
-                    life: 20,
-                    attack: 8
-                },
-                ThemeEnemy {
-                    name: "Ancient Treant",
-                    description: "A towering creature of the forest, ancient and wise yet fiercely protective.",
-                    life: 30,
-                    attack: 10 
-                }
-            ]
-        },
-        ThemeLocation {
-            name: "Darkling Woods",
-            description:
-                "An eerie woods of looming darkness, where shadows dance and secrets whisper.",
-            enemies: [
-                ThemeEnemy {
-                    name: "Shade Stalker",
-                    description: "A creature born of shadows, silently hunting its prey with deadly precision.",
-                    life: 18,
-                    attack: 7
-                },
-                ThemeEnemy {
-                    name: "Wraith Wisp",
-                    description: "A flickering apparition, haunting the woods with chilling whispers and ghostly touch.",
-                    life: 15,
-                    attack: 6
-                },
-                ThemeEnemy {
-                    name: "Nightmare Hound",
-                    description: "A monstrous canine, bred from nightmares and fueled by primal instincts.",
-                    life: 20,
-                    attack: 8
-                },
-            ]
-        },
-        ThemeLocation {
-            name: "Excalibur's Rest",
-            description:
-                "A sacred pool where the mighty sword Excalibur was returned to the Lady of the Lake.",
-            enemies: [
-                ThemeEnemy {
-                    name: "Guardian of the Lake",
-                    description: "A stalwart defender, bound to protect the sacred waters with unyielding resolve.",
+                    name: "Town Guard",
+                    description: "Vigilant soldiers patrolling the streets, maintaining order and protecting the town's inhabitants.",
                     life: 25,
-                    attack: 8
+                    attack: 10,
                 },
-                ThemeEnemy {
-                    name: "Lady's Sentinel",
-                    description: "A vigilant guardian, sworn to watch over the resting place of Excalibur.",
-                    life: 20,
-                    attack: 7
-                },
-                ThemeEnemy {
-                    name: "Holy Warden",
-                    description: "A divine warrior, imbued with holy power and righteousness in defense of sacred relics.",
-                    life: 30,
-                    attack: 10
-                },
-            ]
-        },
-        ThemeLocation {
-            name: "Dragon's Lair",
-            description: "A mysterious cavern rumored to be the home of a fearsome dragon.",
-            enemies: [
-                ThemeEnemy {
-                    name: "Shadow Spirit",
-                    description: "A wraith-like creature, blending with the darkness and striking with ethereal power.",
-                    life: 22,
-                    attack: 8
-                },
-                ThemeEnemy {
-                    name: "Ancient Treant",
-                    description: "A towering creature of the forest, ancient and wise yet fiercely protective.",
-                    life: 27,
-                    attack: 9
-                },
-                ThemeEnemy {
-                    name: "The Great Dragon Kilgharrah",
-                    description: "A legendary beast, wreathed in flames and unmatched in strength, guarding its lair with ferocious determination.",
-                    life: 30,
-                    attack: 10
-                },
-            ]
-        },
+            ],
+        },        
     ],
     items: [
-        "Morgana's Amulet",
-        "Arthur's Polished Armour",
-        "Excalibur's Scabbard",
-        "Gaius's Potion Vial",
-        "Merlin's Dragonlord Staff",
-        "Nimueh's Dark Tome",
-        "Morgause's Enchanted Dagger",
-        "The Cup of Life",
-        "The Crystal of Neahtid",
-        "The Horn of Cathbhadh",
-    ]
+        "Master Sword",
+        "Hylian Shield",
+        "Ocarina of Time",
+        "Fairy Bow",
+        "Bomb Bag",
+        "Hookshot",
+        "Boomerang",
+        "Lens of Truth",
+        "Magic Beans",
+        "Megaton Hammer",
+    ],
 };

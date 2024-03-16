@@ -86,7 +86,7 @@ impl GameState {
                                 quest.character.bold()
                             );
                             println!(
-                                "\"{} is in great danger... {}... They must be stopped...\"",
+                                "\"{} is in great danger... {} seeks the destruction of this world... They must be stopped...\"",
                                 self.world.name, quest.boss_name,
                             )
                         }
