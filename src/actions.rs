@@ -1,4 +1,4 @@
-use colored::{Color, Colorize};
+use colored::{ColoredString, Colorize};
 
 use crate::location::Location;
 
@@ -15,53 +15,39 @@ pub enum ActionType {
 #[derive(Clone)]
 pub struct Action {
     pub class: ActionType,
-    pub name: &'static str,
-    pub name_color: Color,
+    pub name: ColoredString,
 }
 
 impl Action {
-    pub fn display_name(&self) -> String {
-        self.name.color(self.name_color).to_string()
-    }
-
-    pub fn new(class: ActionType, name: &'static str, name_color: Color) -> Action {
-        Action {
-            class,
-            name,
-            name_color,
-        }
+    pub fn new(class: ActionType, name: ColoredString) -> Action {
+        Action { class, name }
     }
 }
 
 pub fn get_visiting_actions() -> Vec<Action> {
     vec![
-        Action::new(ActionType::Travel, "Travel", Color::Yellow),
-        Action::new(ActionType::Explore, "Explore", Color::Blue),
+        Action::new(ActionType::Travel, "Travel".yellow()),
+        Action::new(ActionType::Explore, "Explore".blue()),
     ]
 }
 pub fn get_battle_actions() -> Vec<Action> {
     vec![
-        Action::new(ActionType::Attack, "Attack", Color::Red),
-        Action::new(ActionType::Run, "Run", Color::Cyan),
+        Action::new(ActionType::Attack, "Attack".red()),
+        Action::new(ActionType::Run, "Run".cyan()),
     ]
 }
 
 pub fn get_quest_actions() -> Vec<Action> {
     vec![
-        Action::new(ActionType::Continue, "Continue", Color::Green),
-        Action::new(ActionType::Run, "Run", Color::Cyan),
+        Action::new(ActionType::Continue, "Continue".green()),
+        Action::new(ActionType::Run, "Run".cyan()),
     ]
 }
 
+// TODO Fix .to_owned()
 pub fn get_locations_as_actions(locations: &Vec<Location>) -> Vec<Action> {
     locations
         .iter()
-        .map(|location| {
-            Action::new(
-                ActionType::MoveToLocation,
-                &location.name,
-                location.name_color,
-            )
-        })
+        .map(|location| Action::new(ActionType::MoveToLocation, location.name.to_owned()))
         .collect()
 }

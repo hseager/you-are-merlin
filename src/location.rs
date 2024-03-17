@@ -1,21 +1,18 @@
-use colored::{Color, Colorize};
+use colored::ColoredString;
 
 use crate::encounter::Encounter;
 
+// TODO rather than storing name_color, just store ColoredString
+
 #[derive(Clone, Debug)]
 pub struct Location {
-    pub name: &'static str,
-    pub name_color: Color,
+    pub name: ColoredString,
     pub description: &'static str,
     pub current_encounter: usize,
     pub encounters: Vec<Encounter>,
 }
 
 impl Location {
-    pub fn display_name(&self) -> String {
-        self.name.color(self.name_color).to_string()
-    }
-
     pub fn reset_encounters(&mut self) -> () {
         self.current_encounter = 0;
     }

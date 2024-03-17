@@ -14,29 +14,29 @@ mod world;
 use crate::{game_manager::init_game, player_state::PlayerState};
 
 fn main() {
-    let mut game_state = init_game();
+    let mut game = init_game();
 
-    println!("You are {}.", &game_state.player.name);
+    println!("You are {}.", &game.player.name);
 
     loop {
         let mut input = String::new();
 
-        if let PlayerState::GameOver = game_state.state {
+        if let PlayerState::GameOver = game.state {
             print!("Game Over...");
             break;
         }
 
-        if let PlayerState::Win = game_state.state {
+        if let PlayerState::Win = game.state {
             print!("You Win!");
             break;
         }
 
-        game_state.get_current_prompt();
+        game.get_current_prompt();
 
         io::stdin()
             .read_line(&mut input)
             .expect("Failed to read line");
 
-        game_state.handle_action(&input.trim());
+        game.handle_action(&input.trim());
     }
 }

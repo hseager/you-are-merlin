@@ -71,14 +71,9 @@ fn build_locations(theme: &Theme) -> Vec<Location> {
     let mut locations = Vec::new();
 
     for (i, theme_location) in theme.locations.iter().enumerate() {
-        let ThemeLocation {
-            name, description, ..
-        } = theme_location;
-
         locations.push(Location {
-            name,
-            description,
-            name_color: map_text_color(i),
+            name: theme_location.name.color(map_text_color(i)),
+            description: theme_location.description,
             current_encounter: 0,
             encounters: build_battles(theme_location),
         })

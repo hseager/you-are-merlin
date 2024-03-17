@@ -17,16 +17,18 @@ use crate::{
 mod battle_manager;
 mod world_builder;
 
-pub struct GameState {
+pub struct Game {
     pub player: Player,
     pub state: PlayerState,
     pub world: World,
     pub actions: Vec<Action>,
 }
 
-impl GameState {
+// Fix current_location.name.to_owned()
+
+impl Game {
     pub fn get_current_prompt(&self) -> () {
-        self.state.get_prompt(self);
+        self.state.get_prompt(&self.world);
 
         println!("{}", &self.get_actions_display_list());
     }
@@ -41,17 +43,36 @@ impl GameState {
                     Encounter::Quest(_) => self.state = PlayerState::Quest,
                 },
                 ActionType::MoveToLocation => {
-                    self.state = PlayerState::Visiting;
-                    self.world.current_location = self
+                    let next_location_index = self
                         .world
                         .locations
                         .iter()
                         .position(|location| location.name.to_lowercase() == search.to_lowercase())
-                        .unwrap();
+                        .expect("Unable to find location index when moving location and comparing names.");
+
+                    self.world.current_location = next_location_index;
+
+                    let current_location = self
+                        .world
+                        .get_current_location()
+                        .expect("Failed to get_current_location() when moving to location");
+
+                    self.state = PlayerState::Visiting(
+                        current_location.name.to_owned(),
+                        current_location.description,
+                    );
                 }
                 ActionType::Attack => battle_manager::handle_battle(self),
                 ActionType::Run => {
-                    self.state = PlayerState::Visiting;
+                    let current_location = self
+                        .world
+                        .get_current_location()
+                        .expect("Failed to get_current_location() when running.");
+
+                    self.state = PlayerState::Visiting(
+                        current_location.name.to_owned(),
+                        current_location.description,
+                    );
 
                     self.world
                         .locations
@@ -86,7 +107,7 @@ impl GameState {
     // TODO map this in PlayerState rather than here
     fn get_actions(&self, state: &PlayerState) -> Vec<Action> {
         match state {
-            PlayerState::Visiting => get_visiting_actions(),
+            PlayerState::Visiting(_location_name, _location_description) => get_visiting_actions(),
             PlayerState::Battle => get_battle_actions(),
             PlayerState::Quest => get_quest_actions(),
             PlayerState::Travelling => get_locations_as_actions(&self.world.locations),
@@ -97,13 +118,13 @@ impl GameState {
     fn get_actions_display_list(&self) -> String {
         self.get_actions(&self.state)
             .iter()
-            .map(|action| action.display_name())
+            .map(|action| action.name.to_string())
             .collect::<Vec<String>>()
             .join(", ")
     }
 }
 
-pub fn init_game() -> GameState {
+pub fn init_game() -> Game {
     let theme = load_theme();
     let locations = world_builder::build_world(&theme);
 
@@ -121,9 +142,16 @@ pub fn init_game() -> GameState {
         locations,
     };
 
-    GameState {
+    let current_location = world
+        .get_current_location()
+        .expect("Failed to get_current_location() when initialising Game");
+
+    Game {
         player,
-        state: PlayerState::Visiting,
+        state: PlayerState::Visiting(
+            current_location.name.to_owned(),
+            current_location.description,
+        ),
         world,
         actions: get_visiting_actions(),
     }

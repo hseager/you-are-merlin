@@ -3,7 +3,7 @@ use std::{thread::sleep, time::Duration};
 use crate::{
     characters::{Enemy, Fighter, Player},
     encounter::Encounter,
-    game_manager::{GameState, PlayerState},
+    game_manager::{Game, PlayerState},
 };
 
 enum BattleResult {
@@ -11,39 +11,34 @@ enum BattleResult {
     Lose,
 }
 
-pub fn handle_battle(game_state: &mut GameState) {
-    let location = game_state
-        .world
-        .locations
-        .get_mut(game_state.world.current_location);
+pub fn handle_battle(game: &mut Game) {
+    let location = game.world.locations.get_mut(game.world.current_location);
 
     if let Some(location) = location {
         if let Some(encounter) = location.encounters.get_mut(location.current_encounter) {
             match encounter {
-                Encounter::Battle(battle) => {
-                    match start_battle(&mut game_state.player, &battle.enemy) {
-                        BattleResult::Win(enemy) => {
-                            println!("You defeated {}!", enemy.name);
-                            location.go_to_next_encounter();
-                        }
-                        BattleResult::Lose => {
-                            println!("{} died!", game_state.player.name);
-                            game_state.state = PlayerState::GameOver;
-                        }
+                Encounter::Battle(battle) => match start_battle(&mut game.player, &battle.enemy) {
+                    BattleResult::Win(enemy) => {
+                        println!("You defeated {}!", enemy.name);
+                        location.go_to_next_encounter();
                     }
-                }
+                    BattleResult::Lose => {
+                        println!("{} died!", game.player.name);
+                        game.state = PlayerState::GameOver;
+                    }
+                },
                 Encounter::BossFight(battle) => {
-                    match start_battle(&mut game_state.player, &battle.enemy) {
+                    match start_battle(&mut game.player, &battle.enemy) {
                         BattleResult::Win(enemy) => {
                             println!(
                                 "You defeated {}! The {} is saved!",
-                                enemy.name, game_state.world.name
+                                enemy.name, game.world.name
                             );
-                            game_state.state = PlayerState::Win;
+                            game.state = PlayerState::Win;
                         }
                         BattleResult::Lose => {
-                            println!("{} died!", game_state.player.name);
-                            game_state.state = PlayerState::GameOver;
+                            println!("{} died!", game.player.name);
+                            game.state = PlayerState::GameOver;
                         }
                     }
                 }

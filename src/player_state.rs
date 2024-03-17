@@ -1,12 +1,16 @@
+use colored::ColoredString;
+
 use crate::{
     characters::Enemy,
     encounter::{Encounter, Quest},
-    game_manager::GameState,
+    world::World,
 };
 
+// TODO change PlayerState to return an Instance that contains prompt and actions
+// TODO move GameOver and Win into GameState and rename GameState to Game
 pub enum PlayerState {
     Travelling,
-    Visiting,
+    Visiting(ColoredString, &'static str),
     Battle,
     Quest,
     GameOver,
@@ -14,21 +18,15 @@ pub enum PlayerState {
 }
 
 impl PlayerState {
-    pub fn get_prompt(&self, game_state: &GameState) -> () {
-        let GameState { world, .. } = game_state;
-
+    pub fn get_prompt(&self, world: &World) -> () {
         match &self {
-            PlayerState::Visiting => {
-                if let Some(location) = world.locations.get(world.current_location) {
-                    println!(
-                        "You are currently visiting {}. {}",
-                        location.display_name(),
-                        location.description
-                    );
-                    println!("What would you like to do?")
-                } else {
-                    panic!("Couldn't find location!");
-                }
+            PlayerState::Visiting(location_name, location_description) => {
+                println!(
+                    "You are currently visiting {}. {}",
+                    location_name,
+                    location_description
+                );
+                println!("What would you like to do?")
             }
             PlayerState::Travelling => println!("Where would you like to go?"),
             PlayerState::Battle => match world.get_current_encounter() {
@@ -60,7 +58,7 @@ impl PlayerState {
                     println!("{} (life: {}, attack: {})", name, life, attack);
                     println!("{description}")
                 }
-                Encounter::Quest(_) => panic!("Shouldn't be possible to battle during a quest.. Unless we want to fight an ally?"),
+                Encounter::Quest(_) => panic!("Shouldn't be possible to battle during a quest.. Unless you're trying to fight an ally?"),
             },
             PlayerState::Quest => match world.get_current_encounter() {
                 Encounter::Quest(quest) => match quest {
@@ -90,4 +88,6 @@ impl PlayerState {
             _ => panic!("Unhandled PlayerState")
         }
     }
+
+    // pub fn get_actions(&self) -> () {}
 }
