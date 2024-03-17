@@ -22,12 +22,12 @@ pub enum Quest {
 
 #[derive(Clone, Debug)]
 pub struct SideQuest {
-    pub character: String,
-    pub item: String,
+    pub character: ColoredString,
+    pub item: ColoredString,
 }
 
 #[derive(Clone, Debug)]
 pub struct MainQuest {
-    pub character: String,
+    pub character: ColoredString,
     pub boss_name: ColoredString,
 }

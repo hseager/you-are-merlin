@@ -3,7 +3,7 @@ use std::{thread::sleep, time::Duration};
 use crate::{
     characters::{Enemy, Fighter, Player},
     encounter::Encounter,
-    game_manager::{GameState, State},
+    game_manager::{GameState, PlayerState},
 };
 
 enum BattleResult {
@@ -28,7 +28,7 @@ pub fn handle_battle(game_state: &mut GameState) {
                         }
                         BattleResult::Lose => {
                             println!("{} died!", game_state.player.name);
-                            game_state.state = State::GameOver;
+                            game_state.state = PlayerState::GameOver;
                         }
                     }
                 }
@@ -39,11 +39,11 @@ pub fn handle_battle(game_state: &mut GameState) {
                                 "You defeated {}! The {} is saved!",
                                 enemy.name, game_state.world.name
                             );
-                            game_state.state = State::Win;
+                            game_state.state = PlayerState::Win;
                         }
                         BattleResult::Lose => {
                             println!("{} died!", game_state.player.name);
-                            game_state.state = State::GameOver;
+                            game_state.state = PlayerState::GameOver;
                         }
                     }
                 }

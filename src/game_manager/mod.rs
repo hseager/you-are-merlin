@@ -1,15 +1,14 @@
 use colored::Colorize;
 
-// TODO split game_manager out and use a trait for handling actions
-
 use crate::{
     actions::{
         get_battle_actions, get_locations_as_actions, get_quest_actions, get_visiting_actions,
         Action, ActionType,
     },
-    characters::{Enemy, Player},
+    characters::Player,
     config::{PLAYER_ATTACK, PLAYER_LIFE},
-    encounter::{Encounter, Quest},
+    encounter::Encounter,
+    player_state::PlayerState,
     theme::load_theme,
     utilities::get_random_array_index,
     world::World,
@@ -20,94 +19,14 @@ mod world_builder;
 
 pub struct GameState {
     pub player: Player,
-    pub state: State,
+    pub state: PlayerState,
     pub world: World,
     pub actions: Vec<Action>,
 }
 
-pub enum State {
-    Travelling,
-    Visiting,
-    Battle,
-    Quest,
-    GameOver,
-    Win,
-}
-
 impl GameState {
     pub fn get_current_prompt(&self) -> () {
-        if let Some(location) = self.world.locations.get(self.world.current_location) {
-            match &self.state {
-                State::Visiting => {
-                    println!(
-                        "You are currently visiting {}. {}",
-                        location.display_name(),
-                        location.description
-                    );
-                    println!("What would you like to do?")
-                }
-                State::Travelling => println!("Where would you like to go?"),
-                State::Battle => match self.world.get_current_location().get_current_encounter() {
-                    Encounter::Battle(battle) => {
-                        let Enemy {
-                            name,
-                            life,
-                            attack,
-                            description,
-                            ..
-                        } = &battle.enemy;
-
-                        println!(
-                            "A wild {} appears! (life: {}, attack: {})",
-                            name, life, attack
-                        );
-                        println!("{description}")
-                    }
-                    Encounter::BossFight(battle) => {
-                        let Enemy {
-                            name,
-                            life,
-                            attack,
-                            description,
-                            ..
-                        } = &battle.enemy;
-
-                        println!("A great danger approaches...");
-                        println!("{} (life: {}, attack: {})", name, life, attack);
-                        println!("{description}")
-                    }
-                    _ => (),
-                },
-                State::Quest => match self.world.get_current_location().get_current_encounter() {
-                    Encounter::Quest(quest) => match quest {
-                        Quest::MainQuest(quest) => {
-                            println!(
-                                "You find a calm area. {} wants to ask you something.",
-                                quest.character.bold()
-                            );
-                            println!(
-                                "\"{} is in great danger... {} seeks the destruction of this world... They must be stopped...\"",
-                                self.world.name, quest.boss_name,
-                            )
-                        }
-                        Quest::SideQuest(quest) => {
-                            println!(
-                                "You find a calm area. {} wants to ask you something.",
-                                quest.character.bold()
-                            );
-                            println!(
-                                    "\"Will you find {} and bring it back to me? I will make it worth your while...\"",
-                                    quest.item.bold()
-                                )
-                        }
-                    },
-                    _ => (),
-                },
-                _ => (),
-            }
-        } else {
-            println!("Couldn't find location.");
-        }
+        self.state.get_prompt(self);
 
         println!("{}", &self.get_actions_display_list());
     }
@@ -115,16 +34,14 @@ impl GameState {
     pub fn handle_action(&mut self, search: &str) -> () {
         match &self.find_action(search) {
             Some(action) => match action.class {
-                ActionType::Travel => self.state = State::Travelling,
-                ActionType::Explore => {
-                    match self.world.get_current_location().get_current_encounter() {
-                        Encounter::Battle(_) => self.state = State::Battle,
-                        Encounter::BossFight(_) => self.state = State::Battle,
-                        Encounter::Quest(_) => self.state = State::Quest,
-                    }
-                }
+                ActionType::Travel => self.state = PlayerState::Travelling,
+                ActionType::Explore => match self.world.get_current_encounter() {
+                    Encounter::Battle(_) => self.state = PlayerState::Battle,
+                    Encounter::BossFight(_) => self.state = PlayerState::Battle,
+                    Encounter::Quest(_) => self.state = PlayerState::Quest,
+                },
                 ActionType::MoveToLocation => {
-                    self.state = State::Visiting;
+                    self.state = PlayerState::Visiting;
                     self.world.current_location = self
                         .world
                         .locations
@@ -134,7 +51,7 @@ impl GameState {
                 }
                 ActionType::Attack => battle_manager::handle_battle(self),
                 ActionType::Run => {
-                    self.state = State::Visiting;
+                    self.state = PlayerState::Visiting;
 
                     self.world
                         .locations
@@ -151,7 +68,7 @@ impl GameState {
                         .unwrap()
                         .go_to_next_encounter();
 
-                    self.state = State::Battle;
+                    self.state = PlayerState::Battle;
                 }
             },
             None => println!("This isn't the time to use {}!", search),
@@ -166,12 +83,13 @@ impl GameState {
             .find(|action| action.name.trim().to_lowercase() == search.to_lowercase())
     }
 
-    fn get_actions(&self, state: &State) -> Vec<Action> {
+    // TODO map this in PlayerState rather than here
+    fn get_actions(&self, state: &PlayerState) -> Vec<Action> {
         match state {
-            State::Visiting => get_visiting_actions(),
-            State::Battle => get_battle_actions(),
-            State::Quest => get_quest_actions(),
-            State::Travelling => get_locations_as_actions(&self.world.locations),
+            PlayerState::Visiting => get_visiting_actions(),
+            PlayerState::Battle => get_battle_actions(),
+            PlayerState::Quest => get_quest_actions(),
+            PlayerState::Travelling => get_locations_as_actions(&self.world.locations),
             _ => vec![],
         }
     }
@@ -205,7 +123,7 @@ pub fn init_game() -> GameState {
 
     GameState {
         player,
-        state: State::Visiting,
+        state: PlayerState::Visiting,
         world,
         actions: get_visiting_actions(),
     }

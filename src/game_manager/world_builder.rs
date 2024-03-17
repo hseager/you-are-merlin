@@ -10,6 +10,8 @@ use crate::{
     utilities::map_text_color,
 };
 
+// Transfer ownership rather than cloning/copying ThemeLocation
+
 pub fn build_world(theme: &Theme) -> Vec<Location> {
     let mut locations = build_locations(&theme);
     let mut characters = theme.characters.to_vec();
@@ -35,7 +37,7 @@ pub fn build_world(theme: &Theme) -> Vec<Location> {
 
     locations.shuffle(&mut rng);
 
-    add_boss_encounter(&mut locations, &boss);
+    add_boss_encounter(&mut locations, boss);
 
     locations.shuffle(&mut rng);
 
@@ -111,7 +113,7 @@ fn build_main_quest(characters: &mut Vec<&str>, boss: &Enemy) -> Encounter {
     characters.retain(|c| *c != character);
 
     Encounter::Quest(Quest::MainQuest(MainQuest {
-        character,
+        character: character.bold(),
         boss_name: boss.name.clone(),
     }))
 }
@@ -131,12 +133,15 @@ fn build_side_quest(characters: &mut Vec<&str>, items: &mut Vec<&str>) -> Encoun
     let item = items.choose_mut(&mut rng).unwrap().to_owned();
     items.retain(|i| *i != item);
 
-    Encounter::Quest(Quest::SideQuest(SideQuest { character, item }))
+    Encounter::Quest(Quest::SideQuest(SideQuest {
+        character: character.bold(),
+        item: item.bold(),
+    }))
 }
 
-fn add_boss_encounter(locations: &mut Vec<Location>, boss: &Enemy) -> () {
+fn add_boss_encounter(locations: &mut Vec<Location>, boss: Enemy) -> () {
     let location = locations.get_mut(0).unwrap();
-    location.encounters.push(Encounter::BossFight(Battle {
-        enemy: boss.clone(),
-    }));
+    location
+        .encounters
+        .push(Encounter::BossFight(Battle { enemy: boss }));
 }

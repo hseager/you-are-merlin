@@ -6,11 +6,12 @@ mod config;
 mod encounter;
 mod game_manager;
 mod location;
+mod player_state;
 mod theme;
 mod utilities;
 mod world;
 
-use crate::game_manager::{init_game, State};
+use crate::{game_manager::init_game, player_state::PlayerState};
 
 fn main() {
     let mut game_state = init_game();
@@ -20,12 +21,12 @@ fn main() {
     loop {
         let mut input = String::new();
 
-        if let State::GameOver = game_state.state {
+        if let PlayerState::GameOver = game_state.state {
             print!("Game Over...");
             break;
         }
 
-        if let State::Win = game_state.state {
+        if let PlayerState::Win = game_state.state {
             print!("You Win!");
             break;
         }
