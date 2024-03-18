@@ -36,7 +36,7 @@ impl Fighter for Enemy {
             "{} attacks you for {} damage. (Your life: {})",
             &self.name(),
             damage,
-            &self.life()
+            &target.life()
         );
     }
 
@@ -68,7 +68,7 @@ impl Fighter for Player {
             "You attack {} for {} damage. (Enemy life: {})",
             &target.name(),
             damage,
-            &self.life()
+            target.life()
         );
     }
 

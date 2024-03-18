@@ -1,10 +1,7 @@
 use colored::Colorize;
 
 use crate::{
-    actions::{
-        get_battle_actions, get_locations_as_actions, get_quest_actions, get_visiting_actions,
-        Action, ActionType,
-    },
+    actions::{get_visiting_actions, Action, ActionType},
     characters::Player,
     config::{PLAYER_ATTACK, PLAYER_LIFE},
     encounter::Encounter,
@@ -30,13 +27,16 @@ impl Game {
     pub fn get_current_prompt(&self) -> () {
         self.state.get_prompt(&self.world);
 
-        println!("{}", &self.get_actions_display_list());
+        println!("{}", &self.state.get_actions_display_list());
     }
 
     pub fn handle_action(&mut self, search: &str) -> () {
         match &self.find_action(search) {
             Some(action) => match action.class {
-                ActionType::Travel => self.state = PlayerState::Travelling,
+                ActionType::Travel => {
+                    self.state = PlayerState::Travelling(self.world.locations.clone())
+                    // TODO remove clone
+                }
                 ActionType::Explore => match self.world.get_current_encounter() {
                     Encounter::Battle(_) => self.state = PlayerState::Battle,
                     Encounter::BossFight(_) => self.state = PlayerState::Battle,
@@ -95,32 +95,13 @@ impl Game {
             None => println!("This isn't the time to use {}!", search),
         }
 
-        self.actions = self.get_actions(&self.state);
+        self.actions = self.state.get_actions();
     }
 
     fn find_action(&self, search: &str) -> Option<&Action> {
         self.actions
             .iter()
             .find(|action| action.name.trim().to_lowercase() == search.to_lowercase())
-    }
-
-    // TODO map this in PlayerState rather than here
-    fn get_actions(&self, state: &PlayerState) -> Vec<Action> {
-        match state {
-            PlayerState::Visiting(_location_name, _location_description) => get_visiting_actions(),
-            PlayerState::Battle => get_battle_actions(),
-            PlayerState::Quest => get_quest_actions(),
-            PlayerState::Travelling => get_locations_as_actions(&self.world.locations),
-            _ => vec![],
-        }
-    }
-
-    fn get_actions_display_list(&self) -> String {
-        self.get_actions(&self.state)
-            .iter()
-            .map(|action| action.name.to_string())
-            .collect::<Vec<String>>()
-            .join(", ")
     }
 }
 
