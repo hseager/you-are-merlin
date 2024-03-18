@@ -11,6 +11,8 @@ enum BattleResult {
     Lose,
 }
 
+// TODO lose coupling of game
+
 pub fn handle_battle(game: &mut Game) {
     let location = game.world.locations.get_mut(game.world.current_location);
 

@@ -65,7 +65,7 @@ impl Fighter for Player {
         target.take_damage(damage);
 
         println!(
-            "You attack {} for {} damage. (Your life: {})",
+            "You attack {} for {} damage. (Enemy life: {})",
             &target.name(),
             damage,
             &self.life()

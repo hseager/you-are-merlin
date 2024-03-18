@@ -11,9 +11,10 @@ impl World {
         self.locations.get(self.current_location)
     }
 
-    // TODO clean this up
     pub fn get_current_encounter(&self) -> &Encounter {
-        let location = self.get_current_location().unwrap();
+        let location = self
+            .get_current_location()
+            .expect("Unable to get_current_location when trying to get_current_encounter");
 
         location
             .encounters
