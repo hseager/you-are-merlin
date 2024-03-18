@@ -11,10 +11,10 @@ mod theme;
 mod utilities;
 mod world;
 
-use crate::{game_manager::init_game, player_state::PlayerState};
+use crate::{game_manager::Game, player_state::PlayerState};
 
 fn main() {
-    let mut game = init_game();
+    let mut game = Game::new();
 
     println!("You are {}.", &game.player.name);
 

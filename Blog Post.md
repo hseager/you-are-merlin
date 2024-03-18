@@ -26,3 +26,6 @@
     - handle_actions
 
 1. init_game consumes Theme data rather than reference
+
+Need to check where I'm mutating data to make sure reference lifetimes are still valid
+Need to make sure references are comsumed for each loop cycle

@@ -45,13 +45,13 @@ impl Fighter for Enemy {
     }
 }
 
-pub struct Player {
-    pub name: ColoredString,
+pub struct Player<'a> {
+    pub name: &'a ColoredString,
     pub life: i16,
     pub attack: i16,
 }
 
-impl Fighter for Player {
+impl<'a>  Fighter for Player<'a>  {
     fn name(&self) -> &ColoredString {
         &self.name
     }
