@@ -10,8 +10,6 @@ use crate::{
     utilities::map_text_color,
 };
 
-// Transfer ownership rather than cloning/copying ThemeLocation
-
 pub fn build_world(theme: Theme) -> Vec<Location> {
     let mut locations = build_locations(&theme);
     let mut characters = theme.characters.to_vec();

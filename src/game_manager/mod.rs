@@ -14,8 +14,8 @@ use crate::{
 mod battle_manager;
 mod world_builder;
 
-pub struct Game<'a> {
-    pub player: Player<'a>,
+pub struct Game {
+    pub player: Player,
     pub state: PlayerState,
     pub world: World,
     pub actions: Vec<Action>,
@@ -23,31 +23,31 @@ pub struct Game<'a> {
 
 // Fix current_location.name.to_owned()
 
-impl<'a> Game<'a> {
-    pub fn new() -> Game<'a> {
+impl Game {
+    pub fn new() -> Game {
         let theme = load_theme();
         let world_name = theme.world_name;
-        let player_name = &theme.main_character.bold();
-        let locations = world_builder::build_world(theme);
-    
-        println!("{:#?}", locations);
-    
+
         let player = Player {
-            name: player_name,
+            name: theme.main_character.bold(),
             life: PLAYER_LIFE,
             attack: PLAYER_ATTACK,
         };
-    
+
+        let locations = world_builder::build_world(theme);
+
+        // println!("{:#?}", locations);
+
         let world = World {
             name: world_name,
             current_location: get_random_array_index(&locations),
             locations,
         };
-    
+
         let current_location = world
             .get_current_location()
             .expect("Failed to get_current_location() when initialising Game");
-    
+
         Game {
             player,
             state: PlayerState::Visiting(
@@ -58,7 +58,6 @@ impl<'a> Game<'a> {
             actions: get_visiting_actions(),
         }
     }
-    
 
     pub fn get_current_prompt(&self) -> () {
         self.state.get_prompt(&self.world);
