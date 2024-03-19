@@ -2,8 +2,6 @@ use colored::ColoredString;
 
 use crate::encounter::Encounter;
 
-// TODO rather than storing name_color, just store ColoredString
-
 #[derive(Clone, Debug)]
 pub struct Location {
     pub name: ColoredString,

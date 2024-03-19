@@ -2,13 +2,11 @@ use colored::ColoredString;
 
 use crate::{
     actions::*,
-    characters::Enemy,
     encounter::{Encounter, Quest},
     location::Location,
     world::World,
 };
 
-// TODO change PlayerState to return an Instance that contains prompt and actions
 // TODO move GameOver and Win into GameState and rename GameState to Game
 // TODO Lose coupling of world
 pub enum PlayerState {
@@ -34,32 +32,16 @@ impl PlayerState {
             PlayerState::Travelling(_) => println!("Where would you like to go?"),
             PlayerState::Battle => match world.get_current_encounter() {
                 Encounter::Battle(battle) => {
-                    let Enemy {
-                        name,
-                        life,
-                        attack,
-                        description,
-                        ..
-                    } = &battle.enemy;
-
                     println!(
                         "A wild {} appears! (life: {}, attack: {})",
-                        name, life, attack
+                        battle.enemy.name, battle.enemy.life, battle.enemy.attack
                     );
-                    println!("{description}")
+                    println!("{}", battle.enemy.description)
                 }
                 Encounter::BossFight(battle) => {
-                    let Enemy {
-                        name,
-                        life,
-                        attack,
-                        description,
-                        ..
-                    } = &battle.enemy;
-
                     println!("A great danger approaches...");
-                    println!("{} (life: {}, attack: {})", name, life, attack);
-                    println!("{description}")
+                    println!("{} (life: {}, attack: {})", battle.enemy.name, battle.enemy.life, battle.enemy.attack);
+                    println!("{}", battle.enemy.description)
                 }
                 Encounter::Quest(_) => panic!("Shouldn't be possible to battle during a quest.. Unless you're trying to fight an ally?"),
             },
