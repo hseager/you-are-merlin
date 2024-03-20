@@ -4,11 +4,11 @@ use rand::{seq::SliceRandom, thread_rng};
 use crate::{
     characters::Enemy,
     config::SIDE_QUEST_COUNT,
-    encounter::{Battle, Encounter, MainQuest, Quest, SideQuest},
-    location::Location,
     theme::{Theme, ThemeLocation},
     utilities::map_text_color,
 };
+
+use super::entities::*;
 
 pub fn build_world(theme: Theme) -> Vec<Location> {
     let mut locations = build_locations(&theme);
@@ -72,7 +72,6 @@ fn build_locations(theme: &Theme) -> Vec<Location> {
         locations.push(Location {
             name: theme_location.name.color(map_text_color(i)),
             description: theme_location.description,
-            current_encounter: 0,
             encounters: build_battles(theme_location),
         })
     }

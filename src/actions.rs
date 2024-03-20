@@ -1,6 +1,6 @@
 use colored::{ColoredString, Colorize};
 
-use crate::location::Location;
+use crate::game_data::entities::Location;
 
 #[derive(Clone)]
 pub enum ActionType {
