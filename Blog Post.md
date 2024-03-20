@@ -33,4 +33,4 @@ Need to make sure references are comsumed for each loop cycle
 
 ### Gist to untangle data and mut state
 
-https://gist.github.com/rust-play/6ff3445d37be463465d028bfcfbe69a6
+https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=dc48248bf9b0dfd9cdeaca6f9e0f2b7b
