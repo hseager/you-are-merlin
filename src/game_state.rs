@@ -1,39 +1,58 @@
-use crate::{actions::{get_visiting_actions, Action}, game_data::GameData, player_state::PlayerState};
+use crate::{
+    actions::{get_visiting_actions, Action, ActionType},
+    battle_manager,
+    characters::Player,
+    config::{PLAYER_ATTACK, PLAYER_LIFE},
+    game_data::{
+        entities::{Encounter, Location, Quest},
+        GameData,
+    },
+    player_state::PlayerState,
+};
 
-pub struct GameState<'a>{
-    state: PlayerState<'a>,
+pub struct GameState<'a> {
+    pub state: PlayerState<'a>,
     current_location: usize,
     current_encounter: usize,
-    actions: Vec<Action>,
+    pub actions: Vec<Action>,
+    pub player: Player<'a>,
+    pub game_data: &'a GameData,
 }
 
 impl<'a> GameState<'a> {
     pub fn new(game_data: &GameData) -> GameState {
         let current_location = 0;
-        
+
         let location = game_data.locations.get(current_location).unwrap();
-        
+
+        let player = Player {
+            name: &game_data.main_character,
+            life: PLAYER_LIFE,
+            attack: PLAYER_ATTACK,
+        };
+
         GameState {
             state: PlayerState::Visiting(&location.name, &location.description),
             current_location,
             current_encounter: 0,
-            actions: get_visiting_actions()
+            actions: get_visiting_actions(),
+            player,
+            game_data,
         }
     }
-    
+
     pub fn get_prompt(&self) {
         match &self.state {
             PlayerState::Visiting(location_name, location_description) => {
                 println!(
                     "You are currently visiting {}. {}",
-                    location_name,
-                    location_description
+                    location_name, location_description
                 );
                 println!("What would you like to do?")
             }
             PlayerState::Travelling(_) => println!("Where would you like to go?"),
-            PlayerState::Battle => match world.get_current_encounter() {
-                Encounter::Battle(battle) => {
+            PlayerState::Battle(encounter) => match encounter {
+                Encounter::Battle(battle) => { // TODO Fix enemy name not changing on encounter change
                     println!(
                         "A wild {} appears! (life: {}, attack: {})",
                         battle.enemy.name, battle.enemy.life, battle.enemy.attack
@@ -47,7 +66,7 @@ impl<'a> GameState<'a> {
                 }
                 Encounter::Quest(_) => panic!("Shouldn't be possible to battle during a quest.. Unless you're trying to fight an ally?"),
             },
-            PlayerState::Quest => match world.get_current_encounter() {
+            PlayerState::Quest(encounter) => match encounter {
                 Encounter::Quest(quest) => match quest {
                     Quest::MainQuest(quest) => {
                         println!(
@@ -56,7 +75,7 @@ impl<'a> GameState<'a> {
                         );
                         println!(
                             "\"{} is in great danger... {} seeks the destruction of this world... They must be stopped...\"",
-                            world.name, quest.boss_name,
+                            &self.game_data.world_name, quest.boss_name,
                         )
                     }
                     Quest::SideQuest(quest) => {
@@ -72,27 +91,105 @@ impl<'a> GameState<'a> {
                 },
                 _ => panic!("Encounter not a quest when playerState is a quest.")
             },
-            _ => panic!("Unhandled PlayerState")
+            _ => panic!("Unhandled PlayerState"),
         }
 
         println!("{}", &self.state.get_actions_display_list());
     }
-    
-    pub fn handle_action(&mut self, input: &str, game_data: &'a GameData) -> () {
-        match input {
-            "Travel" => {
-                self.state = PlayerState::Travelling(&game_data.locations)
+
+    pub fn handle_action(&mut self, search: &str) -> () {
+        match &self.find_action(search) {
+            Some(action) => match action.class {
+                ActionType::Travel => {
+                    self.state = PlayerState::Travelling(&self.game_data.locations)
+                }
+                ActionType::Explore => match self.get_current_encounter() {
+                    Encounter::Battle(_) => {
+                        self.state = PlayerState::Battle(self.get_current_encounter())
+                    }
+                    Encounter::BossFight(_) => {
+                        self.state = PlayerState::Battle(self.get_current_encounter())
+                    }
+                    Encounter::Quest(_) => {
+                        self.state = PlayerState::Quest(self.get_current_encounter())
+                    }
+                },
+                ActionType::MoveToLocation => {
+                    let next_location_index = self.game_data
+                        .locations
+                        .iter()
+                        .position(|location| location.name.to_lowercase() == search.to_lowercase())
+                        .expect("Unable to find location index when moving location and comparing names.");
+
+                    self.current_location = next_location_index;
+
+                    let current_location = self.get_current_location();
+
+                    self.state = PlayerState::Visiting(
+                        &current_location.name,
+                        &current_location.description,
+                    );
+                }
+                ActionType::Attack => battle_manager::handle_battle(self),
+                ActionType::Run => {
+                    let current_location = self.get_current_location();
+
+                    self.state = PlayerState::Visiting(
+                        &current_location.name,
+                        &current_location.description,
+                    );
+
+                    self.reset_encounters();
+                }
+                ActionType::Continue => {
+                    println!("You acknowledge their request and continue exploring the area.");
+
+                    self.go_to_next_encounter();
+                    self.state = PlayerState::Battle(self.get_current_encounter());
+                }
             },
-            "Visit" => {
-                let current_location = &game_data.locations.get(self.current_location)
-                    .expect("Failed to get location");
-            
-                self.state = PlayerState::Visiting(
-                    &current_location.name,
-                    &current_location.description,
-                );
-            },
-            _ => println!("Action not found"),
+            None => println!("This isn't the time to use {}!", search),
+        }
+
+        self.actions = self.state.get_actions();
+    }
+
+    fn find_action(&self, search: &str) -> Option<&Action> {
+        self.actions
+            .iter()
+            .find(|action| action.name.trim().to_lowercase() == search.to_lowercase())
+    }
+
+    pub fn get_current_location(&self) -> &'a Location {
+        self.game_data
+            .locations
+            .get(self.current_location)
+            .expect("Failed to get location.")
+    }
+
+    pub fn get_current_encounter(&self) -> &'a Encounter {
+        let location = self.get_current_location();
+
+        location
+            .encounters
+            .get(self.current_encounter)
+            .expect("Failed to get encounter.")
+    }
+
+    pub fn reset_encounters(&mut self) {
+        self.current_encounter = 0;
+    }
+
+    pub fn go_to_next_encounter(&mut self) {
+        // TODO what happens at the end of all encounters?
+        let next_encounter = self.current_encounter + 1;
+
+        let location = self.get_current_location();
+
+        if next_encounter <= location.encounters.len() {
+            self.current_encounter = next_encounter;
+        } else {
+            self.reset_encounters();
         }
     }
 }

@@ -2,12 +2,14 @@ use std::io;
 
 use game_data::GameData;
 use game_state::GameState;
+use player_state::PlayerState;
 
 mod actions;
-mod game_state;
-mod game_data;
+mod battle_manager;
 mod characters;
 mod config;
+mod game_data;
+mod game_state;
 mod player_state;
 mod theme;
 mod utilities;
@@ -19,7 +21,15 @@ fn main() {
     loop {
         let mut input = String::new();
 
-        // TODO win/lose conditions
+        if let PlayerState::GameOver = game_state.state {
+            print!("Game Over...");
+            break;
+        }
+
+        if let PlayerState::Win = game_state.state {
+            print!("You Win!");
+            break;
+        }
 
         game_state.get_prompt();
 
@@ -27,7 +37,7 @@ fn main() {
             .read_line(&mut input)
             .expect("Failed to read line");
 
-        game_state.handle_action(&input.trim(), &game_data);
+        game_state.handle_action(&input.trim());
     }
 }
 

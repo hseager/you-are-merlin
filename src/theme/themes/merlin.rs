@@ -1,8 +1,6 @@
 
 use crate::theme::{Theme, ThemeEnemy, ThemeLocation};
 
-// TODO probably best to calculate life and attack in game rather than theme, easy, medium, hard enemies
-
 // Please ChatGPT, fill in the below Rust struct values with the lore from
 // Merlin
 pub const THEME_DATA: Theme = Theme {
