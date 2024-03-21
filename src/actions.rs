@@ -45,7 +45,7 @@ pub fn get_quest_actions() -> Vec<Action> {
 }
 
 // TODO Fix .to_owned()
-pub fn get_locations_as_actions(locations: &Vec<Location>) -> Vec<Action> {
+pub fn get_locations_as_actions(locations: &[Location]) -> Vec<Action> {
     locations
         .iter()
         .map(|location| Action::new(ActionType::MoveToLocation, location.name.to_owned()))

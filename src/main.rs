@@ -11,8 +11,8 @@ mod config;
 mod game_data;
 mod game_state;
 mod player_state;
-mod theme;
 mod prompts;
+mod theme;
 mod utilities;
 
 fn main() {
@@ -40,6 +40,6 @@ fn main() {
             .read_line(&mut input)
             .expect("Failed to read line");
 
-        game_state.handle_action(&input.trim());
+        game_state.handle_action(input.trim());
     }
 }

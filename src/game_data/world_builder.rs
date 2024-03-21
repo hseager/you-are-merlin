@@ -45,7 +45,7 @@ pub fn build_world(theme: Theme) -> Vec<Location> {
 
 fn add_quests(
     theme: &Theme,
-    locations: &mut Vec<Location>,
+    locations: &mut [Location],
     characters: &mut Vec<&str>,
     items: &mut Vec<&str>,
     quest_count: usize,
@@ -53,14 +53,16 @@ fn add_quests(
 ) {
     let mut quests: Vec<Encounter> = Vec::new();
 
-    quests.push(build_main_quest(characters, &theme.world_name, &boss));
+    quests.push(build_main_quest(characters, theme.world_name, boss));
 
     for _ in 0..quest_count {
         quests.push(build_side_quest(characters, items));
     }
 
-    for(i, quest) in quests.into_iter().enumerate() {
-        let location = locations.get_mut(i).expect("Failed to get location when adding quests");
+    for (i, quest) in quests.into_iter().enumerate() {
+        let location = locations
+            .get_mut(i)
+            .expect("Failed to get location when adding quests");
         location.encounters.insert(0, quest);
     }
 }
@@ -80,7 +82,6 @@ fn build_locations(theme: &Theme) -> Vec<Location> {
 
 // Fill each location with 3 battle encounters
 fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
-
     let mut battles = Vec::new();
 
     for enemy in theme_location.enemies {
@@ -99,7 +100,11 @@ fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
     battles
 }
 
-fn build_main_quest(characters: &mut Vec<&str>, world_name: &'static str, boss: &Enemy) -> Encounter {
+fn build_main_quest(
+    characters: &mut Vec<&str>,
+    world_name: &'static str,
+    boss: &Enemy,
+) -> Encounter {
     let mut rng = thread_rng();
 
     // Choose a random character and remove it from the list to make sure it's unique
@@ -134,7 +139,7 @@ fn build_side_quest(characters: &mut Vec<&str>, items: &mut Vec<&str>) -> Encoun
     }))
 }
 
-fn add_boss_encounter(locations: &mut Vec<Location>, boss: Enemy) -> () {
+fn add_boss_encounter(locations: &mut [Location], boss: Enemy) {
     let location = locations.get_mut(0).unwrap();
     location
         .encounters

@@ -12,10 +12,11 @@ pub enum PlayerState<'a> {
 }
 
 impl<'a> PlayerState<'a> {
-
     pub fn get_prompt(&self) {
         match &self {
-            PlayerState::Visiting(location_name, location_description) => get_visiting_prompt(location_name, location_description),
+            PlayerState::Visiting(location_name, location_description) => {
+                get_visiting_prompt(location_name, location_description)
+            }
             PlayerState::Travelling(_) => get_travelling_prompt(),
             PlayerState::Battle(encounter) => get_battle_prompt(encounter),
             PlayerState::Quest(encounter) => get_quest_prompt(encounter),
@@ -40,5 +41,4 @@ impl<'a> PlayerState<'a> {
             .collect::<Vec<String>>()
             .join(", ")
     }
-
 }

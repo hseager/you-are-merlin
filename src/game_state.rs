@@ -32,7 +32,7 @@ impl<'a> GameState<'a> {
         };
 
         GameState {
-            state: PlayerState::Visiting(&location.name, &location.description),
+            state: PlayerState::Visiting(&location.name, location.description),
             current_location,
             current_encounter: 0,
             actions: get_visiting_actions(),
@@ -46,7 +46,7 @@ impl<'a> GameState<'a> {
         println!("{}", &self.state.get_actions_display_list());
     }
 
-    pub fn handle_action(&mut self, search: &str) -> () {
+    pub fn handle_action(&mut self, search: &str) {
         match &self.find_action(search) {
             Some(action) => match action.class {
                 ActionType::Travel => {
@@ -74,19 +74,15 @@ impl<'a> GameState<'a> {
 
                     let current_location = self.get_current_location();
 
-                    self.state = PlayerState::Visiting(
-                        &current_location.name,
-                        &current_location.description,
-                    );
+                    self.state =
+                        PlayerState::Visiting(&current_location.name, current_location.description);
                 }
                 ActionType::Attack => battle_manager::handle_battle(self),
                 ActionType::Run => {
                     let current_location = self.get_current_location();
 
-                    self.state = PlayerState::Visiting(
-                        &current_location.name,
-                        &current_location.description,
-                    );
+                    self.state =
+                        PlayerState::Visiting(&current_location.name, current_location.description);
 
                     self.reset_encounters();
                 }
@@ -140,10 +136,11 @@ impl<'a> GameState<'a> {
 
             let encounter = self.get_current_encounter();
             match encounter {
-                Encounter::Battle(_) | Encounter::BossFight(_)  => self.state = PlayerState::Battle(encounter),
+                Encounter::Battle(_) | Encounter::BossFight(_) => {
+                    self.state = PlayerState::Battle(encounter)
+                }
                 Encounter::Quest(_) => self.state = PlayerState::Quest(encounter),
             }
-            
         } else {
             self.reset_encounters();
         }

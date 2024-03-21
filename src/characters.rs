@@ -7,8 +7,8 @@ pub trait Fighter {
     fn is_alive(&self) -> bool {
         self.life() > &0
     }
-    fn attack(&self, target: &mut dyn Fighter) -> ();
-    fn take_damage(&mut self, damage: i16) -> ();
+    fn attack(&self, target: &mut dyn Fighter);
+    fn take_damage(&mut self, damage: i16);
 }
 
 #[derive(Clone, Debug)]
@@ -28,7 +28,7 @@ impl Fighter for Enemy {
         &self.life
     }
 
-    fn attack(&self, target: &mut dyn Fighter) -> () {
+    fn attack(&self, target: &mut dyn Fighter) {
         let damage = calculate_damage(self.attack);
         target.take_damage(damage);
 
@@ -40,7 +40,7 @@ impl Fighter for Enemy {
         );
     }
 
-    fn take_damage(&mut self, damage: i16) -> () {
+    fn take_damage(&mut self, damage: i16) {
         self.life -= damage;
     }
 }
@@ -53,14 +53,14 @@ pub struct Player<'a> {
 
 impl<'a> Fighter for Player<'a> {
     fn name(&self) -> &ColoredString {
-        &self.name
+        self.name
     }
 
     fn life(&self) -> &i16 {
         &self.life
     }
 
-    fn attack(&self, target: &mut dyn Fighter) -> () {
+    fn attack(&self, target: &mut dyn Fighter) {
         let damage = calculate_damage(self.attack);
         target.take_damage(damage);
 
@@ -72,7 +72,7 @@ impl<'a> Fighter for Player<'a> {
         );
     }
 
-    fn take_damage(&mut self, damage: i16) -> () {
+    fn take_damage(&mut self, damage: i16) {
         self.life -= damage;
     }
 }
