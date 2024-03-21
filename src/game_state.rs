@@ -52,7 +52,7 @@ impl<'a> GameState<'a> {
             }
             PlayerState::Travelling(_) => println!("Where would you like to go?"),
             PlayerState::Battle(encounter) => match encounter {
-                Encounter::Battle(battle) => { // TODO Fix enemy name not changing on encounter change
+                Encounter::Battle(battle) => {
                     println!(
                         "A wild {} appears! (life: {}, attack: {})",
                         battle.enemy.name, battle.enemy.life, battle.enemy.attack
@@ -188,6 +188,13 @@ impl<'a> GameState<'a> {
 
         if next_encounter <= location.encounters.len() {
             self.current_encounter = next_encounter;
+
+            let encounter = self.get_current_encounter();
+            match encounter {
+                Encounter::Battle(_) | Encounter::BossFight(_)  => self.state = PlayerState::Battle(encounter),
+                Encounter::Quest(_) => self.state = PlayerState::Quest(encounter),
+            }
+            
         } else {
             self.reset_encounters();
         }
