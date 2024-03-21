@@ -15,8 +15,6 @@ A text adventure game, built with Rust.
 
 ### Refactor
 
-- Sort out modules
-- Review .unwrap and .clone()
 - Unit tests
 
 ## Dev
