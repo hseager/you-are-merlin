@@ -1,8 +1,10 @@
+use std::{thread::sleep, time::Duration};
+
 use crate::{
     actions::{get_visiting_actions, Action, ActionType},
     battle_manager,
     characters::Player,
-    config::{PLAYER_ATTACK, PLAYER_LIFE},
+    config::{PLAYER_ATTACK, PLAYER_LIFE, REST_INTERVAL_SECONDS},
     game_data::{
         entities::{Encounter, Location},
         GameData,
@@ -27,6 +29,7 @@ impl<'a> GameState<'a> {
 
         let player = Player {
             name: &game_data.main_character,
+            max_life: PLAYER_LIFE,
             life: PLAYER_LIFE,
             attack: PLAYER_ATTACK,
         };
@@ -91,6 +94,25 @@ impl<'a> GameState<'a> {
 
                     self.go_to_next_encounter();
                     self.state = PlayerState::Battle(self.get_current_encounter());
+                }
+                ActionType::Rest => {
+                    println!("You stay and rest a while...");
+
+                    while self.player.life < self.player.max_life {
+                        let heal_amount = 10;
+                        let mut new_life = self.player.life + heal_amount;
+                        if new_life > self.player.max_life {
+                            new_life = self.player.max_life;
+                        }
+
+                        println!(
+                            "Your life increases by {} (life: {})",
+                            new_life - self.player.life,
+                            new_life
+                        );
+                        self.player.life = new_life;
+                        sleep(Duration::from_secs(REST_INTERVAL_SECONDS as u64));
+                    }
                 }
             },
             None => println!("This isn't the time to use {}!", search),

@@ -2,6 +2,7 @@ use std::{thread::sleep, time::Duration};
 
 use crate::{
     characters::{Enemy, Fighter, Player},
+    config::BATTLE_INTERVAL_SECONDS,
     game_data::entities::Encounter,
     game_state::GameState,
     player_state::PlayerState,
@@ -52,7 +53,7 @@ fn start_battle(player: &mut Player, enemy: &Enemy) -> BattleResult {
             break;
         }
 
-        sleep(Duration::from_secs(1));
+        sleep(Duration::from_secs(BATTLE_INTERVAL_SECONDS as u64));
 
         enemy_copy.attack(player);
 
@@ -60,7 +61,7 @@ fn start_battle(player: &mut Player, enemy: &Enemy) -> BattleResult {
             break;
         }
 
-        sleep(Duration::from_secs(1));
+        sleep(Duration::from_secs(BATTLE_INTERVAL_SECONDS as u64));
     }
 
     if !enemy_copy.is_alive() {

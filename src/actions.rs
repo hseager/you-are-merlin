@@ -10,6 +10,7 @@ pub enum ActionType {
     Continue,
     Run,
     MoveToLocation,
+    Rest,
 }
 
 #[derive(Clone)]
@@ -28,6 +29,7 @@ pub fn get_visiting_actions() -> Vec<Action> {
     vec![
         Action::new(ActionType::Travel, "Travel".yellow()),
         Action::new(ActionType::Explore, "Explore".blue()),
+        Action::new(ActionType::Rest, "Rest".green()),
     ]
 }
 pub fn get_battle_actions() -> Vec<Action> {

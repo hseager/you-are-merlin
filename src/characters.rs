@@ -47,6 +47,7 @@ impl Fighter for Enemy {
 
 pub struct Player<'a> {
     pub name: &'a ColoredString,
+    pub max_life: i16,
     pub life: i16,
     pub attack: i16,
 }
