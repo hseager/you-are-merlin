@@ -26,6 +26,7 @@ pub fn build_world(theme: Theme) -> Vec<Location> {
     locations.shuffle(&mut rng);
 
     add_quests(
+        &theme,
         &mut locations,
         &mut characters,
         &mut items,
@@ -43,6 +44,7 @@ pub fn build_world(theme: Theme) -> Vec<Location> {
 }
 
 fn add_quests(
+    theme: &Theme,
     locations: &mut Vec<Location>,
     characters: &mut Vec<&str>,
     items: &mut Vec<&str>,
@@ -51,7 +53,7 @@ fn add_quests(
 ) {
     let mut quests: Vec<Encounter> = Vec::new();
 
-    quests.push(build_main_quest(characters, &boss));
+    quests.push(build_main_quest(characters, &theme.world_name, &boss));
 
     for _ in 0..quest_count {
         quests.push(build_side_quest(characters, items));
@@ -97,7 +99,7 @@ fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
     battles
 }
 
-fn build_main_quest(characters: &mut Vec<&str>, boss: &Enemy) -> Encounter {
+fn build_main_quest(characters: &mut Vec<&str>, world_name: &'static str, boss: &Enemy) -> Encounter {
     let mut rng = thread_rng();
 
     // Choose a random character and remove it from the list to make sure it's unique
@@ -106,6 +108,7 @@ fn build_main_quest(characters: &mut Vec<&str>, boss: &Enemy) -> Encounter {
 
     Encounter::Quest(Quest::MainQuest(MainQuest {
         character: character.bold(),
+        world_name,
         boss_name: boss.name.clone(),
     }))
 }

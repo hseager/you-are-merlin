@@ -12,6 +12,7 @@ mod game_data;
 mod game_state;
 mod player_state;
 mod theme;
+mod prompts;
 mod utilities;
 
 fn main() {

@@ -36,5 +36,6 @@ pub struct SideQuest {
 #[derive(Debug)]
 pub struct MainQuest {
     pub character: ColoredString,
+    pub world_name: &'static str,
     pub boss_name: ColoredString,
 }
