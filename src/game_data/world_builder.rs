@@ -25,18 +25,19 @@ pub fn build_world(theme: Theme) -> Vec<Location> {
 
     locations.shuffle(&mut rng);
 
+    let boss_location = add_boss_encounter(&mut locations, &boss);
+
+    locations.shuffle(&mut rng);
+
     add_quests(
         &theme,
         &mut locations,
         &mut characters,
         &mut items,
         SIDE_QUEST_COUNT,
-        &boss,
+        boss,
+        boss_location,
     );
-
-    locations.shuffle(&mut rng);
-
-    add_boss_encounter(&mut locations, boss);
 
     locations.shuffle(&mut rng);
 
@@ -49,11 +50,17 @@ fn add_quests(
     characters: &mut Vec<&str>,
     items: &mut Vec<&str>,
     quest_count: usize,
-    boss: &Enemy,
+    boss: Enemy,
+    boss_location: &Location,
 ) {
     let mut quests: Vec<Encounter> = Vec::new();
 
-    quests.push(build_main_quest(characters, theme.world_name, boss));
+    quests.push(build_main_quest(
+        characters,
+        theme.world_name,
+        boss,
+        boss_location,
+    ));
 
     for _ in 0..quest_count {
         quests.push(build_side_quest(characters, items));
@@ -106,7 +113,8 @@ fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
 fn build_main_quest(
     characters: &mut Vec<&str>,
     world_name: &'static str,
-    boss: &Enemy,
+    boss: Enemy,
+    boss_location: &Location,
 ) -> Encounter {
     let mut rng = thread_rng();
 
@@ -117,7 +125,8 @@ fn build_main_quest(
     Encounter::Quest(Quest::MainQuest(MainQuest {
         character: character.bold(),
         world_name,
-        boss_name: boss.name.clone(),
+        boss_name: boss.name,
+        boss_location,
     }))
 }
 
@@ -142,9 +151,12 @@ fn build_side_quest(characters: &mut Vec<&str>, items: &mut Vec<&str>) -> Encoun
     }))
 }
 
-fn add_boss_encounter(locations: &mut [Location], boss: Enemy) {
+fn add_boss_encounter(locations: &mut [Location], boss: &Enemy) -> Location {
     let location = locations.get_mut(0).unwrap();
+
+    location.encounters.push(Encounter::BossFight(Battle {
+        enemy: boss.clone(),
+    }));
+
     location
-        .encounters
-        .push(Encounter::BossFight(Battle { enemy: boss }));
 }
