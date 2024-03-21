@@ -82,6 +82,7 @@ fn build_locations(theme: &Theme) -> Vec<Location> {
 
 // Fill each location with 3 battle encounters
 fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
+    let mut rng = thread_rng();
     let mut battles = Vec::new();
 
     for enemy in theme_location.enemies {
@@ -96,6 +97,8 @@ fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
 
         battles.push(Encounter::Battle(battle))
     }
+
+    battles.shuffle(&mut rng);
 
     battles
 }
