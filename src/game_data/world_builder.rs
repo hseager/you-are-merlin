@@ -57,11 +57,9 @@ fn add_quests(
         quests.push(build_side_quest(characters, items));
     }
 
-    // TODO very messy, clear up clones and checking, make sure there's always more locations than quests etc
-    for (i, location) in locations.iter_mut().take(quests.len()).enumerate() {
-        location
-            .encounters
-            .insert(0, quests.get(i).unwrap().to_owned());
+    for(i, quest) in quests.into_iter().enumerate() {
+        let location = locations.get_mut(i).expect("Failed to get location when adding quests");
+        location.encounters.insert(0, quest);
     }
 }
 
@@ -80,21 +78,23 @@ fn build_locations(theme: &Theme) -> Vec<Location> {
 
 // Fill each location with 3 battle encounters
 fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
-    theme_location
-        .enemies
-        .map(|enemy| {
-            let battle: Battle = Battle {
-                enemy: Enemy {
-                    name: enemy.name.bold(),
-                    description: enemy.description,
-                    attack: enemy.attack,
-                    life: enemy.life,
-                },
-            };
 
-            Encounter::Battle(battle)
-        })
-        .to_vec()
+    let mut battles = Vec::new();
+
+    for enemy in theme_location.enemies {
+        let battle: Battle = Battle {
+            enemy: Enemy {
+                name: enemy.name.bold(),
+                description: enemy.description,
+                attack: enemy.attack,
+                life: enemy.life,
+            },
+        };
+
+        battles.push(Encounter::Battle(battle))
+    }
+
+    battles
 }
 
 fn build_main_quest(characters: &mut Vec<&str>, boss: &Enemy) -> Encounter {

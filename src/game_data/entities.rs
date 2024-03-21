@@ -2,38 +2,38 @@ use colored::ColoredString;
 
 use crate::characters::Enemy;
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub struct Location {
     pub name: ColoredString,
     pub description: &'static str,
     pub encounters: Vec<Encounter>,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub enum Encounter {
     BossFight(Battle),
     Battle(Battle),
     Quest(Quest),
 }
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub struct Battle {
     pub enemy: Enemy,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub enum Quest {
     MainQuest(MainQuest),
     SideQuest(SideQuest),
 }
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub struct SideQuest {
     pub character: ColoredString,
     pub item: ColoredString,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub struct MainQuest {
     pub character: ColoredString,
     pub boss_name: ColoredString,
