@@ -19,6 +19,8 @@ impl GameData {
         let main_character = theme.main_character.bold();
         let locations = world_builder::build_world(theme);
 
+        // println!("{:#?}", locations);
+
         GameData {
             world_name,
             main_character,
