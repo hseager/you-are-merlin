@@ -7,6 +7,7 @@ pub struct Location {
     pub name: ColoredString,
     pub description: &'static str,
     pub encounters: Vec<Encounter>,
+    pub is_resting_location: bool,
 }
 
 #[derive(Debug)]

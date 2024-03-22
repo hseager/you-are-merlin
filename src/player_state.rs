@@ -1,10 +1,8 @@
-use colored::ColoredString;
-
 use crate::{actions::*, game_data::entities::*, prompts::*};
 
 pub enum PlayerState<'a> {
     Travelling(&'a Vec<Location>),
-    Visiting(&'a ColoredString, &'static str),
+    Visiting(&'a Location),
     Battle(&'a Encounter),
     Quest(&'a Encounter),
     GameOver,
@@ -14,8 +12,8 @@ pub enum PlayerState<'a> {
 impl<'a> PlayerState<'a> {
     pub fn get_prompt(&self) {
         match &self {
-            PlayerState::Visiting(location_name, location_description) => {
-                get_visiting_prompt(location_name, location_description)
+            PlayerState::Visiting(location) => {
+                get_visiting_prompt(&location.name, location.description)
             }
             PlayerState::Travelling(_) => get_travelling_prompt(),
             PlayerState::Battle(encounter) => get_battle_prompt(encounter),
@@ -26,7 +24,7 @@ impl<'a> PlayerState<'a> {
 
     pub fn get_actions(&self) -> Vec<Action> {
         match self {
-            PlayerState::Visiting(_, _) => get_visiting_actions(),
+            PlayerState::Visiting(location) => get_visiting_actions(location),
             PlayerState::Battle(_) => get_battle_actions(),
             PlayerState::Quest(_) => get_quest_actions(),
             PlayerState::Travelling(locations) => get_locations_as_actions(locations),

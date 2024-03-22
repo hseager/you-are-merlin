@@ -35,10 +35,10 @@ impl<'a> GameState<'a> {
         };
 
         GameState {
-            state: PlayerState::Visiting(&location.name, location.description),
+            state: PlayerState::Visiting(location),
             current_location,
             current_encounter: 0,
-            actions: get_visiting_actions(),
+            actions: get_visiting_actions(location),
             player,
             game_data,
         }
@@ -77,15 +77,13 @@ impl<'a> GameState<'a> {
 
                     let current_location = self.get_current_location();
 
-                    self.state =
-                        PlayerState::Visiting(&current_location.name, current_location.description);
+                    self.state = PlayerState::Visiting(&current_location);
                 }
                 ActionType::Attack => battle_manager::handle_battle(self),
                 ActionType::Run => {
                     let current_location = self.get_current_location();
 
-                    self.state =
-                        PlayerState::Visiting(&current_location.name, current_location.description);
+                    self.state = PlayerState::Visiting(&current_location);
 
                     self.reset_encounters();
                 }

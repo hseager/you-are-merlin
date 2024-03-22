@@ -6,15 +6,15 @@ A text adventure game, built with Rust.
 
 ### Features
 
-- Rest to regen health
-- Rewards (gold) and trade
 - Quests Rewards
 - Inventory/Items
+- Rewards (gold) and trade
 - Better visuals for life/attack
 - Chance for Run to fail
 
 ### Refactor
 
+- clones in world builder
 - Unit tests
 
 ## Dev

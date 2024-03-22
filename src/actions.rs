@@ -25,12 +25,17 @@ impl Action {
     }
 }
 
-pub fn get_visiting_actions() -> Vec<Action> {
-    vec![
+pub fn get_visiting_actions(location: &Location) -> Vec<Action> {
+    let mut actions = vec![
         Action::new(ActionType::Travel, "Travel".yellow()),
         Action::new(ActionType::Explore, "Explore".blue()),
-        Action::new(ActionType::Rest, "Rest".green()),
-    ]
+    ];
+
+    if location.is_resting_location {
+        actions.push(Action::new(ActionType::Rest, "Rest".green()));
+    }
+
+    actions
 }
 pub fn get_battle_actions() -> Vec<Action> {
     vec![

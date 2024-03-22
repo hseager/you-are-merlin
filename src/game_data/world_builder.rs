@@ -3,7 +3,7 @@ use rand::{seq::SliceRandom, thread_rng};
 
 use crate::{
     characters::Enemy,
-    config::SIDE_QUEST_COUNT,
+    config::{REST_LOCATIONS_COUNT, SIDE_QUEST_COUNT},
     theme::{Theme, ThemeLocation},
     utilities::map_text_color,
 };
@@ -37,6 +37,10 @@ pub fn build_world(theme: Theme) -> Vec<Location> {
         SIDE_QUEST_COUNT,
         boss,
     );
+
+    locations.shuffle(&mut rng);
+
+    add_resting_locations(&mut locations, REST_LOCATIONS_COUNT);
 
     locations.shuffle(&mut rng);
 
@@ -75,6 +79,7 @@ fn build_locations(theme: &Theme) -> Vec<Location> {
             name: theme_location.name.color(map_text_color(i)),
             description: theme_location.description,
             encounters: build_battles(theme_location),
+            is_resting_location: false,
         })
     }
     locations
@@ -148,4 +153,14 @@ fn add_boss_encounter(locations: &mut [Location], boss: &Enemy) {
     location.encounters.push(Encounter::BossFight(Battle {
         enemy: boss.clone(),
     }));
+}
+
+fn add_resting_locations(locations: &mut [Location], resting_location_count: usize) {
+    for i in 0..resting_location_count {
+        let location = locations
+            .get_mut(i)
+            .expect("Unable to get location when adding resting locations");
+
+        location.is_resting_location = true;
+    }
 }
