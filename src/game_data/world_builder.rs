@@ -14,7 +14,6 @@ use super::entities::*;
 pub fn build_world(theme: Theme) -> Vec<Location> {
     let mut locations = build_locations(&theme);
     let mut characters = theme.characters.to_vec();
-    let mut items = theme.items.to_vec();
     let boss = Enemy {
         name: theme.boss.name.bold().red(),
         description: theme.boss.description,
@@ -33,7 +32,7 @@ pub fn build_world(theme: Theme) -> Vec<Location> {
         &theme,
         &mut locations,
         &mut characters,
-        &mut items,
+        &mut theme.quest_items.to_vec(),
         SIDE_QUEST_COUNT,
         boss,
     );

@@ -151,7 +151,7 @@ impl<'a> GameState<'a> {
 
         let location = self.get_current_location();
 
-        if next_encounter <= location.encounters.len() {
+        if next_encounter < location.encounters.len() {
             self.current_encounter = next_encounter;
 
             let encounter = self.get_current_encounter();

@@ -8,6 +8,7 @@ pub struct Theme {
     pub characters: [&'static str; 6],
     pub locations: [ThemeLocation; 6],
     pub items: [&'static str; 10],
+    pub quest_items: [&'static str; 8],
     pub boss: ThemeEnemy,
 }
 
