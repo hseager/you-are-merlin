@@ -52,14 +52,23 @@ fn add_quests(
     locations: &mut [Location],
     characters: &mut Vec<&str>,
     items: &mut Vec<&str>,
-    quest_count: usize,
+    side_quest_count: usize,
     boss: Enemy,
 ) {
     let mut quests: Vec<Encounter> = Vec::new();
 
     quests.push(build_main_quest(characters, theme.world_name, boss));
 
-    for _ in 0..quest_count {
+    assert!(
+        locations.len() > side_quest_count,
+        "Can't have more sidequests than locations. Try adjusting setting in config."
+    );
+    assert!(
+        characters.len() > side_quest_count,
+        "Can't have more sidequests than characters. Try adding more characters to Theme data."
+    );
+
+    for _ in 0..side_quest_count {
         quests.push(build_side_quest(characters, items));
     }
 
@@ -156,6 +165,11 @@ fn add_boss_encounter(locations: &mut [Location], boss: &Enemy) {
 }
 
 fn add_resting_locations(locations: &mut [Location], resting_location_count: usize) {
+    assert!(
+        locations.len() >= resting_location_count,
+        "Can't have more resting locations than locations. Try lowering resting locations in config."
+    );
+
     for i in 0..resting_location_count {
         let location = locations
             .get_mut(i)
