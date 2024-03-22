@@ -1,3 +1,10 @@
+use rand::Rng;
+
+use crate::{
+    config::{ENEMY_BOSS_STATS, ENEMY_EASY_STATS, ENEMY_HARD_STATS, ENEMY_MEDIUM_STATS},
+    theme::ThemeEnemyDifficulty,
+};
+
 use std::{thread::sleep, time::Duration};
 
 use crate::{
@@ -70,5 +77,28 @@ fn start_battle(player: &mut Player, enemy: &Enemy) -> BattleResult {
         BattleResult::Lose
     } else {
         panic!("Battle ended without anyone dying?..");
+    }
+}
+
+pub fn map_theme_difficulty_to_stats(difficulty: ThemeEnemyDifficulty) -> (i16, i16) {
+    match difficulty {
+        ThemeEnemyDifficulty::Easy => ENEMY_EASY_STATS,
+        ThemeEnemyDifficulty::Medium => ENEMY_MEDIUM_STATS,
+        ThemeEnemyDifficulty::Hard => ENEMY_HARD_STATS,
+        ThemeEnemyDifficulty::Boss => ENEMY_BOSS_STATS,
+    }
+}
+
+// Select random damage from -2 to +2 of current attack stat
+pub fn calculate_damage(damage: i16) -> i16 {
+    let range = rand::thread_rng().gen_range(0..4);
+
+    match range {
+        0 => damage - 2,
+        1 => damage - 1,
+        2 => damage,
+        3 => damage + 1,
+        4 => damage + 2,
+        _ => damage,
     }
 }

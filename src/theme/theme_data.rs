@@ -1,9 +1,6 @@
-use crate::theme::{Theme, ThemeEnemy, ThemeLocation};
+use super::*;
 
-use super::ThemeEnemyDifficulty;
-
-// TODO probably best to calculate life and attack in game rather than theme, easy, medium, hard enemies
-// TODO replace life and attack with EnemyDifficulty. Move boss to boss location.
+// Move boss to boss location.
 
 // Please ChatGPT, fill in the below Rust struct values with the lore from
 // "The Legend of Zelda: Ocarina of Time"

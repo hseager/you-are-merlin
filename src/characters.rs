@@ -1,6 +1,8 @@
 use colored::ColoredString;
-use rand::Rng;
 
+use crate::battle_manager::calculate_damage;
+
+// TODO change attack to u16
 pub trait Fighter {
     fn name(&self) -> &ColoredString;
     fn life(&self) -> &i16;
@@ -75,19 +77,5 @@ impl<'a> Fighter for Player<'a> {
 
     fn take_damage(&mut self, damage: i16) {
         self.life -= damage;
-    }
-}
-
-// Select random damage from -2 to +2 of current attack stat
-fn calculate_damage(damage: i16) -> i16 {
-    let range = rand::thread_rng().gen_range(0..4);
-
-    match range {
-        0 => damage - 2,
-        1 => damage - 1,
-        2 => damage,
-        3 => damage + 1,
-        4 => damage + 2,
-        _ => damage,
     }
 }

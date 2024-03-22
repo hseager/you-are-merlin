@@ -2,8 +2,9 @@ use colored::Colorize;
 use rand::{seq::SliceRandom, thread_rng};
 
 use crate::{
+    battle_manager::map_theme_difficulty_to_stats,
     characters::Enemy,
-    config::{BATTLE_ENCOUNTERS_COUNT, REST_LOCATIONS_COUNT, SIDE_QUEST_COUNT},
+    config::{REST_LOCATIONS_COUNT, SIDE_QUEST_COUNT},
     theme::{Theme, ThemeLocation},
     utilities::map_text_color,
 };
@@ -14,11 +15,13 @@ use super::entities::*;
 pub fn build_world(theme: Theme) -> Vec<Location> {
     let mut locations = build_locations(&theme);
     let mut characters = theme.characters.to_vec();
+
+    let (boss_life, boss_attack) = map_theme_difficulty_to_stats(theme.boss.difficulty);
     let boss = Enemy {
         name: theme.boss.name.bold().red(),
         description: theme.boss.description,
-        life: theme.boss.life,
-        attack: theme.boss.attack,
+        life: boss_life,
+        attack: boss_attack,
     };
 
     let mut rng = thread_rng();
@@ -86,7 +89,7 @@ fn build_locations(theme: &Theme) -> Vec<Location> {
         locations.push(Location {
             name: theme_location.name.color(map_text_color(i)),
             description: theme_location.description,
-            encounters: build_battles(theme_location, BATTLE_ENCOUNTERS_COUNT),
+            encounters: build_battles(theme_location),
             is_resting_location: false,
         })
     }
@@ -94,19 +97,18 @@ fn build_locations(theme: &Theme) -> Vec<Location> {
 }
 
 // Fill each location with 3 battle encounters
-fn build_battles(theme_location: &ThemeLocation, battle_encounter_count: usize) -> Vec<Encounter> {
+fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
     let mut rng = thread_rng();
     let mut battles = Vec::new();
 
-    for i in 0..battle_encounter_count {}
-
     for enemy in theme_location.enemies {
+        let (life, attack) = map_theme_difficulty_to_stats(enemy.difficulty);
         let battle: Battle = Battle {
             enemy: Enemy {
                 name: enemy.name.bold(),
                 description: enemy.description,
-                attack: enemy.attack,
-                life: enemy.life,
+                life,
+                attack,
             },
         };
 
