@@ -77,13 +77,13 @@ impl<'a> GameState<'a> {
 
                     let current_location = self.get_current_location();
 
-                    self.state = PlayerState::Visiting(&current_location);
+                    self.state = PlayerState::Visiting(current_location);
                 }
                 ActionType::Attack => battle_manager::handle_battle(self),
                 ActionType::Run => {
                     let current_location = self.get_current_location();
 
-                    self.state = PlayerState::Visiting(&current_location);
+                    self.state = PlayerState::Visiting(current_location);
 
                     self.reset_encounters();
                 }

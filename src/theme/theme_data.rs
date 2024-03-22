@@ -1,6 +1,9 @@
 use crate::theme::{Theme, ThemeEnemy, ThemeLocation};
 
+use super::ThemeEnemyDifficulty;
+
 // TODO probably best to calculate life and attack in game rather than theme, easy, medium, hard enemies
+// TODO replace life and attack with EnemyDifficulty. Move boss to boss location.
 
 // Please ChatGPT, fill in the below Rust struct values with the lore from
 // "The Legend of Zelda: Ocarina of Time"
@@ -18,8 +21,7 @@ pub const THEME_DATA: Theme = Theme {
     boss: ThemeEnemy {
         name: "Ganon",
         description: "The King of Thieves and the ultimate evil, seeking the power of the Triforce to conquer Hyrule.",
-        life: 50,
-        attack: 12,
+        difficulty: ThemeEnemyDifficulty::Boss
     },
     locations: [
         ThemeLocation {
@@ -29,20 +31,17 @@ pub const THEME_DATA: Theme = Theme {
                 ThemeEnemy {
                     name: "Gerudo Guard",
                     description: "Elite warriors of the Gerudo, wielding curved swords and swift horse mounts.",
-                    life: 22,
-                    attack: 8,
+                    difficulty: ThemeEnemyDifficulty::Hard
                 },
                 ThemeEnemy {
                     name: "Leevers",
                     description: "Sandy creatures emerging from the ground to attack travelers, making navigation treacherous.",
-                    life: 20,
-                    attack: 7,
+                    difficulty: ThemeEnemyDifficulty::Easy
                 },
                 ThemeEnemy {
                     name: "Gerudo Thief",
                     description: "Sneaky bandits lurking in the shadows, attempting to steal valuable items from passersby.",
-                    life: 18,
-                    attack: 9,
+                    difficulty: ThemeEnemyDifficulty::Medium
                 },
             ],
         },
@@ -53,20 +52,17 @@ pub const THEME_DATA: Theme = Theme {
                 ThemeEnemy {
                     name: "Goron Warrior",
                     description: "Mighty rock-eaters wielding massive hammers, rolling down slopes with incredible force.",
-                    life: 25,
-                    attack: 10,
+                    difficulty: ThemeEnemyDifficulty::Hard
                 },
                 ThemeEnemy {
                     name: "Fire Keese",
                     description: "Fiery bats swarming around the volcanic caverns, attacking with scorching flames.",
-                    life: 15,
-                    attack: 7,
+                    difficulty: ThemeEnemyDifficulty::Easy
                 },
                 ThemeEnemy {
                     name: "Fire Dancer",
                     description: "Agile creatures leaping through the flames, performing deadly dances to summon infernal energy.",
-                    life: 18,
-                    attack: 8,
+                    difficulty: ThemeEnemyDifficulty::Medium
                 },
             ],
         },
@@ -77,20 +73,17 @@ pub const THEME_DATA: Theme = Theme {
                 ThemeEnemy {
                     name: "River Zora",
                     description: "Aquatic monsters lurking in the waters, shooting deadly projectiles with precision accuracy.",
-                    life: 20,
-                    attack: 9,
+                    difficulty: ThemeEnemyDifficulty::Medium
                 },
                 ThemeEnemy {
                     name: "Electric Octorok",
                     description: "Electrified cephalopods swimming in the domain's rivers, shocking unsuspecting travelers.",
-                    life: 18,
-                    attack: 7,
+                    difficulty: ThemeEnemyDifficulty::Medium
                 },
                 ThemeEnemy {
                     name: "Zora Sentry",
                     description: "Vigilant guards patrolling the domain's boundaries, armed with tridents and keen senses.",
-                    life: 22,
-                    attack: 8,
+                    difficulty: ThemeEnemyDifficulty::Hard
                 },
             ],
         },
@@ -101,20 +94,17 @@ pub const THEME_DATA: Theme = Theme {
                 ThemeEnemy {
                     name: "Skull Kid",
                     description: "Mischievous spirits playing pranks on travelers, leading them astray with their flute melodies.",
-                    life: 18,
-                    attack: 7,
+                    difficulty: ThemeEnemyDifficulty::Medium
                 },
                 ThemeEnemy {
                     name: "Deku Scrub",
                     description: "Small plant-like creatures attacking from the underbrush, spitting nuts with surprising accuracy.",
-                    life: 15,
-                    attack: 6,
+                    difficulty: ThemeEnemyDifficulty::Easy
                 },
                 ThemeEnemy {
                     name: "Forest Wolfos",
                     description: "Aggressive wolf-like creatures prowling the woods, attacking with feral ferocity.",
-                    life: 20,
-                    attack: 8,
+                    difficulty: ThemeEnemyDifficulty::Hard
                 },
             ],
         },
@@ -125,47 +115,41 @@ pub const THEME_DATA: Theme = Theme {
                 ThemeEnemy {
                     name: "Stalchild",
                     description: "Restless undead emerging from the ground at night, attacking travelers with chilling claws.",
-                    life: 15,
-                    attack: 7,
+                    difficulty: ThemeEnemyDifficulty::Medium
                 },
                 ThemeEnemy {
                     name: "Peahat",
                     description: "Flying creatures hovering above the fields, attacking with razor-sharp blades and gusts of wind.",
-                    life: 18,
-                    attack: 8,
+                    difficulty: ThemeEnemyDifficulty::Easy
                 },
                 ThemeEnemy {
                     name: "Stalfos Knight",
                     description: "Powerful skeletal warriors rising to challenge those who dare to wander the fields at night.",
-                    life: 22,
-                    attack: 9,
+                    difficulty: ThemeEnemyDifficulty::Hard
                 },
             ],
         },
         ThemeLocation {
-            name: "Hyrule Castle Town",
-            description: "A bustling hub of commerce and culture within the shadow of Hyrule Castle, where travelers from all corners of the kingdom converge.",
+            name: "Ganon's Castle",
+            description: "A foreboding fortress located at the heart of Hyrule, serving as the stronghold of the malevolent Ganondorf, where dark magic and treacherous traps await any who dare to challenge its depths.",
             enemies: [
                 ThemeEnemy {
-                    name: "Poe",
-                    description: "Ghostly spirits haunting the streets at night, stealing the souls of unsuspecting victims.",
-                    life: 20,
-                    attack: 8,
+                    name: "Darknut",
+                    description: "Elite warriors clad in heavy armor, wielding massive swords to strike down intruders with swift and powerful attacks.",
+                    difficulty: ThemeEnemyDifficulty::Hard
                 },
                 ThemeEnemy {
-                    name: "Gossip Stone",
-                    description: "Mysterious stone monuments scattered throughout the town, revealing secrets to those who listen.",
-                    life: 12,
-                    attack: 5,
+                    name: "Wizzrobe",
+                    description: "Sorcerous foes conjuring potent spells to assault invaders from afar, disappearing and reappearing in a whirlwind of magic.",
+                    difficulty: ThemeEnemyDifficulty::Medium
                 },
                 ThemeEnemy {
-                    name: "Town Guard",
-                    description: "Vigilant soldiers patrolling the streets, maintaining order and protecting the town's inhabitants.",
-                    life: 25,
-                    attack: 10,
+                    name: "Stalfos Knight",
+                    description: "Undead knights risen from the depths of the castle, wielding enchanted weapons to defend their master's domain.",
+                    difficulty: ThemeEnemyDifficulty::Hard
                 },
             ],
-        },        
+        },
     ],
     items: [
         "The Master Sword",

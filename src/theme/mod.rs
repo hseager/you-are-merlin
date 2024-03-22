@@ -27,6 +27,13 @@ pub struct ThemeLocation {
 pub struct ThemeEnemy {
     pub name: &'static str,
     pub description: &'static str,
-    pub life: i16,
-    pub attack: i16,
+    pub difficulty: ThemeEnemyDifficulty,
+}
+
+#[derive(Clone, Copy)]
+pub enum ThemeEnemyDifficulty {
+    Easy,
+    Medium,
+    Hard,
+    Boss,
 }

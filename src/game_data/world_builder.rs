@@ -3,7 +3,7 @@ use rand::{seq::SliceRandom, thread_rng};
 
 use crate::{
     characters::Enemy,
-    config::{REST_LOCATIONS_COUNT, SIDE_QUEST_COUNT},
+    config::{BATTLE_ENCOUNTERS_COUNT, REST_LOCATIONS_COUNT, SIDE_QUEST_COUNT},
     theme::{Theme, ThemeLocation},
     utilities::map_text_color,
 };
@@ -86,7 +86,7 @@ fn build_locations(theme: &Theme) -> Vec<Location> {
         locations.push(Location {
             name: theme_location.name.color(map_text_color(i)),
             description: theme_location.description,
-            encounters: build_battles(theme_location),
+            encounters: build_battles(theme_location, BATTLE_ENCOUNTERS_COUNT),
             is_resting_location: false,
         })
     }
@@ -94,9 +94,11 @@ fn build_locations(theme: &Theme) -> Vec<Location> {
 }
 
 // Fill each location with 3 battle encounters
-fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
+fn build_battles(theme_location: &ThemeLocation, battle_encounter_count: usize) -> Vec<Encounter> {
     let mut rng = thread_rng();
     let mut battles = Vec::new();
+
+    for i in 0..battle_encounter_count {}
 
     for enemy in theme_location.enemies {
         let battle: Battle = Battle {
