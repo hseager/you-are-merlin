@@ -2,7 +2,6 @@ use colored::ColoredString;
 
 use crate::battle_manager::calculate_damage;
 
-// TODO change attack to u16
 pub trait Fighter {
     fn name(&self) -> &ColoredString;
     fn life(&self) -> &i16;
@@ -10,7 +9,7 @@ pub trait Fighter {
         self.life() > &0
     }
     fn attack(&self, target: &mut dyn Fighter);
-    fn take_damage(&mut self, damage: i16);
+    fn take_damage(&mut self, damage: u16);
 }
 
 #[derive(Clone, Debug)]
@@ -18,7 +17,7 @@ pub struct Enemy {
     pub name: ColoredString,
     pub description: &'static str,
     pub life: i16,
-    pub attack: i16,
+    pub attack: u16,
 }
 
 impl Fighter for Enemy {
@@ -42,8 +41,8 @@ impl Fighter for Enemy {
         );
     }
 
-    fn take_damage(&mut self, damage: i16) {
-        self.life -= damage;
+    fn take_damage(&mut self, damage: u16) {
+        self.life -= damage as i16;
     }
 }
 
@@ -51,7 +50,7 @@ pub struct Player<'a> {
     pub name: &'a ColoredString,
     pub max_life: i16,
     pub life: i16,
-    pub attack: i16,
+    pub attack: u16,
 }
 
 impl<'a> Fighter for Player<'a> {
@@ -75,7 +74,7 @@ impl<'a> Fighter for Player<'a> {
         );
     }
 
-    fn take_damage(&mut self, damage: i16) {
-        self.life -= damage;
+    fn take_damage(&mut self, damage: u16) {
+        self.life -= damage as i16;
     }
 }

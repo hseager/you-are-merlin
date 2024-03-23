@@ -80,7 +80,7 @@ fn start_battle(player: &mut Player, enemy: &Enemy) -> BattleResult {
     }
 }
 
-pub fn map_theme_difficulty_to_stats(difficulty: ThemeEnemyDifficulty) -> (i16, i16) {
+pub fn map_theme_difficulty_to_stats(difficulty: ThemeEnemyDifficulty) -> (i16, u16) {
     match difficulty {
         ThemeEnemyDifficulty::Easy => ENEMY_EASY_STATS,
         ThemeEnemyDifficulty::Medium => ENEMY_MEDIUM_STATS,
@@ -90,8 +90,14 @@ pub fn map_theme_difficulty_to_stats(difficulty: ThemeEnemyDifficulty) -> (i16, 
 }
 
 // Select random damage from -2 to +2 of current attack stat
-pub fn calculate_damage(damage: i16) -> i16 {
+pub fn calculate_damage(attack: u16) -> u16 {
     let range = rand::thread_rng().gen_range(0..4);
+
+    let mut damage = attack;
+
+    if damage < 2 {
+        damage = 2;
+    }
 
     match range {
         0 => damage - 2,

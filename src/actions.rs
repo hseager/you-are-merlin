@@ -51,7 +51,6 @@ pub fn get_quest_actions() -> Vec<Action> {
     ]
 }
 
-// TODO Fix .to_owned()
 pub fn get_locations_as_actions(locations: &[Location]) -> Vec<Action> {
     locations
         .iter()
