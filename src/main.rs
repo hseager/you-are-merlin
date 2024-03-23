@@ -10,6 +10,7 @@ mod characters;
 mod config;
 mod game_data;
 mod game_state;
+mod items;
 mod player_state;
 mod prompts;
 mod theme;

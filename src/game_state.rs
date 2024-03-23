@@ -9,6 +9,7 @@ use crate::{
         entities::{Encounter, Location},
         GameData,
     },
+    items::get_encounter_reward,
     player_state::PlayerState,
 };
 
@@ -19,6 +20,7 @@ pub struct GameState<'a> {
     pub actions: Vec<Action>,
     pub player: Player<'a>,
     pub game_data: &'a GameData,
+    pub items: Vec<&'static str>,
 }
 
 impl<'a> GameState<'a> {
@@ -40,6 +42,7 @@ impl<'a> GameState<'a> {
             current_encounter: 0,
             actions: get_visiting_actions(location),
             player,
+            items: game_data.items.clone(),
             game_data,
         }
     }
@@ -162,6 +165,16 @@ impl<'a> GameState<'a> {
                 Encounter::Quest(_) => self.state = PlayerState::Quest(encounter),
             }
         } else {
+            println!(
+                "You clear {} of danger and find a chest ahead...",
+                location.name
+            );
+
+            // TODO add item to character
+            // Work out item stats
+
+            let item = get_encounter_reward(&mut self.items);
+            self.state = PlayerState::Treasure(item);
             self.reset_encounters();
         }
     }

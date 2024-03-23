@@ -10,6 +10,7 @@ pub struct GameData {
     pub world_name: &'static str,
     pub main_character: ColoredString,
     pub locations: Vec<Location>,
+    pub items: Vec<&'static str>,
 }
 
 impl GameData {
@@ -17,6 +18,7 @@ impl GameData {
         let theme = load_theme();
         let world_name = theme.world_name;
         let main_character = theme.main_character.bold();
+        let items = theme.items.to_vec();
         let locations = world_builder::build_world(theme);
 
         // println!("{:#?}", locations);
@@ -25,6 +27,7 @@ impl GameData {
             world_name,
             main_character,
             locations,
+            items,
         }
     }
 }

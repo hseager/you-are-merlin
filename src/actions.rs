@@ -57,3 +57,7 @@ pub fn get_locations_as_actions(locations: &[Location]) -> Vec<Action> {
         .map(|location| Action::new(ActionType::MoveToLocation, location.name.to_owned()))
         .collect()
 }
+
+pub fn get_treasure_actions() -> Vec<Action> {
+    vec![Action::new(ActionType::Travel, "Travel".yellow())]
+}

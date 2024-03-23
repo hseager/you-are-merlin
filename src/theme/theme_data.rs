@@ -90,7 +90,7 @@ pub const THEME_DATA: Theme = Theme {
             ],
         },
         ThemeLocation {
-            name: "Lost Woods",
+            name: "The Lost Woods",
             description: "An enchanted forest filled with winding paths and mystical illusions, hiding the entrance to the sacred forest temple.",
             class: LocationType::Dungeon,
             enemies: [

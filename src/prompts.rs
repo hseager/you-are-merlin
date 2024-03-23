@@ -1,6 +1,9 @@
 use colored::ColoredString;
 
-use crate::game_data::entities::{Encounter, Quest};
+use crate::{
+    game_data::entities::{Encounter, Quest},
+    items::Item,
+};
 
 pub fn get_visiting_prompt(location_name: &ColoredString, location_description: &'static str) {
     println!(
@@ -56,7 +59,13 @@ pub fn get_quest_prompt(encounter: &Encounter) {
                 )
             }
         },
-        _ => panic!("Encounter not a quest when playerState is a quest.")
+        _ => panic!("Encounter not a quest when playerState is a quest."),
     }
+}
 
+pub fn get_treasure_prompt(item: &Item) {
+    println!(
+        "You open the chest and find {}! (attack increased by {}, max life increased by {})",
+        item.name, item.attack, item.life
+    );
 }

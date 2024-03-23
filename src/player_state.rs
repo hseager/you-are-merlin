@@ -1,10 +1,11 @@
-use crate::{actions::*, game_data::entities::*, prompts::*};
+use crate::{actions::*, game_data::entities::*, items::Item, prompts::*};
 
 pub enum PlayerState<'a> {
     Travelling(&'a Vec<Location>),
     Visiting(&'a Location),
     Battle(&'a Encounter),
     Quest(&'a Encounter),
+    Treasure(Item),
     GameOver,
     Win,
 }
@@ -18,6 +19,7 @@ impl<'a> PlayerState<'a> {
             PlayerState::Travelling(_) => get_travelling_prompt(),
             PlayerState::Battle(encounter) => get_battle_prompt(encounter),
             PlayerState::Quest(encounter) => get_quest_prompt(encounter),
+            PlayerState::Treasure(item) => get_treasure_prompt(item),
             _ => panic!("Unhandled PlayerState"),
         }
     }
@@ -28,6 +30,7 @@ impl<'a> PlayerState<'a> {
             PlayerState::Battle(_) => get_battle_actions(),
             PlayerState::Quest(_) => get_quest_actions(),
             PlayerState::Travelling(locations) => get_locations_as_actions(locations),
+            PlayerState::Treasure(_) => get_treasure_actions(),
             _ => vec![],
         }
     }
