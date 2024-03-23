@@ -1,4 +1,7 @@
-use crate::theme::theme_data::THEME_DATA;
+use crate::{
+    game_data::entities::{EnemyDifficulty, LocationType},
+    theme::theme_data::THEME_DATA,
+};
 
 mod theme_data;
 
@@ -21,19 +24,12 @@ pub struct ThemeLocation {
     pub name: &'static str,
     pub description: &'static str,
     pub enemies: [ThemeEnemy; 3],
+    pub class: LocationType,
 }
 
 #[derive(Clone, Copy)]
 pub struct ThemeEnemy {
     pub name: &'static str,
     pub description: &'static str,
-    pub difficulty: ThemeEnemyDifficulty,
-}
-
-#[derive(Clone, Copy)]
-pub enum ThemeEnemyDifficulty {
-    Easy,
-    Medium,
-    Hard,
-    Boss,
+    pub difficulty: EnemyDifficulty,
 }

@@ -2,7 +2,7 @@ use rand::Rng;
 
 use crate::{
     config::{ENEMY_BOSS_STATS, ENEMY_EASY_STATS, ENEMY_HARD_STATS, ENEMY_MEDIUM_STATS},
-    theme::ThemeEnemyDifficulty,
+    game_data::entities::EnemyDifficulty,
 };
 
 use std::{thread::sleep, time::Duration};
@@ -80,12 +80,12 @@ fn start_battle(player: &mut Player, enemy: &Enemy) -> BattleResult {
     }
 }
 
-pub fn map_theme_difficulty_to_stats(difficulty: ThemeEnemyDifficulty) -> (i16, u16) {
+pub fn map_theme_difficulty_to_stats(difficulty: EnemyDifficulty) -> (i16, u16) {
     match difficulty {
-        ThemeEnemyDifficulty::Easy => ENEMY_EASY_STATS,
-        ThemeEnemyDifficulty::Medium => ENEMY_MEDIUM_STATS,
-        ThemeEnemyDifficulty::Hard => ENEMY_HARD_STATS,
-        ThemeEnemyDifficulty::Boss => ENEMY_BOSS_STATS,
+        EnemyDifficulty::Easy => ENEMY_EASY_STATS,
+        EnemyDifficulty::Normal => ENEMY_MEDIUM_STATS,
+        EnemyDifficulty::Hard => ENEMY_HARD_STATS,
+        EnemyDifficulty::Boss => ENEMY_BOSS_STATS,
     }
 }
 

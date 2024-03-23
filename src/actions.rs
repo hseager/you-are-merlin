@@ -1,6 +1,6 @@
 use colored::{ColoredString, Colorize};
 
-use crate::game_data::entities::Location;
+use crate::game_data::entities::{Location, LocationType};
 
 #[derive(Clone)]
 pub enum ActionType {
@@ -31,7 +31,7 @@ pub fn get_visiting_actions(location: &Location) -> Vec<Action> {
         Action::new(ActionType::Explore, "Explore".blue()),
     ];
 
-    if location.is_resting_location {
+    if let LocationType::SafeZone = location.class {
         actions.push(Action::new(ActionType::Rest, "Rest".green()));
     }
 

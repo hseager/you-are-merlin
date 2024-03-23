@@ -4,7 +4,7 @@ use rand::{seq::SliceRandom, thread_rng};
 use crate::{
     battle_manager::map_theme_difficulty_to_stats,
     characters::Enemy,
-    config::{REST_LOCATIONS_COUNT, SIDE_QUEST_COUNT},
+    config::SIDE_QUEST_COUNT,
     theme::{Theme, ThemeLocation},
     utilities::map_text_color,
 };
@@ -39,10 +39,6 @@ pub fn build_world(theme: Theme) -> Vec<Location> {
         SIDE_QUEST_COUNT,
         boss,
     );
-
-    locations.shuffle(&mut rng);
-
-    add_resting_locations(&mut locations, REST_LOCATIONS_COUNT);
 
     locations.shuffle(&mut rng);
 
@@ -90,7 +86,7 @@ fn build_locations(theme: &Theme) -> Vec<Location> {
             name: theme_location.name.color(map_text_color(i)),
             description: theme_location.description,
             encounters: build_battles(theme_location),
-            is_resting_location: false,
+            class: theme_location.class,
         })
     }
     locations
@@ -165,19 +161,4 @@ fn add_boss_encounter(locations: &mut [Location], boss: &Enemy) {
     location.encounters.push(Encounter::BossFight(Battle {
         enemy: boss.clone(),
     }));
-}
-
-fn add_resting_locations(locations: &mut [Location], resting_location_count: usize) {
-    assert!(
-        locations.len() >= resting_location_count,
-        "Can't have more resting locations than locations. Try lowering resting locations in config."
-    );
-
-    for i in 0..resting_location_count {
-        let location = locations
-            .get_mut(i)
-            .expect("Unable to get location when adding resting locations");
-
-        location.is_resting_location = true;
-    }
 }
