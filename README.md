@@ -9,8 +9,9 @@ A text adventure game, built with Rust.
 #### mvp
 - Theme selection
 - Redo side quests, Items & Rewards
+    - Add side quest rewards to each dungeon
+    - Choose random side quest in SafeZone, make them repeatable
 - Chance for Run to fail
-- Move Boss to boss location
 
 #### v1.0 
 - Inventory
@@ -19,6 +20,8 @@ A text adventure game, built with Rust.
 - Rewards (gold) and trade
 - Mini bosses for dungeons
 - Dungeon difficulty, more battles = better reward
+- More types of encounters like puzzles and riddles etc
+    - Choice encounter with reward or damage
 - Require key for main boss
 
 #### later

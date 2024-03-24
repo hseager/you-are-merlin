@@ -80,7 +80,7 @@ fn start_battle(player: &mut Player, enemy: &Enemy) -> BattleResult {
     }
 }
 
-pub fn map_theme_difficulty_to_stats(difficulty: EnemyDifficulty) -> (i16, u16) {
+pub fn map_theme_enemy_difficulty_to_stats(difficulty: EnemyDifficulty) -> (i16, u16) {
     match difficulty {
         EnemyDifficulty::Easy => ENEMY_EASY_STATS,
         EnemyDifficulty::Normal => ENEMY_MEDIUM_STATS,

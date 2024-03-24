@@ -8,7 +8,7 @@ mod theme_data;
 pub struct Theme {
     pub main_character: &'static str,
     pub world_name: &'static str,
-    pub characters: [&'static str; 6],
+    pub friendly_characters: [&'static str; 6],
     pub locations: [ThemeLocation; 6],
     pub items: [&'static str; 10],
     pub quest_items: [&'static str; 8],
@@ -19,11 +19,11 @@ pub fn load_theme() -> Theme {
     THEME_DATA
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub struct ThemeLocation {
     pub name: &'static str,
     pub description: &'static str,
-    pub enemies: [ThemeEnemy; 3],
+    pub enemies: Option<Vec<ThemeEnemy>>,
     pub class: LocationType,
 }
 

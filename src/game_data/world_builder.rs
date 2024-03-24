@@ -2,7 +2,7 @@ use colored::Colorize;
 use rand::{seq::SliceRandom, thread_rng};
 
 use crate::{
-    battle_manager::map_theme_difficulty_to_stats,
+    battle_manager::map_theme_enemy_difficulty_to_stats,
     characters::Enemy,
     config::SIDE_QUEST_COUNT,
     theme::{Theme, ThemeLocation},
@@ -14,9 +14,9 @@ use super::entities::*;
 // TODO clean up clones here
 pub fn build_world(theme: Theme) -> Vec<Location> {
     let mut locations = build_locations(&theme);
-    let mut characters = theme.characters.to_vec();
+    let mut characters = theme.friendly_characters.to_vec();
 
-    let (boss_life, boss_attack) = map_theme_difficulty_to_stats(theme.boss.difficulty);
+    let (boss_life, boss_attack) = map_theme_enemy_difficulty_to_stats(theme.boss.difficulty);
     let boss = Enemy {
         name: theme.boss.name.bold().red(),
         description: theme.boss.description,
@@ -30,46 +30,46 @@ pub fn build_world(theme: Theme) -> Vec<Location> {
 
     add_main_quest(&mut locations, boss, &mut characters, theme.world_name);
 
-    add_side_quests(
-        &mut locations,
-        &mut characters,
-        &mut theme.quest_items.to_vec(),
-        SIDE_QUEST_COUNT,
-    );
+    // add_side_quests(
+    //     &mut locations,
+    //     &mut characters,
+    //     &mut theme.quest_items.to_vec(),
+    //     SIDE_QUEST_COUNT,
+    // );
 
     locations.shuffle(&mut rng);
 
     locations
 }
 
-fn add_side_quests(
-    locations: &mut [Location],
-    characters: &mut Vec<&str>,
-    items: &mut Vec<&str>,
-    side_quest_count: usize,
-) {
-    let mut quests: Vec<Encounter> = Vec::new();
+// fn add_side_quests(
+//     locations: &mut [Location],
+//     characters: &mut Vec<&str>,
+//     items: &mut Vec<&str>,
+//     side_quest_count: usize,
+// ) {
+//     let mut quests: Vec<Encounter> = Vec::new();
 
-    assert!(
-        locations.len() > side_quest_count,
-        "Can't have more sidequests than locations. Try adjusting setting in config."
-    );
-    assert!(
-        characters.len() > side_quest_count,
-        "Can't have more sidequests than characters. Try adding more characters to Theme data."
-    );
+//     assert!(
+//         locations.len() > side_quest_count,
+//         "Can't have more sidequests than locations. Try adjusting setting in config."
+//     );
+//     assert!(
+//         characters.len() > side_quest_count,
+//         "Can't have more sidequests than characters. Try adding more characters to Theme data."
+//     );
 
-    for _ in 0..side_quest_count {
-        quests.push(build_side_quest(characters, items));
-    }
+//     for _ in 0..side_quest_count {
+//         quests.push(build_side_quest(characters, items));
+//     }
 
-    for (i, quest) in quests.into_iter().enumerate() {
-        let location = locations
-            .get_mut(i)
-            .expect("Failed to get location when adding quests");
-        location.encounters.insert(0, quest);
-    }
-}
+//     for (i, quest) in quests.into_iter().enumerate() {
+//         let location = locations
+//             .get_mut(i)
+//             .expect("Failed to get location when adding quests");
+//         location.encounters.insert(0, quest);
+//     }
+// }
 
 fn build_locations(theme: &Theme) -> Vec<Location> {
     let mut locations = Vec::new();
@@ -78,20 +78,31 @@ fn build_locations(theme: &Theme) -> Vec<Location> {
         locations.push(Location {
             name: theme_location.name.color(map_text_color(i)),
             description: theme_location.description,
-            encounters: build_battles(theme_location),
+            encounters: build_encounters(
+                theme_location,
+                theme.friendly_characters,
+                theme.quest_items,
+            ),
             class: theme_location.class,
         })
     }
     locations
 }
 
-// Fill each location with 3 battle encounters
+fn build_encounters(theme_location: &ThemeLocation, characters) -> Vec<Encounter> {
+    match theme_location.class {
+        LocationType::Dungeon | LocationType::BossDungeon => build_battles(theme_location),
+        LocationType::SafeZone => build_side_quests(characters, items),
+    }
+}
+
+// Fill each dungeon with 3 battle encounters
 fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
     let mut rng = thread_rng();
     let mut battles = Vec::new();
 
     for enemy in theme_location.enemies {
-        let (life, attack) = map_theme_difficulty_to_stats(enemy.difficulty);
+        let (life, attack) = map_theme_enemy_difficulty_to_stats(enemy.difficulty);
         let battle: Battle = Battle {
             enemy: Enemy {
                 name: enemy.name.bold(),
