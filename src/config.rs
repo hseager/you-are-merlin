@@ -9,6 +9,6 @@ pub const BATTLE_INTERVAL_SECONDS: u8 = 1;
 
 // life, attack
 pub const ENEMY_EASY_STATS: (i16, u16) = (20, 3);
-pub const ENEMY_MEDIUM_STATS: (i16, u16) = (24, 5);
-pub const ENEMY_HARD_STATS: (i16, u16) = (27, 6);
-pub const ENEMY_BOSS_STATS: (i16, u16) = (32, 8);
+pub const ENEMY_MEDIUM_STATS: (i16, u16) = (26, 5);
+pub const ENEMY_HARD_STATS: (i16, u16) = (38, 6);
+pub const ENEMY_BOSS_STATS: (i16, u16) = (150, 10);

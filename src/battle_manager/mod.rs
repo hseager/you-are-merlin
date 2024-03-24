@@ -91,20 +91,6 @@ pub fn map_theme_difficulty_to_stats(difficulty: EnemyDifficulty) -> (i16, u16) 
 
 // Select random damage from -2 to +2 of current attack stat
 pub fn calculate_damage(attack: u16) -> u16 {
-    let range = rand::thread_rng().gen_range(0..4);
-
-    let mut damage = attack;
-
-    if damage < 2 {
-        damage = 2;
-    }
-
-    match range {
-        0 => damage - 2,
-        1 => damage - 1,
-        2 => damage,
-        3 => damage + 1,
-        4 => damage + 2,
-        _ => damage,
-    }
+    let damage_range = 2;
+    rand::thread_rng().gen_range(attack - damage_range..attack + damage_range)
 }

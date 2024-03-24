@@ -6,11 +6,23 @@ A text adventure game, built with Rust.
 
 ### Features
 
-- Quests Rewards
-- Inventory/Items
-- Rewards (gold) and trade
-- Better visuals for life/attack
+#### mvp
+- Theme selection
+- Quests Items & Rewards
 - Chance for Run to fail
+- Move Boss to boss location
+
+#### v1.0 
+- Inventory
+- Usable items
+- Better item stats (crit chance/multi/ lifegain on hit)
+- Rewards (gold) and trade
+- Mini bosses for dungeons
+- Dungeon difficulty, more battles = better reward
+- Require key for main boss
+
+#### later
+- Better visuals for life/attack
 
 ### Refactor
 

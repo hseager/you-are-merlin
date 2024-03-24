@@ -149,7 +149,6 @@ impl<'a> GameState<'a> {
     }
 
     pub fn go_to_next_encounter(&mut self) {
-        // TODO what happens at the end of all encounters?
         let next_encounter = self.current_encounter + 1;
 
         let location = self.get_current_location();
@@ -170,10 +169,11 @@ impl<'a> GameState<'a> {
                 location.name
             );
 
-            // TODO add item to character
-            // Work out item stats
-
             let item = get_encounter_reward(&mut self.items);
+
+            self.player.attack += item.attack;
+            self.player.max_life += item.max_life;
+
             self.state = PlayerState::Treasure(item);
             self.reset_encounters();
         }

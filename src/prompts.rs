@@ -66,6 +66,6 @@ pub fn get_quest_prompt(encounter: &Encounter) {
 pub fn get_treasure_prompt(item: &Item) {
     println!(
         "You open the chest and find {}! (attack increased by {}, max life increased by {})",
-        item.name, item.attack, item.life
+        item.name, item.attack, item.max_life
     );
 }

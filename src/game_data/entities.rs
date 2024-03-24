@@ -2,9 +2,6 @@ use colored::ColoredString;
 
 use crate::characters::Enemy;
 
-// todo add locaton type like dungeons and safe zones
-// Boss location, mini bosses for dungeons
-
 #[derive(Debug)]
 pub struct Location {
     pub name: ColoredString,
