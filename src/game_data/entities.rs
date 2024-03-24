@@ -10,10 +10,11 @@ pub struct Location {
     pub class: LocationType,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum LocationType {
     SafeZone,
     Dungeon,
+    BossDungeon,
 }
 
 #[derive(Debug)]

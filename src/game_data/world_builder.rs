@@ -28,16 +28,13 @@ pub fn build_world(theme: Theme) -> Vec<Location> {
 
     locations.shuffle(&mut rng);
 
-    // We create the boss and mainquest in the first location here so that they are grouped together
-    add_boss_encounter(&mut locations, &boss);
+    add_main_quest(&mut locations, boss, &mut characters, theme.world_name);
 
-    add_quests(
-        &theme,
+    add_side_quests(
         &mut locations,
         &mut characters,
         &mut theme.quest_items.to_vec(),
         SIDE_QUEST_COUNT,
-        boss,
     );
 
     locations.shuffle(&mut rng);
@@ -45,17 +42,13 @@ pub fn build_world(theme: Theme) -> Vec<Location> {
     locations
 }
 
-fn add_quests(
-    theme: &Theme,
+fn add_side_quests(
     locations: &mut [Location],
     characters: &mut Vec<&str>,
     items: &mut Vec<&str>,
     side_quest_count: usize,
-    boss: Enemy,
 ) {
     let mut quests: Vec<Encounter> = Vec::new();
-
-    quests.push(build_main_quest(characters, theme.world_name, boss));
 
     assert!(
         locations.len() > side_quest_count,
@@ -119,7 +112,7 @@ fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
 fn build_main_quest(
     characters: &mut Vec<&str>,
     world_name: &'static str,
-    boss: Enemy,
+    boss: &Enemy,
 ) -> Encounter {
     let mut rng = thread_rng();
 
@@ -130,7 +123,7 @@ fn build_main_quest(
     Encounter::Quest(Quest::MainQuest(MainQuest {
         character: character.bold(),
         world_name,
-        boss_name: boss.name,
+        boss_name: boss.name.clone(),
     }))
 }
 
@@ -155,10 +148,22 @@ fn build_side_quest(characters: &mut Vec<&str>, items: &mut Vec<&str>) -> Encoun
     }))
 }
 
-fn add_boss_encounter(locations: &mut [Location], boss: &Enemy) {
-    let location = locations.get_mut(0).unwrap();
+fn add_main_quest(
+    locations: &mut [Location],
+    boss: Enemy,
+    characters: &mut Vec<&str>,
+    world_name: &'static str,
+) {
+    let location = locations
+        .iter_mut()
+        .find(|l| l.class == LocationType::BossDungeon)
+        .expect("Unable to find BossDungeon. Make sure at least one Theme location is a LocationType::BossLocation.");
 
-    location.encounters.push(Encounter::BossFight(Battle {
-        enemy: boss.clone(),
-    }));
+    location
+        .encounters
+        .insert(0, build_main_quest(characters, world_name, &boss));
+
+    location
+        .encounters
+        .push(Encounter::BossFight(Battle { enemy: boss }));
 }

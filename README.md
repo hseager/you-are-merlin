@@ -8,7 +8,7 @@ A text adventure game, built with Rust.
 
 #### mvp
 - Theme selection
-- Quests Items & Rewards
+- Redo side quests, Items & Rewards
 - Chance for Run to fail
 - Move Boss to boss location
 

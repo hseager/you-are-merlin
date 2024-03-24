@@ -4,7 +4,7 @@ use crate::game_data::entities::EnemyDifficulty;
 
 use super::*;
 
-// Please ChatGPT, fill in the below Rust struct values with the lore from
+// Please ChatGPT, fill in the below Rust struct with the lore from
 // "The Legend of Zelda: Ocarina of Time"
 pub const THEME_DATA: Theme = Theme {
     main_character: "Link",
@@ -135,7 +135,7 @@ pub const THEME_DATA: Theme = Theme {
         },
         ThemeLocation {
             name: "Ganon's Castle",
-            class: LocationType::Dungeon,
+            class: LocationType::BossDungeon,
             description: "A foreboding fortress located at the heart of Hyrule, serving as the stronghold of the malevolent Ganondorf, where dark magic and treacherous traps await any who dare to challenge its depths.",
             enemies: [
                 ThemeEnemy {

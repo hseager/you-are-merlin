@@ -23,8 +23,8 @@ pub fn get_encounter_reward(items: &mut Vec<&str>) -> Item {
 }
 
 pub fn create_item_stats() -> (i16, u16) {
-    let attack: u16 = rand::thread_rng().gen_range(1..4);
-    let max_life = rand::thread_rng().gen_range(5..10);
+    let attack: u16 = rand::thread_rng().gen_range(1..=4);
+    let max_life = rand::thread_rng().gen_range(5..=10);
 
     (max_life, attack)
 }

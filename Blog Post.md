@@ -34,3 +34,21 @@ Need to make sure references are comsumed for each loop cycle
 ### Gist to untangle data and mut state
 
 https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=dc48248bf9b0dfd9cdeaca6f9e0f2b7b
+
+
+## Items & Stats
+
+- Dodge + Chance to hit
+- Block (reduces incoming damage)
+- Chance to stun
+- attack speed
+- Crit chance & multi
+- Attack speed
+- Increases gold
+
+
+## Website
+- Auth 
+- top rated themes
+- Voting on themes
+- Save themes to database

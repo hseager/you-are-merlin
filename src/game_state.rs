@@ -73,7 +73,7 @@ impl<'a> GameState<'a> {
                     let next_location_index = self.game_data
                         .locations
                         .iter()
-                        .position(|location| location.name.to_lowercase() == search.to_lowercase())
+                        .position(|location| location.name.to_lowercase().contains(&search.to_lowercase()))
                         .expect("Unable to find location index when moving location and comparing names.");
 
                     self.current_location = next_location_index;
@@ -123,9 +123,13 @@ impl<'a> GameState<'a> {
     }
 
     fn find_action(&self, search: &str) -> Option<&Action> {
-        self.actions
-            .iter()
-            .find(|action| action.name.trim().to_lowercase() == search.to_lowercase())
+        self.actions.iter().find(|action| {
+            action
+                .name
+                .trim()
+                .to_lowercase()
+                .contains(&search.to_lowercase())
+        })
     }
 
     pub fn get_current_location(&self) -> &'a Location {
