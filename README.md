@@ -23,6 +23,7 @@ A text adventure game, built with Rust.
 - More types of encounters like puzzles and riddles etc
     - Choice encounter with reward or damage
 - Require key for main boss
+- Split items into weapons, armor, utilities
 
 #### later
 - Better visuals for life/attack
