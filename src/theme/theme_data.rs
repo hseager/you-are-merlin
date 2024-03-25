@@ -98,7 +98,7 @@ pub const THEME_DATA: Theme = Theme {
         ThemeLocation {
             name: "Hyrule Field",
             description: "Vast plains stretching across the kingdom of Hyrule, connecting its various regions and landmarks.",
-            class: LocationType::Dungeon("The Rabbit Mask"),
+            class: LocationType::Dungeon("The Bunny Hood"),
             enemies: Some([
                 ThemeEnemy {
                     name: "Stalchild",

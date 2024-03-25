@@ -6,7 +6,7 @@ use crate::{
     characters::Player,
     config::{PLAYER_ATTACK, PLAYER_LIFE, REST_INTERVAL_SECONDS},
     game_data::{
-        entities::{Encounter, Location},
+        entities::{Encounter, Location, LocationType},
         GameData,
     },
     items::get_encounter_reward,
@@ -78,23 +78,13 @@ impl<'a> GameState<'a> {
 
                     self.current_location = next_location_index;
 
-                    let current_location = self.get_current_location();
-
-                    self.state = PlayerState::Visiting(current_location);
+                    self.state = PlayerState::Visiting(self.get_current_location());
                 }
                 ActionType::Attack => battle_manager::handle_battle(self),
                 ActionType::Run => {
-                    let current_location = self.get_current_location();
-
-                    self.state = PlayerState::Visiting(current_location);
+                    self.state = PlayerState::Visiting(self.get_current_location());
 
                     self.reset_encounters();
-                }
-                ActionType::Continue => {
-                    println!("You acknowledge their request and continue exploring the area.");
-
-                    self.go_to_next_encounter();
-                    self.state = PlayerState::Battle(self.get_current_encounter());
                 }
                 ActionType::Rest => {
                     println!("You stay and rest a while...");
@@ -114,6 +104,11 @@ impl<'a> GameState<'a> {
                         self.player.life = new_life;
                         sleep(Duration::from_secs(REST_INTERVAL_SECONDS as u64));
                     }
+                }
+                ActionType::Accept => {
+                    println!("You accept their request.");
+
+                    self.state = PlayerState::Visiting(self.get_current_location());
                 }
             },
             None => println!("This isn't the time to use {}!", search),
@@ -168,18 +163,31 @@ impl<'a> GameState<'a> {
                 Encounter::Quest(_) => self.state = PlayerState::Quest(encounter),
             }
         } else {
-            println!(
-                "You clear {} of danger and find a chest ahead...",
-                location.name
-            );
+            self.handle_end_of_encounters(location);
+        }
+    }
 
-            let item = get_encounter_reward(&mut self.items);
+    fn handle_end_of_encounters(&mut self, location: &Location) {
+        match location.class {
+            LocationType::Dungeon(_) => {
+                println!(
+                    "You clear {} of danger and find a chest ahead...",
+                    location.name
+                );
 
-            self.player.attack += item.attack;
-            self.player.max_life += item.max_life;
+                let item = get_encounter_reward(&mut self.items);
 
-            self.state = PlayerState::Treasure(item);
-            self.reset_encounters();
+                self.player.attack += item.attack;
+                self.player.max_life += item.max_life;
+
+                self.state = PlayerState::Treasure(item);
+                self.reset_encounters();
+            }
+            LocationType::SafeZone => {
+                self.state = PlayerState::Visiting(self.get_current_location());
+                self.reset_encounters();
+            }
+            _ => (),
         }
     }
 }

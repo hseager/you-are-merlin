@@ -7,10 +7,10 @@ pub enum ActionType {
     Travel,
     Explore,
     Attack,
-    Continue,
     Run,
     MoveToLocation,
     Rest,
+    Accept,
 }
 
 #[derive(Clone)]
@@ -46,8 +46,8 @@ pub fn get_battle_actions() -> Vec<Action> {
 
 pub fn get_quest_actions() -> Vec<Action> {
     vec![
-        Action::new(ActionType::Continue, "Continue".green()),
-        Action::new(ActionType::Run, "Run".cyan()),
+        Action::new(ActionType::Accept, "Accept".green()),
+        Action::new(ActionType::Run, "Decline".red()),
     ]
 }
 
