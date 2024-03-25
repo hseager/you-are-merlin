@@ -4,7 +4,6 @@ use rand::{seq::SliceRandom, thread_rng};
 use crate::{
     battle_manager::map_theme_enemy_difficulty_to_stats,
     characters::Enemy,
-    config::SIDE_QUEST_COUNT,
     theme::{Theme, ThemeLocation},
     utilities::map_text_color,
 };
@@ -13,8 +12,9 @@ use super::entities::*;
 
 // TODO clean up clones here
 pub fn build_world(theme: Theme) -> Vec<Location> {
-    let mut locations = build_locations(&theme);
     let mut characters = theme.friendly_characters.to_vec();
+    let mut locations = build_locations(&theme, &mut characters);
+    
 
     let (boss_life, boss_attack) = map_theme_enemy_difficulty_to_stats(theme.boss.difficulty);
     let boss = Enemy {
@@ -30,48 +30,12 @@ pub fn build_world(theme: Theme) -> Vec<Location> {
 
     add_main_quest(&mut locations, boss, &mut characters, theme.world_name);
 
-    // add_side_quests(
-    //     &mut locations,
-    //     &mut characters,
-    //     &mut theme.quest_items.to_vec(),
-    //     SIDE_QUEST_COUNT,
-    // );
-
     locations.shuffle(&mut rng);
 
     locations
 }
 
-// fn add_side_quests(
-//     locations: &mut [Location],
-//     characters: &mut Vec<&str>,
-//     items: &mut Vec<&str>,
-//     side_quest_count: usize,
-// ) {
-//     let mut quests: Vec<Encounter> = Vec::new();
-
-//     assert!(
-//         locations.len() > side_quest_count,
-//         "Can't have more sidequests than locations. Try adjusting setting in config."
-//     );
-//     assert!(
-//         characters.len() > side_quest_count,
-//         "Can't have more sidequests than characters. Try adding more characters to Theme data."
-//     );
-
-//     for _ in 0..side_quest_count {
-//         quests.push(build_side_quest(characters, items));
-//     }
-
-//     for (i, quest) in quests.into_iter().enumerate() {
-//         let location = locations
-//             .get_mut(i)
-//             .expect("Failed to get location when adding quests");
-//         location.encounters.insert(0, quest);
-//     }
-// }
-
-fn build_locations(theme: &Theme) -> Vec<Location> {
+fn build_locations(theme: &Theme, characters: &mut Vec<&str>) -> Vec<Location> {
     let mut locations = Vec::new();
 
     for (i, theme_location) in theme.locations.iter().enumerate() {
@@ -79,9 +43,9 @@ fn build_locations(theme: &Theme) -> Vec<Location> {
             name: theme_location.name.color(map_text_color(i)),
             description: theme_location.description,
             encounters: build_encounters(
+                theme,
                 theme_location,
-                theme.friendly_characters,
-                theme.quest_items,
+                characters
             ),
             class: theme_location.class,
         })
@@ -89,11 +53,47 @@ fn build_locations(theme: &Theme) -> Vec<Location> {
     locations
 }
 
-fn build_encounters(theme_location: &ThemeLocation, characters) -> Vec<Encounter> {
+fn build_encounters(theme: &Theme, theme_location: &ThemeLocation, characters: &mut Vec<&str>) -> Vec<Encounter> {
     match theme_location.class {
-        LocationType::Dungeon | LocationType::BossDungeon => build_battles(theme_location),
-        LocationType::SafeZone => build_side_quests(characters, items),
+        LocationType::Dungeon(_) | LocationType::BossDungeon => build_battles(theme_location),
+        LocationType::SafeZone => build_side_quest(theme, characters),
     }
+}
+
+// Build a side quest for each SafeZone
+// Basically what the plan is, for now, is to create 1 sidequest for each SafeZone.
+// Once the side quest is complete, remove it from the encounters, and only show the 'explore' action
+// when there are encounters in the vec
+
+// TODO fix encounters in safezones
+fn build_side_quest(theme: &Theme, characters: &mut Vec<&str>) -> Vec<Encounter> {
+    let mut rng = thread_rng();
+
+    assert!(!characters.is_empty(), "No characters available");
+
+    // Choose a random character and remove it from the list to make sure it's unique
+    let character = characters.choose_mut(&mut rng).unwrap().to_owned();
+    characters.retain(|c| *c != character);
+
+    let dungeons: Vec<_> = theme.locations.iter().filter(|l| {
+        if let LocationType::Dungeon(_) = l.class {
+            true
+        } else {
+            false
+        }
+    }).collect();
+
+    let dungeon = dungeons.choose(&mut rng).expect("Unable to get a dungeon from Theme data when creating side quest.");
+
+    if let LocationType::Dungeon(item) = &dungeon.class {
+        vec![Encounter::Quest(Quest::SideQuest(SideQuest {
+            character: character.bold(),
+            location_name: dungeon.name.bold(), // TODO get same color as location name
+            item: item.bold(),
+        }))]
+    } else {
+        panic!("Unexpected class when creating a sidequest. Should be a dungeon");
+    }    
 }
 
 // Fill each dungeon with 3 battle encounters
@@ -101,7 +101,9 @@ fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
     let mut rng = thread_rng();
     let mut battles = Vec::new();
 
-    for enemy in theme_location.enemies {
+    let enemies = theme_location.enemies.as_ref().expect("Unable to get enemies when building battles. Check Theme data dungeons have enemies.");
+
+    for enemy in enemies {
         let (life, attack) = map_theme_enemy_difficulty_to_stats(enemy.difficulty);
         let battle: Battle = Battle {
             enemy: Enemy {
@@ -135,27 +137,6 @@ fn build_main_quest(
         character: character.bold(),
         world_name,
         boss_name: boss.name.clone(),
-    }))
-}
-
-fn build_side_quest(characters: &mut Vec<&str>, items: &mut Vec<&str>) -> Encounter {
-    let mut rng = thread_rng();
-
-    // Ensure there are characters and items available
-    assert!(!characters.is_empty(), "No characters available");
-    assert!(!items.is_empty(), "No items available");
-
-    // Choose a random character and remove it from the list to make sure it's unique
-    let character = characters.choose_mut(&mut rng).unwrap().to_owned();
-    characters.retain(|c| *c != character);
-
-    // Choose a random item and remove it from the list to make sure it's unique
-    let item = items.choose_mut(&mut rng).unwrap().to_owned();
-    items.retain(|i| *i != item);
-
-    Encounter::Quest(Quest::SideQuest(SideQuest {
-        character: character.bold(),
-        item: item.bold(),
     }))
 }
 

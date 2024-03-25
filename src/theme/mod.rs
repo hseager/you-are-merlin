@@ -11,7 +11,6 @@ pub struct Theme {
     pub friendly_characters: [&'static str; 6],
     pub locations: [ThemeLocation; 6],
     pub items: [&'static str; 10],
-    pub quest_items: [&'static str; 8],
     pub boss: ThemeEnemy,
 }
 
@@ -23,7 +22,7 @@ pub fn load_theme() -> Theme {
 pub struct ThemeLocation {
     pub name: &'static str,
     pub description: &'static str,
-    pub enemies: Option<Vec<ThemeEnemy>>,
+    pub enemies: Option<[ThemeEnemy; 3]>,
     pub class: LocationType,
 }
 

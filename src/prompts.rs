@@ -54,8 +54,8 @@ pub fn get_quest_prompt(encounter: &Encounter) {
                     &quest.character
                 );
                 println!(
-                    "\"Will you find {} and bring it back to me? I will make it worth your while...\"",
-                    &quest.item
+                    "\"Will you find {} from {} and bring it back to me? I will make it worth your while!\"",
+                    &quest.item, &quest.location_name
                 )
             }
         },

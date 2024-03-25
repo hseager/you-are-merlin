@@ -13,7 +13,7 @@ pub struct Location {
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum LocationType {
     SafeZone,
-    Dungeon,
+    Dungeon(&'static str),
     BossDungeon,
 }
 
@@ -38,6 +38,7 @@ pub enum Quest {
 #[derive(Debug)]
 pub struct SideQuest {
     pub character: ColoredString,
+    pub location_name: ColoredString,
     pub item: ColoredString,
 }
 

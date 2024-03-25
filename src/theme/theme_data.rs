@@ -26,8 +26,8 @@ pub const THEME_DATA: Theme = Theme {
         ThemeLocation {
             name: "Gerudo Valley",
             description: "A desert canyon inhabited by the fierce Gerudo tribe, known for their skilled horseback archery and thievery.",
-            class: LocationType::Dungeon,
-            enemies: Some(vec![
+            class: LocationType::Dungeon("The Spirit Medallion"),
+            enemies: Some([
                 ThemeEnemy {
                     name: "Gerudo Guard",
                     description: "Elite warriors of the Gerudo, wielding curved swords and swift horse mounts.",
@@ -48,8 +48,8 @@ pub const THEME_DATA: Theme = Theme {
         ThemeLocation {
             name: "Death Mountain",
             description: "A towering volcano shrouded in smoke and lava, home to the proud Goron tribe and the terrifying Fire Temple.",
-            class: LocationType::Dungeon,
-            enemies: Some(vec![
+            class: LocationType::Dungeon("The Goron's Ruby"),
+            enemies: Some([
                 ThemeEnemy {
                     name: "Goron Warrior",
                     description: "Mighty rock-eaters wielding massive hammers, rolling down slopes with incredible force.",
@@ -76,8 +76,8 @@ pub const THEME_DATA: Theme = Theme {
         ThemeLocation {
             name: "The Lost Woods",
             description: "An enchanted forest filled with winding paths and mystical illusions, hiding the entrance to the sacred forest temple.",
-            class: LocationType::Dungeon,
-            enemies: Some(vec![
+            class: LocationType::Dungeon("The Forest Medallion"),
+            enemies: Some([
                 ThemeEnemy {
                     name: "Skull Kid",
                     description: "Mischievous spirits playing pranks on travelers, leading them astray with their flute melodies.",
@@ -98,8 +98,8 @@ pub const THEME_DATA: Theme = Theme {
         ThemeLocation {
             name: "Hyrule Field",
             description: "Vast plains stretching across the kingdom of Hyrule, connecting its various regions and landmarks.",
-            class: LocationType::Dungeon,
-            enemies: Some(vec![
+            class: LocationType::Dungeon("The Rabbit Mask"),
+            enemies: Some([
                 ThemeEnemy {
                     name: "Stalchild",
                     description: "Restless undead emerging from the ground at night, attacking travelers with chilling claws.",
@@ -121,7 +121,7 @@ pub const THEME_DATA: Theme = Theme {
             name: "Ganon's Castle",
             class: LocationType::BossDungeon,
             description: "A foreboding fortress located at the heart of Hyrule, serving as the stronghold of the malevolent Ganondorf, where dark magic and treacherous traps await any who dare to challenge its depths.",
-            enemies: Some(vec![
+            enemies: Some([
                 ThemeEnemy {
                     name: "Darknut",
                     description: "Elite warriors clad in heavy armor, wielding massive swords to strike down intruders with swift and powerful attacks.",
@@ -151,15 +151,5 @@ pub const THEME_DATA: Theme = Theme {
         "The Lens of Truth",
         "Some Magic Beans",
         "The Megaton Hammer",
-    ],
-    quest_items: [
-        "The Kokiri's Emerald",
-        "The Goron's Ruby",
-        "The Zora's Sapphire",
-        "The Forest Medallion",
-        "The Fire Medallion",
-        "The Water Medallion",
-        "The Spirit Medallion",
-        "The Shadow Medallion",
     ]
 };
