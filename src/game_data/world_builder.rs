@@ -14,7 +14,6 @@ use super::entities::*;
 pub fn build_world(theme: Theme) -> Vec<Location> {
     let mut characters = theme.friendly_characters.to_vec();
     let mut locations = build_locations(&theme, &mut characters);
-    
 
     let (boss_life, boss_attack) = map_theme_enemy_difficulty_to_stats(theme.boss.difficulty);
     let boss = Enemy {
@@ -42,18 +41,18 @@ fn build_locations(theme: &Theme, characters: &mut Vec<&str>) -> Vec<Location> {
         locations.push(Location {
             name: theme_location.name.color(map_text_color(i)),
             description: theme_location.description,
-            encounters: build_encounters(
-                theme,
-                theme_location,
-                characters
-            ),
+            encounters: build_encounters(theme, theme_location, characters),
             class: theme_location.class,
         })
     }
     locations
 }
 
-fn build_encounters(theme: &Theme, theme_location: &ThemeLocation, characters: &mut Vec<&str>) -> Vec<Encounter> {
+fn build_encounters(
+    theme: &Theme,
+    theme_location: &ThemeLocation,
+    characters: &mut Vec<&str>,
+) -> Vec<Encounter> {
     match theme_location.class {
         LocationType::Dungeon(_) | LocationType::BossDungeon => build_battles(theme_location),
         LocationType::SafeZone => build_side_quest(theme, characters),
@@ -61,11 +60,6 @@ fn build_encounters(theme: &Theme, theme_location: &ThemeLocation, characters: &
 }
 
 // Build a side quest for each SafeZone
-// Basically what the plan is, for now, is to create 1 sidequest for each SafeZone.
-// Once the side quest is complete, remove it from the encounters, and only show the 'explore' action
-// when there are encounters in the vec
-
-// TODO fix encounters in safezones
 fn build_side_quest(theme: &Theme, characters: &mut Vec<&str>) -> Vec<Encounter> {
     let mut rng = thread_rng();
 
@@ -75,15 +69,15 @@ fn build_side_quest(theme: &Theme, characters: &mut Vec<&str>) -> Vec<Encounter>
     let character = characters.choose_mut(&mut rng).unwrap().to_owned();
     characters.retain(|c| *c != character);
 
-    let dungeons: Vec<_> = theme.locations.iter().filter(|l| {
-        if let LocationType::Dungeon(_) = l.class {
-            true
-        } else {
-            false
-        }
-    }).collect();
+    let dungeons: Vec<_> = theme
+        .locations
+        .iter()
+        .filter(|l| matches!(l.class, LocationType::Dungeon(_)))
+        .collect();
 
-    let dungeon = dungeons.choose(&mut rng).expect("Unable to get a dungeon from Theme data when creating side quest.");
+    let dungeon = dungeons
+        .choose(&mut rng)
+        .expect("Unable to get a dungeon from Theme data when creating side quest.");
 
     if let LocationType::Dungeon(item) = &dungeon.class {
         vec![Encounter::Quest(Quest::SideQuest(SideQuest {
@@ -93,7 +87,7 @@ fn build_side_quest(theme: &Theme, characters: &mut Vec<&str>) -> Vec<Encounter>
         }))]
     } else {
         panic!("Unexpected class when creating a sidequest. Should be a dungeon");
-    }    
+    }
 }
 
 // Fill each dungeon with 3 battle encounters
@@ -101,7 +95,9 @@ fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
     let mut rng = thread_rng();
     let mut battles = Vec::new();
 
-    let enemies = theme_location.enemies.as_ref().expect("Unable to get enemies when building battles. Check Theme data dungeons have enemies.");
+    let enemies = theme_location.enemies.as_ref().expect(
+        "Unable to get enemies when building battles. Check Theme data dungeons have enemies.",
+    );
 
     for enemy in enemies {
         let (life, attack) = map_theme_enemy_difficulty_to_stats(enemy.difficulty);

@@ -5,10 +5,7 @@ use crate::{
     battle_manager,
     characters::Player,
     config::{PLAYER_ATTACK, PLAYER_LIFE, REST_INTERVAL_SECONDS},
-    game_data::{
-        entities::{Encounter, Location, LocationType},
-        GameData,
-    },
+    game_data::{entities::*, GameData},
     items::get_encounter_reward,
     player_state::PlayerState,
 };
@@ -21,6 +18,7 @@ pub struct GameState<'a> {
     pub player: Player<'a>,
     pub game_data: &'a GameData,
     pub items: Vec<&'static str>,
+    pub accepted_quests: Vec<&'a SideQuest>,
 }
 
 impl<'a> GameState<'a> {
@@ -44,6 +42,7 @@ impl<'a> GameState<'a> {
             player,
             items: game_data.items.clone(),
             game_data,
+            accepted_quests: Vec::new(),
         }
     }
 
@@ -107,6 +106,12 @@ impl<'a> GameState<'a> {
                 }
                 ActionType::Accept => {
                     println!("You accept their request.");
+
+                    let encounter = self.get_current_encounter();
+
+                    if let Encounter::Quest(Quest::SideQuest(side_quest)) = encounter {
+                        self.accepted_quests.push(side_quest);
+                    }
 
                     self.state = PlayerState::Visiting(self.get_current_location());
                 }

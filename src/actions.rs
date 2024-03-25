@@ -44,6 +44,7 @@ pub fn get_battle_actions() -> Vec<Action> {
     ]
 }
 
+// TODO need to check accepted quests here and be able to change options based on inventory etc
 pub fn get_quest_actions() -> Vec<Action> {
     vec![
         Action::new(ActionType::Accept, "Accept".green()),
