@@ -35,7 +35,7 @@ pub fn handle_battle(game_state: &mut GameState) {
         Encounter::BossFight(battle) => match start_battle(&mut game_state.player, &battle.enemy) {
             BattleResult::Win(enemy) => {
                 println!(
-                    "You defeated {}! The {} is saved!",
+                    "You defeated {}! {} is saved!",
                     enemy.name, game_state.game_data.world_name
                 );
                 game_state.state = PlayerState::Win;

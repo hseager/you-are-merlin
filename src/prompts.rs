@@ -35,7 +35,7 @@ pub fn get_battle_prompt(encounter: &Encounter) {
     }
 }
 
-pub fn get_quest_prompt(quest: &Quest, accepted_quests: &Vec<&SideQuest>) {
+pub fn get_quest_prompt(quest: &Quest, accepted_quests: &[&SideQuest]) {
     match quest {
         Quest::MainQuest(quest) => {
             println!(
@@ -70,7 +70,7 @@ pub fn get_quest_prompt(quest: &Quest, accepted_quests: &Vec<&SideQuest>) {
 
 pub fn get_treasure_prompt(item: &Item) {
     println!(
-        "You open the chest and find {}! (attack increased by {}, max life increased by {})",
+        "You recieve {}! Your attack power increases by {}, and your maximum life grows by {} points.",
         item.name, item.attack, item.max_life
     );
 }

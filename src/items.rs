@@ -7,7 +7,7 @@ pub struct Item {
     pub attack: u16,
 }
 
-pub fn get_encounter_reward(items: &mut Vec<&str>) -> Item {
+pub fn create_item(items: &mut Vec<&str>) -> Item {
     let mut rng = thread_rng();
 
     let item_name = items.choose_mut(&mut rng).unwrap().to_owned();

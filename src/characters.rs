@@ -1,6 +1,6 @@
 use colored::ColoredString;
 
-use crate::battle_manager::calculate_damage;
+use crate::{battle_manager::calculate_damage, items::Item};
 
 pub trait Fighter {
     fn name(&self) -> &ColoredString;
@@ -51,6 +51,22 @@ pub struct Player<'a> {
     pub max_life: i16,
     pub life: i16,
     pub attack: u16,
+    pub inventory: Vec<ColoredString>, // TODO change to vec of items
+}
+
+impl<'a> Player<'a> {
+    pub fn add_item_to_inventory(&mut self, item: ColoredString) {
+        self.inventory.push(item);
+    }
+
+    pub fn has_item_in_inventory(&self, item: &ColoredString) -> bool {
+        self.inventory.iter().any(|i| i == item)
+    }
+
+    pub fn equip_item(&mut self, item: &Item) {
+        self.attack += item.attack;
+        self.max_life += item.max_life;
+    }
 }
 
 impl<'a> Fighter for Player<'a> {

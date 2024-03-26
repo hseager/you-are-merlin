@@ -1,6 +1,9 @@
 use colored::{ColoredString, Colorize};
 
-use crate::game_data::entities::{Location, LocationType, Quest, SideQuest};
+use crate::{
+    characters::Player,
+    game_data::entities::{Location, LocationType, Quest, SideQuest},
+};
 
 #[derive(Clone)]
 pub enum ActionType {
@@ -12,6 +15,7 @@ pub enum ActionType {
     Rest,
     Accept,
     Continue,
+    GiveItem,
 }
 
 #[derive(Clone)]
@@ -26,11 +30,12 @@ impl Action {
     }
 }
 
-pub fn get_visiting_actions(location: &Location) -> Vec<Action> {
-    let mut actions = vec![
-        Action::new(ActionType::Travel, "Travel".yellow()),
-        Action::new(ActionType::Explore, "Explore".blue()),
-    ];
+pub fn get_visiting_actions(location: &Location, completed_locations: &[&Location]) -> Vec<Action> {
+    let mut actions = vec![Action::new(ActionType::Travel, "Travel".yellow())];
+
+    if !completed_locations.iter().any(|l| l.name == location.name) {
+        actions.push(Action::new(ActionType::Explore, "Explore".blue()))
+    }
 
     if let LocationType::SafeZone = location.class {
         actions.push(Action::new(ActionType::Rest, "Rest".green()));
@@ -46,19 +51,23 @@ pub fn get_battle_actions() -> Vec<Action> {
 }
 
 // TODO need to check accepted quests here and be able to change options based on inventory etc
-pub fn get_quest_actions(quest: &Quest, accepted_quests: &Vec<&SideQuest>) -> Vec<Action> {
+pub fn get_quest_actions(
+    quest: &Quest,
+    accepted_quests: &[&SideQuest],
+    player: &Player,
+) -> Vec<Action> {
     match quest {
         Quest::MainQuest(_) => {
             vec![
                 Action::new(ActionType::Continue, "Continue".green()),
                 Action::new(ActionType::Run, "Run".cyan()),
             ]
-        },
+        }
         Quest::SideQuest(side_quest) => {
-            if side_quest.is_accepted(accepted_quests) {
-                vec![
-                    Action::new(ActionType::Run, "Continue".green())
-                ]
+            if player.has_item_in_inventory(&side_quest.item) {
+                vec![Action::new(ActionType::GiveItem, "Give".blue())]
+            } else if side_quest.is_accepted(accepted_quests) {
+                vec![Action::new(ActionType::Run, "Continue".green())]
             } else {
                 vec![
                     Action::new(ActionType::Accept, "Accept".green()),
@@ -67,7 +76,6 @@ pub fn get_quest_actions(quest: &Quest, accepted_quests: &Vec<&SideQuest>) -> Ve
             }
         }
     }
-
 }
 
 pub fn get_locations_as_actions(locations: &[Location]) -> Vec<Action> {
@@ -78,5 +86,5 @@ pub fn get_locations_as_actions(locations: &[Location]) -> Vec<Action> {
 }
 
 pub fn get_treasure_actions() -> Vec<Action> {
-    vec![Action::new(ActionType::Travel, "Travel".yellow())]
+    vec![Action::new(ActionType::Run, "Continue".green())]
 }

@@ -43,8 +43,10 @@ pub struct SideQuest {
 }
 
 impl SideQuest {
-    pub fn is_accepted(&self, accepted_quests: &Vec<&SideQuest>) -> bool {
-        accepted_quests.iter().any(|q| q.character == self.character)
+    pub fn is_accepted(&self, accepted_quests: &[&SideQuest]) -> bool {
+        accepted_quests
+            .iter()
+            .any(|q| q.character == self.character)
     }
 }
 
