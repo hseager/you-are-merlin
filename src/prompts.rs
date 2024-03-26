@@ -35,31 +35,28 @@ pub fn get_battle_prompt(encounter: &Encounter) {
     }
 }
 
-pub fn get_quest_prompt(encounter: &Encounter) {
-    match encounter {
-        Encounter::Quest(quest) => match quest {
-            Quest::MainQuest(quest) => {
-                println!(
-                    "You find a calm area. {} wants to ask you something.",
-                    &quest.character
-                );
-                println!(
-                    "\"{} is in great danger... {} seeks the destruction of this world... They must be stopped...\"",
-                    &quest.world_name, &quest.boss_name,
-                )
-            }
-            Quest::SideQuest(quest) => {
-                println!(
-                    "You find a calm area. {} wants to ask you something.",
-                    &quest.character
-                );
-                println!(
-                    "\"Will you find {} from {} and bring it back to me? I will make it worth your while!\"",
-                    &quest.item, &quest.location_name
-                )
-            }
-        },
-        _ => panic!("Encounter not a quest when playerState is a quest."),
+pub fn get_quest_prompt(quest: &Quest) {
+    match quest {
+        Quest::MainQuest(quest) => {
+            println!(
+                "You find a calm area. {} wants to ask you something.",
+                &quest.character
+            );
+            println!(
+                "\"{} is in great danger... {} seeks the destruction of this world... They must be stopped...\"",
+                &quest.world_name, &quest.boss_name,
+            )
+        }
+        Quest::SideQuest(quest) => {
+            println!(
+                "You find a calm area. {} wants to ask you something.",
+                &quest.character
+            );
+            println!(
+                "\"Will you find {} from {} and bring it back to me? I will make it worth your while!\"",
+                &quest.item, &quest.location_name
+            )
+        }
     }
 }
 

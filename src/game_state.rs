@@ -64,8 +64,8 @@ impl<'a> GameState<'a> {
                     Encounter::BossFight(_) => {
                         self.state = PlayerState::Battle(self.get_current_encounter())
                     }
-                    Encounter::Quest(_) => {
-                        self.state = PlayerState::Quest(self.get_current_encounter())
+                    Encounter::Quest(quest) => {
+                        self.state = PlayerState::Quest(quest)
                     }
                 },
                 ActionType::MoveToLocation => {
@@ -114,6 +114,12 @@ impl<'a> GameState<'a> {
                     }
 
                     self.state = PlayerState::Visiting(self.get_current_location());
+                },
+                ActionType::Continue => {
+                    println!("You acknowledge their request and continue exploring the area.");
+
+                    self.go_to_next_encounter();
+                    self.state = PlayerState::Battle(self.get_current_encounter());
                 }
             },
             None => println!("This isn't the time to use {}!", search),
@@ -165,7 +171,7 @@ impl<'a> GameState<'a> {
                 Encounter::Battle(_) | Encounter::BossFight(_) => {
                     self.state = PlayerState::Battle(encounter)
                 }
-                Encounter::Quest(_) => self.state = PlayerState::Quest(encounter),
+                Encounter::Quest(quest) => self.state = PlayerState::Quest(quest),
             }
         } else {
             self.handle_end_of_encounters(location);

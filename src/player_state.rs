@@ -4,7 +4,7 @@ pub enum PlayerState<'a> {
     Travelling(&'a Vec<Location>),
     Visiting(&'a Location),
     Battle(&'a Encounter),
-    Quest(&'a Encounter),
+    Quest(&'a Quest),
     Treasure(Item),
     GameOver,
     Win,
@@ -18,7 +18,7 @@ impl<'a> PlayerState<'a> {
             }
             PlayerState::Travelling(_) => get_travelling_prompt(),
             PlayerState::Battle(encounter) => get_battle_prompt(encounter),
-            PlayerState::Quest(encounter) => get_quest_prompt(encounter),
+            PlayerState::Quest(quest) => get_quest_prompt(quest),
             PlayerState::Treasure(item) => get_treasure_prompt(item),
             _ => panic!("Unhandled PlayerState"),
         }
@@ -28,7 +28,7 @@ impl<'a> PlayerState<'a> {
         match self {
             PlayerState::Visiting(location) => get_visiting_actions(location),
             PlayerState::Battle(_) => get_battle_actions(),
-            PlayerState::Quest(_) => get_quest_actions(),
+            PlayerState::Quest(quest) => get_quest_actions(quest),
             PlayerState::Travelling(locations) => get_locations_as_actions(locations),
             PlayerState::Treasure(_) => get_treasure_actions(),
             _ => vec![],
