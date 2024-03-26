@@ -54,10 +54,8 @@ pub fn get_quest_actions(quest: &Quest, accepted_quests: &Vec<&SideQuest>) -> Ve
                 Action::new(ActionType::Run, "Run".cyan()),
             ]
         },
-        Quest::SideQuest(quest) => {
-            let accepted_quest = accepted_quests.iter().any(|q| q.character == quest.character);
-
-            if accepted_quest {
+        Quest::SideQuest(side_quest) => {
+            if side_quest.is_accepted(accepted_quests) {
                 vec![
                     Action::new(ActionType::Run, "Continue".green())
                 ]

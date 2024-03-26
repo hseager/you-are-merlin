@@ -47,24 +47,21 @@ pub fn get_quest_prompt(quest: &Quest, accepted_quests: &Vec<&SideQuest>) {
                 &quest.world_name, &quest.boss_name,
             )
         }
-        Quest::SideQuest(quest) => {
-            // Safe to assume that a quest is unique by character for now
-            let accepted_quest = accepted_quests.iter().any(|q| q.character == quest.character);
-
+        Quest::SideQuest(side_quest) => {
             println!(
                 "You find a calm area. {} wants to ask you something.",
-                &quest.character
+                &side_quest.character
             );
 
-            if accepted_quest {
+            if side_quest.is_accepted(accepted_quests) {
                 println!(
                     "\"Do you have it? Please, bring me {} back from {}.\"",
-                    &quest.item, &quest.location_name
+                    &side_quest.item, &side_quest.location_name
                 )
             } else {
                 println!(
                     "\"Will you find {} from {} and bring it back to me? I will make it worth your while!\"",
-                    &quest.item, &quest.location_name
+                    &side_quest.item, &side_quest.location_name
                 )
             }
         }

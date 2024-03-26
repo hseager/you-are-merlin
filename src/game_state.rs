@@ -1,5 +1,7 @@
 use std::{thread::sleep, time::Duration};
 
+use colored::Colorize;
+
 use crate::{
     actions::*,
     battle_manager,
@@ -159,10 +161,11 @@ impl<'a> GameState<'a> {
 
         let location = self.get_current_location();
 
+        let encounter = self.get_current_encounter();
+
         if next_encounter < location.encounters.len() {
             self.current_encounter = next_encounter;
 
-            let encounter = self.get_current_encounter();
             match encounter {
                 Encounter::Battle(_) | Encounter::BossFight(_) => {
                     self.state = PlayerState::Battle(encounter)
@@ -176,18 +179,28 @@ impl<'a> GameState<'a> {
 
     fn handle_end_of_encounters(&mut self, location: &Location) {
         match location.class {
-            LocationType::Dungeon(_) => {
+            LocationType::Dungeon(item) => {
                 println!(
-                    "You clear {} of danger and find a chest ahead...",
+                    "You clear {} of danger and find safe area.",
                     location.name
                 );
 
-                let item = get_encounter_reward(&mut self.items);
+                let is_on_side_quest = self.accepted_quests.iter().any(|q| q.item == item.bold());
+                
+                if is_on_side_quest {
+                    println!(
+                        "You find {}!", item.bold()
+                    );
+                }
 
-                self.player.attack += item.attack;
-                self.player.max_life += item.max_life;
+                // TODO add item to inventory
 
-                self.state = PlayerState::Treasure(item);
+                let reward = get_encounter_reward(&mut self.items);
+
+                self.player.attack += reward.attack;
+                self.player.max_life += reward.max_life;
+
+                self.state = PlayerState::Treasure(reward);
                 self.reset_encounters();
             }
             LocationType::SafeZone => {
@@ -197,7 +210,6 @@ impl<'a> GameState<'a> {
             _ => (),
         }
     }
-
 
     pub fn get_prompt(&self) {
         match &self.state {
@@ -232,6 +244,4 @@ impl<'a> GameState<'a> {
             .collect::<Vec<String>>()
             .join(", ")
     }
-
-
 }
