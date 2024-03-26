@@ -6,6 +6,11 @@ A text adventure game, built with Rust.
 
 ### Features
 
+- Main quest with world boss
+- Dungeons
+- Items
+- Side quests
+
 #### mvp
 - Theme selection
 - Redo side quests, Items & Rewards
@@ -23,7 +28,7 @@ A text adventure game, built with Rust.
 - More types of encounters like puzzles and riddles etc
     - Choice encounter with reward or damage
 - Require key for main boss
-- Split items into weapons, armor, utilities
+- Split items into types like weapons, armor, utilities
 
 #### later
 - Better visuals for life/attack

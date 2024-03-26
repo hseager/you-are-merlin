@@ -1,7 +1,7 @@
 use colored::ColoredString;
 
 use crate::{
-    game_data::entities::{Encounter, Quest},
+    game_data::entities::{Encounter, Quest, SideQuest},
     items::Item,
 };
 
@@ -35,7 +35,7 @@ pub fn get_battle_prompt(encounter: &Encounter) {
     }
 }
 
-pub fn get_quest_prompt(quest: &Quest) {
+pub fn get_quest_prompt(quest: &Quest, accepted_quests: &Vec<&SideQuest>) {
     match quest {
         Quest::MainQuest(quest) => {
             println!(
@@ -48,14 +48,25 @@ pub fn get_quest_prompt(quest: &Quest) {
             )
         }
         Quest::SideQuest(quest) => {
+            // Safe to assume that a quest is unique by character for now
+            let accepted_quest = accepted_quests.iter().any(|q| q.character == quest.character);
+
             println!(
                 "You find a calm area. {} wants to ask you something.",
                 &quest.character
             );
-            println!(
-                "\"Will you find {} from {} and bring it back to me? I will make it worth your while!\"",
-                &quest.item, &quest.location_name
-            )
+
+            if accepted_quest {
+                println!(
+                    "\"Do you have it? Please, bring me {} back from {}.\"",
+                    &quest.item, &quest.location_name
+                )
+            } else {
+                println!(
+                    "\"Will you find {} from {} and bring it back to me? I will make it worth your while!\"",
+                    &quest.item, &quest.location_name
+                )
+            }
         }
     }
 }

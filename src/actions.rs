@@ -1,6 +1,6 @@
 use colored::{ColoredString, Colorize};
 
-use crate::game_data::entities::{Location, LocationType, Quest};
+use crate::game_data::entities::{Location, LocationType, Quest, SideQuest};
 
 #[derive(Clone)]
 pub enum ActionType {
@@ -46,7 +46,7 @@ pub fn get_battle_actions() -> Vec<Action> {
 }
 
 // TODO need to check accepted quests here and be able to change options based on inventory etc
-pub fn get_quest_actions(quest: &Quest) -> Vec<Action> {
+pub fn get_quest_actions(quest: &Quest, accepted_quests: &Vec<&SideQuest>) -> Vec<Action> {
     match quest {
         Quest::MainQuest(_) => {
             vec![
@@ -54,11 +54,19 @@ pub fn get_quest_actions(quest: &Quest) -> Vec<Action> {
                 Action::new(ActionType::Run, "Run".cyan()),
             ]
         },
-        Quest::SideQuest(_) => {
-            vec![
-                Action::new(ActionType::Accept, "Accept".green()),
-                Action::new(ActionType::Run, "Decline".red()),
-            ]
+        Quest::SideQuest(quest) => {
+            let accepted_quest = accepted_quests.iter().any(|q| q.character == quest.character);
+
+            if accepted_quest {
+                vec![
+                    Action::new(ActionType::Run, "Continue".green())
+                ]
+            } else {
+                vec![
+                    Action::new(ActionType::Accept, "Accept".green()),
+                    Action::new(ActionType::Run, "Decline".red()),
+                ]
+            }
         }
     }
 

@@ -1,13 +1,13 @@
 use std::{thread::sleep, time::Duration};
 
 use crate::{
-    actions::{get_visiting_actions, Action, ActionType},
+    actions::*,
     battle_manager,
     characters::Player,
     config::{PLAYER_ATTACK, PLAYER_LIFE, REST_INTERVAL_SECONDS},
     game_data::{entities::*, GameData},
     items::get_encounter_reward,
-    player_state::PlayerState,
+    player_state::PlayerState, prompts::*,
 };
 
 pub struct GameState<'a> {
@@ -25,7 +25,8 @@ impl<'a> GameState<'a> {
     pub fn new(game_data: &GameData) -> GameState {
         let current_location = 0;
 
-        let location = game_data.locations.get(current_location).unwrap();
+        let location = game_data.locations.get(current_location)
+            .expect("Unable to get location when creating a new game state.");
 
         let player = Player {
             name: &game_data.main_character,
@@ -44,11 +45,6 @@ impl<'a> GameState<'a> {
             game_data,
             accepted_quests: Vec::new(),
         }
-    }
-
-    pub fn get_prompt(&self) {
-        self.state.get_prompt();
-        println!("{}", &self.state.get_actions_display_list());
     }
 
     pub fn handle_action(&mut self, search: &str) {
@@ -125,7 +121,7 @@ impl<'a> GameState<'a> {
             None => println!("This isn't the time to use {}!", search),
         }
 
-        self.actions = self.state.get_actions();
+        self.actions = self.get_actions();
     }
 
     fn find_action(&self, search: &str) -> Option<&Action> {
@@ -201,4 +197,41 @@ impl<'a> GameState<'a> {
             _ => (),
         }
     }
+
+
+    pub fn get_prompt(&self) {
+        match &self.state {
+            PlayerState::Visiting(location) => {
+                get_visiting_prompt(&location.name, location.description)
+            }
+            PlayerState::Travelling(_) => get_travelling_prompt(),
+            PlayerState::Battle(encounter) => get_battle_prompt(encounter),
+            PlayerState::Quest(quest) => get_quest_prompt(quest, &self.accepted_quests),
+            PlayerState::Treasure(item) => get_treasure_prompt(item),
+            _ => panic!("Unhandled PlayerState"),
+        }
+
+        println!("{}", &self.get_actions_display_list());
+    }
+
+    pub fn get_actions(&self) -> Vec<Action> {
+        match self.state {
+            PlayerState::Visiting(location) => get_visiting_actions(location),
+            PlayerState::Battle(_) => get_battle_actions(),
+            PlayerState::Quest(quest) => get_quest_actions(quest, &self.accepted_quests),
+            PlayerState::Travelling(locations) => get_locations_as_actions(locations),
+            PlayerState::Treasure(_) => get_treasure_actions(),
+            _ => vec![],
+        }
+    }
+
+    pub fn get_actions_display_list(&self) -> String {
+        self.get_actions()
+            .iter()
+            .map(|action| action.name.to_string())
+            .collect::<Vec<String>>()
+            .join(", ")
+    }
+
+
 }
