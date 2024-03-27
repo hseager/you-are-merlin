@@ -18,6 +18,8 @@ pub fn load_theme() -> Theme {
     THEME_DATA
 }
 
+
+// TODO clean up clones
 #[derive(Clone)]
 pub struct ThemeLocation {
     pub name: &'static str,

@@ -26,12 +26,12 @@ fn main() {
         let mut input = String::new();
 
         if let PlayerState::GameOver = game_state.state {
-            print!("Game Over...");
+            println!("Game Over...");
             break;
         }
 
         if let PlayerState::Win = game_state.state {
-            print!("You Win!");
+            println!("You Win!");
             break;
         }
 

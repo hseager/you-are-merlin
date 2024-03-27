@@ -25,6 +25,7 @@ pub struct GameState<'a> {
     pub completed_locations: Vec<&'a Location>,
 }
 
+// TODO getting too big, need to split this out
 impl<'a> GameState<'a> {
     pub fn new(game_data: &GameData) -> GameState {
         let current_location = 0;

@@ -1,5 +1,3 @@
-// Move boss to boss location.
-
 use crate::game_data::entities::EnemyDifficulty;
 
 use super::*;
@@ -9,7 +7,7 @@ use super::*;
 pub const THEME_DATA: Theme = Theme {
     main_character: "Link",
     world_name: "Hyrule",
-    characters: [
+    friendly_characters: [
         "Princess Zelda",
         "Navi",
         "Skullkid",
@@ -26,8 +24,8 @@ pub const THEME_DATA: Theme = Theme {
         ThemeLocation {
             name: "Gerudo Valley",
             description: "A desert canyon inhabited by the fierce Gerudo tribe, known for their skilled horseback archery and thievery.",
-            class: LocationType::Dungeon,
-            enemies: [
+            class: LocationType::Dungeon("The Spirit Medallion"),
+            enemies: Some([
                 ThemeEnemy {
                     name: "Gerudo Guard",
                     description: "Elite warriors of the Gerudo, wielding curved swords and swift horse mounts.",
@@ -43,13 +41,13 @@ pub const THEME_DATA: Theme = Theme {
                     description: "Sneaky bandits lurking in the shadows, attempting to steal valuable items from passersby.",
                     difficulty: EnemyDifficulty::Normal
                 },
-            ],
+            ]),
         },
         ThemeLocation {
             name: "Death Mountain",
             description: "A towering volcano shrouded in smoke and lava, home to the proud Goron tribe and the terrifying Fire Temple.",
-            class: LocationType::Dungeon,
-            enemies: [
+            class: LocationType::Dungeon("The Goron's Ruby"),
+            enemies: Some([
                 ThemeEnemy {
                     name: "Goron Warrior",
                     description: "Mighty rock-eaters wielding massive hammers, rolling down slopes with incredible force.",
@@ -65,35 +63,19 @@ pub const THEME_DATA: Theme = Theme {
                     description: "Agile creatures leaping through the flames, performing deadly dances to summon infernal energy.",
                     difficulty: EnemyDifficulty::Normal
                 },
-            ],
+            ]),
         },
         ThemeLocation {
             name: "Zora's Domain",
             description: "A serene waterfall kingdom ruled by the aquatic Zora tribe, famed for their elegant architecture and beautiful music.",
             class: LocationType::SafeZone,
-            enemies: [
-                ThemeEnemy {
-                    name: "River Zora",
-                    description: "Aquatic monsters lurking in the waters, shooting deadly projectiles with precision accuracy.",
-                    difficulty: EnemyDifficulty::Normal
-                },
-                ThemeEnemy {
-                    name: "Electric Octorok",
-                    description: "Electrified cephalopods swimming in the domain's rivers, shocking unsuspecting travelers.",
-                    difficulty: EnemyDifficulty::Normal
-                },
-                ThemeEnemy {
-                    name: "Zora Sentry",
-                    description: "Vigilant guards patrolling the domain's boundaries, armed with tridents and keen senses.",
-                    difficulty: EnemyDifficulty::Hard
-                },
-            ],
+            enemies: None,
         },
         ThemeLocation {
             name: "The Lost Woods",
             description: "An enchanted forest filled with winding paths and mystical illusions, hiding the entrance to the sacred forest temple.",
-            class: LocationType::Dungeon,
-            enemies: [
+            class: LocationType::Dungeon("The Forest Medallion"),
+            enemies: Some([
                 ThemeEnemy {
                     name: "Skull Kid",
                     description: "Mischievous spirits playing pranks on travelers, leading them astray with their flute melodies.",
@@ -109,13 +91,13 @@ pub const THEME_DATA: Theme = Theme {
                     description: "Aggressive wolf-like creatures prowling the woods, attacking with feral ferocity.",
                     difficulty: EnemyDifficulty::Hard
                 },
-            ],
+            ]),
         },
         ThemeLocation {
             name: "Hyrule Field",
             description: "Vast plains stretching across the kingdom of Hyrule, connecting its various regions and landmarks.",
-            class: LocationType::Dungeon,
-            enemies: [
+            class: LocationType::Dungeon("The Bunny Hood"),
+            enemies: Some([
                 ThemeEnemy {
                     name: "Stalchild",
                     description: "Restless undead emerging from the ground at night, attacking travelers with chilling claws.",
@@ -131,13 +113,13 @@ pub const THEME_DATA: Theme = Theme {
                     description: "Powerful skeletal warriors rising to challenge those who dare to wander the fields at night.",
                     difficulty: EnemyDifficulty::Hard
                 },
-            ],
+            ]),
         },
         ThemeLocation {
             name: "Ganon's Castle",
             class: LocationType::BossDungeon,
             description: "A foreboding fortress located at the heart of Hyrule, serving as the stronghold of the malevolent Ganondorf, where dark magic and treacherous traps await any who dare to challenge its depths.",
-            enemies: [
+            enemies: Some([
                 ThemeEnemy {
                     name: "Darknut",
                     description: "Elite warriors clad in heavy armor, wielding massive swords to strike down intruders with swift and powerful attacks.",
@@ -153,7 +135,7 @@ pub const THEME_DATA: Theme = Theme {
                     description: "Undead knights risen from the depths of the castle, wielding enchanted weapons to defend their master's domain.",
                     difficulty: EnemyDifficulty::Hard
                 },
-            ],
+            ]),
         },
     ],
     items: [
@@ -167,15 +149,5 @@ pub const THEME_DATA: Theme = Theme {
         "The Lens of Truth",
         "Some Magic Beans",
         "The Megaton Hammer",
-    ],
-    quest_items: [
-        "The Kokiri's Emerald",
-        "The Goron's Ruby",
-        "The Zora's Sapphire",
-        "The Forest Medallion",
-        "The Fire Medallion",
-        "The Water Medallion",
-        "The Spirit Medallion",
-        "The Shadow Medallion",
     ]
 };

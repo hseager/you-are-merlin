@@ -1,155 +1,156 @@
-// Move boss to boss location.
 
-use crate::game_data::entities::EnemyDifficulty;
+use crate::{game_data::entities::{EnemyDifficulty, LocationType}, theme::{Theme, ThemeEnemy, ThemeLocation}};
 
-use super::*;
-
-// Please ChatGPT, fill in the below Rust struct with the lore from
-// "The Legend of Zelda: Ocarina of Time"
+// Please ChatGPT, fill in the below Rust struct values with the lore from
+// "Merlin"
 pub const THEME_DATA: Theme = Theme {
-    main_character: "Link",
-    world_name: "Hyrule",
+    main_character: "Merlin",
+    world_name: "Camelot",
     friendly_characters: [
-        "Princess Zelda",
-        "Navi",
-        "Skullkid",
-        "Impa",
-        "Saria",
-        "Ruto",
+        "Lancelot",
+        "Mordred",
+        "Arthur Pendragon",
+        "Gaius",
+        "Guinevere",
+        "Uther Pendragon",
     ],
     boss: ThemeEnemy {
-        name: "Ganon",
-        description: "The King of Thieves and the ultimate evil, seeking the power of the Triforce to conquer Hyrule.",
+        name: "The Sorceress Morgana",
+        description: "A powerful sorceress, skilled in dark magic and harboring deep-seated resentment towards Camelot and those who dwell within it.",
         difficulty: EnemyDifficulty::Boss
     },
     locations: [
         ThemeLocation {
-            name: "Gerudo Valley",
-            description: "A desert canyon inhabited by the fierce Gerudo tribe, known for their skilled horseback archery and thievery.",
-            class: LocationType::Dungeon("The Spirit Medallion"),
+            name: "Camelot Castle",
+            description: "A majestic fortress atop rugged cliffs, echoing tales of chivalry.",
+            class: LocationType::Dungeon("Arthur's Polished Armour"),
             enemies: Some([
                 ThemeEnemy {
-                    name: "Gerudo Guard",
-                    description: "Elite warriors of the Gerudo, wielding curved swords and swift horse mounts.",
+                    name: "Black Knight",
+                    description: "Clad in dark armor, a formidable foe wielding a deadly sword.",
                     difficulty: EnemyDifficulty::Hard
                 },
                 ThemeEnemy {
-                    name: "Leevers",
-                    description: "Sandy creatures emerging from the ground to attack travelers, making navigation treacherous.",
+                    name: "Enchanted Armor",
+                    description: "An animated suit of armor, powered by mystical forces.",
                     difficulty: EnemyDifficulty::Easy
                 },
                 ThemeEnemy {
-                    name: "Gerudo Thief",
-                    description: "Sneaky bandits lurking in the shadows, attempting to steal valuable items from passersby.",
+                    name: "Sir Balin's Shade",
+                    description: "The lingering spirit of a once noble knight, seeking vengeance.",
                     difficulty: EnemyDifficulty::Normal
-                },
-            ]),
+                }
+            ])
         },
         ThemeLocation {
-            name: "Death Mountain",
-            description: "A towering volcano shrouded in smoke and lava, home to the proud Goron tribe and the terrifying Fire Temple.",
-            class: LocationType::Dungeon("The Goron's Ruby"),
-            enemies: Some([
-                ThemeEnemy {
-                    name: "Goron Warrior",
-                    description: "Mighty rock-eaters wielding massive hammers, rolling down slopes with incredible force.",
-                    difficulty: EnemyDifficulty::Hard
-                },
-                ThemeEnemy {
-                    name: "Fire Keese",
-                    description: "Fiery bats swarming around the volcanic caverns, attacking with scorching flames.",
-                    difficulty: EnemyDifficulty::Easy
-                },
-                ThemeEnemy {
-                    name: "Fire Dancer",
-                    description: "Agile creatures leaping through the flames, performing deadly dances to summon infernal energy.",
-                    difficulty: EnemyDifficulty::Normal
-                },
-            ]),
-        },
-        ThemeLocation {
-            name: "Zora's Domain",
-            description: "A serene waterfall kingdom ruled by the aquatic Zora tribe, famed for their elegant architecture and beautiful music.",
+            name: "Camelot Tavern",
+            description:
+                "A lively hub in Camelot's heart, offering hearty meals and merry company.",
             class: LocationType::SafeZone,
-            enemies: None,
+            enemies: None
         },
         ThemeLocation {
-            name: "The Lost Woods",
-            description: "An enchanted forest filled with winding paths and mystical illusions, hiding the entrance to the sacred forest temple.",
-            class: LocationType::Dungeon("The Forest Medallion"),
+            name: "Forest of Balor",
+            description:
+                "A verdant labyrinth cloaked in ancient mystery, hiding forgotten secrets.",
+            class: LocationType::Dungeon("The Cup of Life"),
             enemies: Some([
                 ThemeEnemy {
-                    name: "Skull Kid",
-                    description: "Mischievous spirits playing pranks on travelers, leading them astray with their flute melodies.",
+                    name: "Shadow Spirit",
+                    description: "A wraith-like creature, blending with the darkness and striking with ethereal power.",
                     difficulty: EnemyDifficulty::Normal
                 },
                 ThemeEnemy {
-                    name: "Deku Scrub",
-                    description: "Small plant-like creatures attacking from the underbrush, spitting nuts with surprising accuracy.",
-                    difficulty: EnemyDifficulty::Easy
-                },
-                ThemeEnemy {
-                    name: "Forest Wolfos",
-                    description: "Aggressive wolf-like creatures prowling the woods, attacking with feral ferocity.",
-                    difficulty: EnemyDifficulty::Hard
-                },
-            ]),
-        },
-        ThemeLocation {
-            name: "Hyrule Field",
-            description: "Vast plains stretching across the kingdom of Hyrule, connecting its various regions and landmarks.",
-            class: LocationType::Dungeon("The Bunny Hood"),
-            enemies: Some([
-                ThemeEnemy {
-                    name: "Stalchild",
-                    description: "Restless undead emerging from the ground at night, attacking travelers with chilling claws.",
+                    name: "Cursed Druid",
+                    description: "A wielder of dark magic, twisted by ancient curses and filled with malice.",
                     difficulty: EnemyDifficulty::Normal
                 },
                 ThemeEnemy {
-                    name: "Peahat",
-                    description: "Flying creatures hovering above the fields, attacking with razor-sharp blades and gusts of wind.",
+                    name: "Ancient Treant",
+                    description: "A towering creature of the forest, ancient and wise yet fiercely protective.",
+                    difficulty:  EnemyDifficulty::Hard
+                }
+            ])
+        },
+        ThemeLocation {
+            name: "Darkling Woods",
+            description:
+                "An eerie woods of looming darkness, where shadows dance and secrets whisper.",
+            class: LocationType::Dungeon("Nimueh's Dark Tome"),
+            enemies: Some([
+                ThemeEnemy {
+                    name: "Shade Stalker",
+                    description: "A creature born of shadows, silently hunting its prey with deadly precision.",
+                    difficulty: EnemyDifficulty::Normal
+                },
+                ThemeEnemy {
+                    name: "Wraith Wisp",
+                    description: "A flickering apparition, haunting the woods with chilling whispers and ghostly touch.",
                     difficulty: EnemyDifficulty::Easy
                 },
                 ThemeEnemy {
-                    name: "Stalfos Knight",
-                    description: "Powerful skeletal warriors rising to challenge those who dare to wander the fields at night.",
+                    name: "Nightmare Hound",
+                    description: "A monstrous canine, bred from nightmares and fueled by primal instincts.",
                     difficulty: EnemyDifficulty::Hard
                 },
-            ]),
+            ])
         },
         ThemeLocation {
-            name: "Ganon's Castle",
+            name: "Excalibur's Rest",
+            description:
+                "A sacred pool where the mighty sword Excalibur was returned to the Lady of the Lake.",
+            class: LocationType::Dungeon("Excalibur's Scabbard"),
+            enemies: Some([
+                ThemeEnemy {
+                    name: "Guardian of the Lake",
+                    description: "A stalwart defender, bound to protect the sacred waters with unyielding resolve.",
+                    difficulty: EnemyDifficulty::Normal
+                },
+                ThemeEnemy {
+                    name: "Lady's Sentinel",
+                    description: "A vigilant guardian, sworn to watch over the resting place of Excalibur.",
+                    difficulty: EnemyDifficulty::Easy
+                },
+                ThemeEnemy {
+                    name: "Holy Warden",
+                    description: "A divine warrior, imbued with holy power and righteousness in defense of sacred relics.",
+                    difficulty: EnemyDifficulty::Hard
+                },
+            ])
+        },
+        ThemeLocation {
+            name: "Dragon's Lair",
+            description: "A mysterious cavern rumored to be the home of a fearsome dragon.",
             class: LocationType::BossDungeon,
-            description: "A foreboding fortress located at the heart of Hyrule, serving as the stronghold of the malevolent Ganondorf, where dark magic and treacherous traps await any who dare to challenge its depths.",
             enemies: Some([
                 ThemeEnemy {
-                    name: "Darknut",
-                    description: "Elite warriors clad in heavy armor, wielding massive swords to strike down intruders with swift and powerful attacks.",
-                    difficulty: EnemyDifficulty::Hard
+                    name: "Shadow Spirit",
+                    description: "A wraith-like creature, blending with the darkness and striking with ethereal power.",
+                    difficulty: EnemyDifficulty::Easy
                 },
                 ThemeEnemy {
-                    name: "Wizzrobe",
-                    description: "Sorcerous foes conjuring potent spells to assault invaders from afar, disappearing and reappearing in a whirlwind of magic.",
+                    name: "Ancient Treant",
+                    description: "A towering creature of the forest, ancient and wise yet fiercely protective.",
                     difficulty: EnemyDifficulty::Normal
                 },
                 ThemeEnemy {
-                    name: "Stalfos Knight",
-                    description: "Undead knights risen from the depths of the castle, wielding enchanted weapons to defend their master's domain.",
+                    name: "The Great Dragon Kilgharrah",
+                    description: "A legendary beast, wreathed in flames and unmatched in strength, guarding its lair with ferocious determination.",
                     difficulty: EnemyDifficulty::Hard
                 },
-            ]),
+            ])
         },
     ],
     items: [
-        "The Master Sword",
-        "The Hylian Shield",
-        "The Ocarina of Time",
-        "The Fairy Bow",
-        "The Bomb Bag",
-        "The Hookshot",
-        "The Boomerang",
-        "The Lens of Truth",
-        "Some Magic Beans",
-        "The Megaton Hammer",
+        "Merlin's Robes of the Old Religion",
+        "Mordred's Shadow Sword",
+        "Guinevere's Locket of Protection",
+        "Lancelot's Shield of Valor",
+        "Morgana's Veil of Illusion",
+        "The Cauldron of Arianrhod",
+        "The Staff of Avalon",
+        "The Crystal Cave's Whispering Gem",
+        "The Helm of Dragon's Breath",
+        "The Grail of Destiny",
     ]
 };
