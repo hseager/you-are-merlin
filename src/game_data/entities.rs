@@ -57,7 +57,7 @@ pub struct MainQuest {
     pub boss_name: ColoredString,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub enum EnemyDifficulty {
     Easy,
     Normal,

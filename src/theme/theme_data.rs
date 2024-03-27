@@ -12,6 +12,6 @@ pub fn get_themes() -> Vec<ThemeTemplate> {
         ("Merlin", merlin::THEME_DATA),
         ("Zelda", zelda::THEME_DATA),
         ("Game Of Thrones", game_of_thrones::THEME_DATA),
-        ("Star wars", star_wars::THEME_DATA)
+        ("Star Wars", star_wars::THEME_DATA)
     ]
 }
