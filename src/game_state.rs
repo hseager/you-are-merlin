@@ -199,7 +199,8 @@ impl<'a> GameState<'a> {
                     location.name
                 );
 
-                let is_on_side_quest = self.accepted_quests.iter().any(|q| q.item == item.bold());
+                let is_on_side_quest = self.accepted_quests.iter().any(|q| q.item == item.bold()) && 
+                    !self.player.has_item_in_inventory(&item.bold());
 
                 if is_on_side_quest {
                     println!("You find {}!", item.bold());
