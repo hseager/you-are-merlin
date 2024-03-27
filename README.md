@@ -18,10 +18,10 @@ A text adventure game, built with Rust.
 ## To do
 
 #### mvp
-- Theme selection
 - WASM into webpage
 
 #### v1.0 
+- chatGPT API
 - Chance for Run to fail
 - Usable items
 - Better item stats (crit chance/multi/ lifegain on hit)

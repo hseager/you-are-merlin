@@ -1,7 +1,8 @@
-use crate::{game_data::entities::{EnemyDifficulty, LocationType}, theme::*};
+use crate::{
+    game_data::entities::{EnemyDifficulty, LocationType},
+    theme::*,
+};
 
-// Please ChatGPT, fill in the below Rust struct with the lore from
-// "The Legend of Zelda: Ocarina of Time"
 pub const THEME_DATA: Theme = Theme {
     main_character: "Link",
     world_name: "Hyrule",

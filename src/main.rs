@@ -29,7 +29,6 @@ fn main() {
         .expect("Failed to theme selection.");
 
     let theme_data = get_theme(theme_selection.trim());
-
     let game_data = GameData::new(theme_data);
     let mut game_state = GameState::new(&game_data);
 
@@ -60,9 +59,8 @@ fn main() {
     }
 }
 
-
 fn spacer() {
     for _ in 0..16 {
-        println!("");
+        println!();
     }
 }
