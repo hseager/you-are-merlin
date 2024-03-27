@@ -2,24 +2,26 @@
 
 A text adventure game, built with Rust.
 
-## To do
+## Features
 
-### Features
-
-- Main quest with world boss
+- Main quest with a final world boss
 - Dungeons
 - Items
 - Side quests
 
+### Tips
+
+- Finding a safezone will make your journey easier!
+- Try exploring and get stronger before facing the final boss
+- You don't have to type out the full action, it's a partial match
+
+## To do
+
 #### mvp
 - Theme selection
-- Redo side quests, Items & Rewards
-    - Add side quest rewards to each dungeon
-    - Choose random side quest in SafeZone, make them repeatable
-- Chance for Run to fail
 
 #### v1.0 
-- Inventory
+- Chance for Run to fail
 - Usable items
 - Better item stats (crit chance/multi/ lifegain on hit)
 - Rewards (gold) and trade
@@ -27,23 +29,19 @@ A text adventure game, built with Rust.
 - Dungeon difficulty, more battles = better reward
 - More types of encounters like puzzles and riddles etc
     - Choice encounter with reward or damage
-- Require key for main boss
-- Split items into types like weapons, armor, utilities
+- Split items into types like weapons, armor, utilities with unique stats
 
 #### later
+- Require key for main boss
 - Better visuals for life/attack
 
 ### Refactor
 
 - clones in world builder
+- Messy sidequests
 - Unit tests
 
 ## Dev
 
 - cargo build
 - cargo run
-
-
-# Tips
-- Some areas have quests
-- There is a boss in each world
