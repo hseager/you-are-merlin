@@ -4,6 +4,8 @@ use game_data::GameData;
 use game_state::GameState;
 use player_state::PlayerState;
 
+use crate::theme::get_theme_display_list;
+
 mod actions;
 mod battle_manager;
 mod characters;
@@ -17,6 +19,16 @@ mod theme;
 mod utilities;
 
 fn main() {
+    println!("Choose a theme.");
+    println!("{}", get_theme_display_list());
+
+    let mut theme_selection = String::new();
+    io::stdin()
+        .read_line(&mut theme_selection)
+        .expect("Failed to read line");
+
+    println!("{theme_selection}");
+
     let game_data = GameData::new();
     let mut game_state = GameState::new(&game_data);
 

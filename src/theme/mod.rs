@@ -1,10 +1,12 @@
 use crate::{
-    game_data::entities::{EnemyDifficulty, LocationType},
-    theme::theme_data::THEME_DATA,
+    game_data::entities::{EnemyDifficulty, LocationType}
 };
+
+use self::theme_data::get_themes;
 
 mod theme_data;
 
+#[derive(Clone)]
 pub struct Theme {
     pub main_character: &'static str,
     pub world_name: &'static str,
@@ -14,10 +16,21 @@ pub struct Theme {
     pub boss: ThemeEnemy,
 }
 
+// TODO dirty, redo clones
 pub fn load_theme() -> Theme {
-    THEME_DATA
+    let themes = get_themes();
+    let (_name, data) = themes.get(0).expect("Unable to load first theme.");
+
+    data.clone()
 }
 
+pub fn get_theme_display_list() -> String {
+    get_themes()
+        .iter()
+        .map(|theme| theme.0.to_string())
+        .collect::<Vec<String>>()
+        .join(", ")
+}
 
 // TODO clean up clones
 #[derive(Clone)]

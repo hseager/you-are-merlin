@@ -19,6 +19,7 @@ A text adventure game, built with Rust.
 
 #### mvp
 - Theme selection
+- WASM into webpage
 
 #### v1.0 
 - Chance for Run to fail
