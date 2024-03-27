@@ -29,8 +29,6 @@ pub fn build_world(theme: Theme) -> Vec<Location> {
 
     add_main_quest(&mut locations, boss, &mut characters, theme.world_name);
 
-    locations.shuffle(&mut rng);
-
     locations
 }
 
@@ -75,14 +73,18 @@ fn build_side_quest(theme: &Theme, characters: &mut Vec<&str>) -> Vec<Encounter>
         .filter(|l| matches!(l.class, LocationType::Dungeon(_)))
         .collect();
 
+    // Select a random dungeon
     let dungeon = dungeons
         .choose(&mut rng)
         .expect("Unable to get a dungeon from Theme data when creating side quest.");
 
+    let dungeon_index = theme.locations.iter().position(|l| l.name == dungeon.name)
+        .expect("Unable to get dungeon index when building side quest");
+
     if let LocationType::Dungeon(item) = &dungeon.class {
         vec![Encounter::Quest(Quest::SideQuest(SideQuest {
             character: character.bold(),
-            location_name: dungeon.name.bold(), // TODO get same color as location name
+            location_name: dungeon.name.color(map_text_color(dungeon_index)),
             item: item.bold(),
         }))]
     } else {
