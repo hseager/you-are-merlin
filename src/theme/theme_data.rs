@@ -7,6 +7,7 @@ mod pulp_fiction;
 mod star_wars;
 mod world_of_warcraft;
 mod zelda;
+mod fallout;
 
 type ThemeTemplate = (&'static str, Theme);
 
@@ -19,5 +20,6 @@ pub fn get_themes() -> Vec<ThemeTemplate> {
         ("Pulp Fiction", pulp_fiction::THEME_DATA),
         ("Pokemon", pokemon::THEME_DATA),
         ("World of Warcraft", world_of_warcraft::THEME_DATA),
+        ("Fallout", fallout::THEME_DATA),
     ]
 }

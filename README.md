@@ -20,7 +20,8 @@ A text adventure game, built with Rust.
 #### mvp
 - WASM into webpage
 
-#### v1.0 
+#### v1.0
+- Boss quote
 - chatGPT API
 - Chance for Run to fail
 - Usable items
