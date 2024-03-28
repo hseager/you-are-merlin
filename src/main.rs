@@ -1,11 +1,10 @@
 use std::io;
 
-use colored::Colorize;
 use game_data::GameData;
 use game_state::GameState;
 use player_state::PlayerState;
 
-use crate::theme::{get_theme, get_theme_display_list};
+use crate::theme::{get_theme, select_theme};
 
 mod actions;
 mod battle_manager;
@@ -49,18 +48,3 @@ fn main() {
         game_state.handle_action(input.trim());
     }
 }
-
-fn select_theme() -> String {
-    println!("{}", "Choose a theme.".bold());
-    println!("{}", get_theme_display_list());
-
-    let mut input = String::new();
-    io::stdin()
-        .read_line(&mut input)
-        .expect("Failed to theme selection.");
-
-    utilities::spacer();
-
-    input.trim().to_string()
-}
-
