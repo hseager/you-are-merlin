@@ -20,19 +20,10 @@ mod theme;
 mod utilities;
 
 fn main() {
-    println!("{}", "Choose a theme.".bold());
-    println!("{}", get_theme_display_list());
-
-    let mut theme_selection = String::new();
-    io::stdin()
-        .read_line(&mut theme_selection)
-        .expect("Failed to theme selection.");
-
-    let theme_data = get_theme(theme_selection.trim());
+    let theme_selection = select_theme();
+    let theme_data = get_theme(theme_selection);
     let game_data = GameData::new(theme_data);
     let mut game_state = GameState::new(&game_data);
-
-    spacer();
 
     println!("You are {}.", &game_state.player.name);
 
@@ -59,8 +50,17 @@ fn main() {
     }
 }
 
-fn spacer() {
-    for _ in 0..16 {
-        println!();
-    }
+fn select_theme() -> String {
+    println!("{}", "Choose a theme.".bold());
+    println!("{}", get_theme_display_list());
+
+    let mut input = String::new();
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Failed to theme selection.");
+
+    utilities::spacer();
+
+    input.trim().to_string()
 }
+

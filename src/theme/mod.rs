@@ -30,7 +30,7 @@ pub fn get_theme_display_list() -> String {
     joined_themes
 }
 
-pub fn get_theme(input: &str) -> Theme {
+pub fn get_theme(input: String) -> Theme {
     let themes = get_themes();
     let theme = themes.iter().find(|t| t.0.to_lowercase().contains(&input.to_lowercase()));
 
