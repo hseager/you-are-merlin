@@ -25,6 +25,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "custom-print"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f069652649993736519feb4836624034e3c63554ca33b28dbf192cf5ffb9cce4"
+
+[[package]]
 name = "getrandom"
 version = "0.2.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -202,6 +208,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "af190c94f2773fdb3729c55b007a722abb5384da03bc0986df4c289bf5567e96"
 
 [[package]]
+name = "web-sys"
+version = "0.3.69"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "77afa9a11836342370f4817622a2f0f418b134426d91a82dfb48f532d2ec13ef"
+dependencies = [
+ "js-sys",
+ "wasm-bindgen",
+]
+
+[[package]]
 name = "windows-sys"
 version = "0.48.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -272,7 +288,9 @@ name = "you_are_merlin"
 version = "0.1.0"
 dependencies = [
  "colored",
+ "custom-print",
  "getrandom",
  "rand",
  "wasm-bindgen",
+ "web-sys",
 ]

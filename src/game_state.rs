@@ -200,8 +200,8 @@ impl<'a> GameState<'a> {
                     location.name
                 );
 
-                let is_on_side_quest = self.accepted_quests.iter().any(|q| q.item == item.bold()) && 
-                    !self.player.has_item_in_inventory(&item.bold());
+                let is_on_side_quest = self.accepted_quests.iter().any(|q| q.item == item.bold())
+                    && !self.player.has_item_in_inventory(&item.bold());
 
                 if is_on_side_quest {
                     println!("You find {}!", item.bold());
@@ -223,7 +223,7 @@ impl<'a> GameState<'a> {
         }
     }
 
-    pub fn get_prompt(&self) {
+    pub fn get_prompt(&self) -> String {
         match &self.state {
             PlayerState::Visiting(location) => {
                 get_visiting_prompt(&location.name, location.description)
@@ -234,8 +234,6 @@ impl<'a> GameState<'a> {
             PlayerState::Treasure(item) => get_treasure_prompt(item),
             _ => panic!("Unhandled PlayerState"),
         }
-
-        println!("{}", &self.get_actions_display_list());
     }
 
     pub fn get_actions(&self) -> Vec<Action> {

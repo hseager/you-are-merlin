@@ -39,7 +39,8 @@ fn main() {
             break;
         }
 
-        game_state.get_prompt();
+        println!("{}", game_state.get_prompt());
+        println!("{}", game_state.get_actions_display_list());
 
         io::stdin()
             .read_line(&mut input)
