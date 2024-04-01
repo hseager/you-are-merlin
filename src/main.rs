@@ -1,51 +1,37 @@
 use std::io;
 
-use game_data::GameData;
-use game_state::GameState;
-use player_state::PlayerState;
-
-use crate::theme::{get_theme, select_theme};
-
-mod actions;
-mod battle_manager;
-mod characters;
-mod config;
-mod game_data;
-mod game_state;
-mod items;
-mod player_state;
-mod prompts;
-mod theme;
-mod utilities;
+use colored::Colorize;
+use you_are_merlin::{theme::get_theme_display_list, utilities, Game};
 
 fn main() {
-    let theme_selection = select_theme();
-    let theme_data = get_theme(theme_selection);
-    let game_data = GameData::new(theme_data);
-    let mut game_state = GameState::new(&game_data);
+    let theme = select_theme();
+    let mut game = Game::new(theme);
 
-    println!("You are {}.", &game_state.player.name);
+    println!("You are {}.", game.get_player_name());
 
-    loop {
+    while game.is_running() {
         let mut input = String::new();
 
-        if let PlayerState::GameOver = game_state.state {
-            println!("Game Over...");
-            break;
-        }
-
-        if let PlayerState::Win = game_state.state {
-            println!("You Win!");
-            break;
-        }
-
-        println!("{}", game_state.get_prompt());
-        println!("{}", game_state.get_actions_display_list());
+        println!("{}", game.get_prompt());
 
         io::stdin()
             .read_line(&mut input)
             .expect("Failed to read line");
 
-        game_state.handle_action(input.trim());
+        game.handle_action(input);
     }
+}
+
+pub fn select_theme() -> String {
+    println!("{}", "Choose a theme.".bold());
+    println!("{}", get_theme_display_list());
+
+    let mut input = String::new();
+    io::stdin()
+        .read_line(&mut input)
+        .expect("Failed to theme selection.");
+
+    utilities::spacer();
+
+    input.trim().to_string()
 }

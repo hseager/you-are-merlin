@@ -34,7 +34,7 @@ pub fn get_battle_prompt(encounter: &Encounter) -> String {
     }
 }
 
-pub fn get_quest_prompt(quest: &Quest, accepted_quests: &[&SideQuest]) -> String {
+pub fn get_quest_prompt(quest: &Quest, accepted_quests: Vec<SideQuest>) -> String {
     match quest {
         Quest::MainQuest(quest) => {
             format!(
@@ -43,24 +43,19 @@ pub fn get_quest_prompt(quest: &Quest, accepted_quests: &[&SideQuest]) -> String
             )
         }
         Quest::SideQuest(side_quest) => {
-            let mut text = String::new();
-
             if side_quest.is_accepted(accepted_quests) {
-                text = format!(
-                    "\"Do you have it? Please, bring me {} back from {}.\"",
-                    &side_quest.item, &side_quest.location_name
-                );
+                format!(
+                    "You find a calm area. {} wants to ask you something.\n\
+                    \"Do you have it? Please, bring me {} back from {}.\"",
+                    side_quest.character, side_quest.item, side_quest.location_name
+                )
             } else {
-                text = format!(
-                    "\"Will you find {} from {} and bring it back to me? I will make it worth your while!\"",
-                    &side_quest.item, &side_quest.location_name
+                format!(
+                    "You find a calm area. {} wants to ask you something.\n\
+                    \"Will you find {} from {} and bring it back to me? I will make it worth your while!\"",
+                    side_quest.character, side_quest.item, side_quest.location_name
                 )
             }
-
-            format!(
-                "You find a calm area. {} wants to ask you something.\n{}",
-                &side_quest.character, text
-            )
         }
     }
 }
@@ -70,4 +65,12 @@ pub fn get_treasure_prompt(item: &Item) -> String {
         "You recieve {}! Your attack power increases by {}, and your maximum life grows by {} points.",
         item.name, item.attack, item.max_life
     )
+}
+
+pub fn get_win_prompt() -> String {
+    "You Win!".to_string()
+}
+
+pub fn get_game_over_prompt() -> String {
+    "You Win!".to_string()
 }

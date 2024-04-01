@@ -1,10 +1,13 @@
-use crate::{game_data::entities::*, items::Item};
+use crate::{
+    game_data::entities::{Encounter, Location, Quest},
+    items::Item,
+};
 
-pub enum PlayerState<'a> {
-    Travelling(&'a Vec<Location>),
-    Visiting(&'a Location),
-    Battle(&'a Encounter),
-    Quest(&'a Quest),
+pub enum PlayerState {
+    Travelling(Vec<Location>),
+    Visiting(Location),
+    Battle(Encounter),
+    Quest(Quest),
     Treasure(Item),
     GameOver,
     Win,

@@ -2,7 +2,7 @@ use colored::ColoredString;
 
 use crate::characters::Enemy;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Location {
     pub name: ColoredString,
     pub description: &'static str,
@@ -17,25 +17,25 @@ pub enum LocationType {
     BossDungeon,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Encounter {
     BossFight(Battle),
     Battle(Battle),
     Quest(Quest),
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Battle {
     pub enemy: Enemy,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum Quest {
     MainQuest(MainQuest),
     SideQuest(SideQuest),
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct SideQuest {
     pub character: ColoredString,
     pub location_name: ColoredString,
@@ -43,14 +43,14 @@ pub struct SideQuest {
 }
 
 impl SideQuest {
-    pub fn is_accepted(&self, accepted_quests: &[&SideQuest]) -> bool {
+    pub fn is_accepted(&self, accepted_quests: Vec<SideQuest>) -> bool {
         accepted_quests
             .iter()
             .any(|q| q.character == self.character)
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct MainQuest {
     pub character: ColoredString,
     pub world_name: &'static str,

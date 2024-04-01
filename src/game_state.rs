@@ -1,33 +1,29 @@
-use std::{thread::sleep, time::Duration};
-
 use colored::Colorize;
 
 use crate::{
     actions::*,
     battle_manager,
     characters::Player,
-    config::{PLAYER_ATTACK, PLAYER_LIFE, REST_INTERVAL_SECONDS},
     game_data::{entities::*, GameData},
     items::create_item,
     player_state::PlayerState,
     prompts::*,
 };
 
-pub struct GameState<'a> {
-    pub state: PlayerState<'a>,
+pub struct GameState {
+    pub state: PlayerState,
     current_location: usize,
     current_encounter: usize,
     pub actions: Vec<Action>,
-    pub player: Player<'a>,
-    pub game_data: &'a GameData,
+    pub game_data: GameData,
     pub items: Vec<&'static str>,
-    pub accepted_quests: Vec<&'a SideQuest>,
-    pub completed_locations: Vec<&'a Location>,
+    pub accepted_quests: Vec<SideQuest>,
+    pub completed_locations: Vec<Location>,
 }
 
 // TODO getting too big, need to split this out
-impl<'a> GameState<'a> {
-    pub fn new(game_data: &GameData) -> GameState {
+impl GameState {
+    pub fn new(game_data: GameData) -> GameState {
         let current_location = 0;
 
         let location = game_data
@@ -35,43 +31,32 @@ impl<'a> GameState<'a> {
             .get(current_location)
             .expect("Unable to get location when creating a new game state.");
 
-        let player = Player {
-            name: &game_data.main_character,
-            max_life: PLAYER_LIFE,
-            life: PLAYER_LIFE,
-            attack: PLAYER_ATTACK,
-            inventory: Vec::new(),
-        };
-
-        let completed_locations = Vec::new();
-
         GameState {
-            state: PlayerState::Visiting(location),
+            state: PlayerState::Visiting(location.clone()),
             current_location,
             current_encounter: 0,
-            actions: get_visiting_actions(location, &completed_locations),
-            player,
+            actions: get_visiting_actions(location.clone(), Vec::new()),
             items: game_data.items.clone(),
             game_data,
             accepted_quests: Vec::new(),
-            completed_locations,
+            completed_locations: Vec::new(),
         }
     }
 
-    pub fn handle_action(&mut self, search: &str) {
+    pub fn handle_action(&mut self, search: &str, player: &mut Player) {
         match &self.find_action(search) {
             Some(action) => match action.class {
                 ActionType::Travel => {
-                    self.state = PlayerState::Travelling(&self.game_data.locations)
+                    self.state = PlayerState::Travelling(self.game_data.locations.clone())
                 }
                 ActionType::Explore => match self.get_current_encounter() {
                     Encounter::Battle(_) => {
-                        self.state = PlayerState::Battle(self.get_current_encounter())
+                        self.state = PlayerState::Battle(self.get_current_encounter().clone())
                     }
                     Encounter::BossFight(_) => {
-                        self.state = PlayerState::Battle(self.get_current_encounter())
+                        self.state = PlayerState::Battle(self.get_current_encounter().clone())
                     }
-                    Encounter::Quest(quest) => self.state = PlayerState::Quest(quest),
+                    Encounter::Quest(quest) => self.state = PlayerState::Quest(quest.clone()),
                 },
                 ActionType::MoveToLocation => {
                     let next_location_index = self.game_data
@@ -82,32 +67,18 @@ impl<'a> GameState<'a> {
 
                     self.current_location = next_location_index;
 
-                    self.state = PlayerState::Visiting(self.get_current_location());
+                    self.state = PlayerState::Visiting(self.get_current_location().clone());
                 }
-                ActionType::Attack => battle_manager::handle_battle(self),
+                ActionType::Attack => battle_manager::handle_battle(self, player),
                 ActionType::Run => {
-                    self.state = PlayerState::Visiting(self.get_current_location());
+                    self.state = PlayerState::Visiting(self.get_current_location().clone());
 
                     self.reset_encounters();
                 }
                 ActionType::Rest => {
                     println!("You stay and rest a while...");
 
-                    while self.player.life < self.player.max_life {
-                        let heal_amount = 10;
-                        let mut new_life = self.player.life + heal_amount;
-                        if new_life > self.player.max_life {
-                            new_life = self.player.max_life;
-                        }
-
-                        println!(
-                            "Your life increases by {} (life: {})",
-                            new_life - self.player.life,
-                            new_life
-                        );
-                        self.player.life = new_life;
-                        sleep(Duration::from_secs(REST_INTERVAL_SECONDS as u64));
-                    }
+                    player.heal();
                 }
                 ActionType::Accept => {
                     println!("You accept their request.");
@@ -115,24 +86,25 @@ impl<'a> GameState<'a> {
                     let encounter = self.get_current_encounter();
 
                     if let Encounter::Quest(Quest::SideQuest(side_quest)) = encounter {
-                        self.accepted_quests.push(side_quest);
+                        self.accepted_quests.push(side_quest.clone());
                     }
 
-                    self.state = PlayerState::Visiting(self.get_current_location());
+                    self.state = PlayerState::Visiting(self.get_current_location().clone());
                 }
                 ActionType::Continue => {
                     println!("You acknowledge their request and continue exploring the area.");
 
-                    self.go_to_next_encounter();
-                    self.state = PlayerState::Battle(self.get_current_encounter());
+                    self.go_to_next_encounter(player);
+                    self.state = PlayerState::Battle(self.get_current_encounter().clone());
                 }
                 ActionType::GiveItem => {
                     println!("\"Your assistance in retrieving this has been invaluable. Thank you for your help! Please take this.\"");
 
-                    self.completed_locations.push(self.get_current_location());
+                    self.completed_locations
+                        .push(self.get_current_location().clone());
 
                     let item = create_item(&mut self.items);
-                    self.player.equip_item(&item);
+                    player.equip_item(&item);
 
                     self.state = PlayerState::Treasure(item);
                 }
@@ -140,7 +112,7 @@ impl<'a> GameState<'a> {
             None => println!("This isn't the time to use {}!", search),
         }
 
-        self.actions = self.get_actions();
+        self.actions = self.get_actions(player);
     }
 
     fn find_action(&self, search: &str) -> Option<&Action> {
@@ -153,14 +125,14 @@ impl<'a> GameState<'a> {
         })
     }
 
-    pub fn get_current_location(&self) -> &'a Location {
+    pub fn get_current_location(&self) -> &Location {
         self.game_data
             .locations
             .get(self.current_location)
             .expect("Failed to get location.")
     }
 
-    pub fn get_current_encounter(&self) -> &'a Encounter {
+    pub fn get_current_encounter(&self) -> &Encounter {
         let location = self.get_current_location();
 
         location
@@ -173,7 +145,7 @@ impl<'a> GameState<'a> {
         self.current_encounter = 0;
     }
 
-    pub fn go_to_next_encounter(&mut self) {
+    pub fn go_to_next_encounter(&mut self, player: &mut Player) {
         let next_encounter = self.current_encounter + 1;
         let location = self.get_current_location();
 
@@ -183,16 +155,16 @@ impl<'a> GameState<'a> {
             let encounter = self.get_current_encounter();
             match encounter {
                 Encounter::Battle(_) | Encounter::BossFight(_) => {
-                    self.state = PlayerState::Battle(encounter)
+                    self.state = PlayerState::Battle(encounter.clone())
                 }
-                Encounter::Quest(quest) => self.state = PlayerState::Quest(quest),
+                Encounter::Quest(quest) => self.state = PlayerState::Quest(quest.clone()),
             }
         } else {
-            self.handle_end_of_encounters(location);
+            self.handle_end_of_encounters(location.clone(), player);
         }
     }
 
-    fn handle_end_of_encounters(&mut self, location: &Location) {
+    fn handle_end_of_encounters(&mut self, location: Location, player: &mut Player) {
         match location.class {
             LocationType::Dungeon(item) => {
                 println!(
@@ -201,22 +173,22 @@ impl<'a> GameState<'a> {
                 );
 
                 let is_on_side_quest = self.accepted_quests.iter().any(|q| q.item == item.bold())
-                    && !self.player.has_item_in_inventory(&item.bold());
+                    && !player.has_item_in_inventory(&item.bold());
 
                 if is_on_side_quest {
                     println!("You find {}!", item.bold());
-                    self.player.add_item_to_inventory(item.bold());
+                    player.add_item_to_inventory(item.bold());
                 }
 
                 let item = create_item(&mut self.items);
-                self.player.equip_item(&item);
+                player.equip_item(&item);
 
                 println!("You spot a chest up ahead and eagerly pry it open.");
                 self.state = PlayerState::Treasure(item);
                 self.reset_encounters();
             }
             LocationType::SafeZone => {
-                self.state = PlayerState::Visiting(self.get_current_location());
+                self.state = PlayerState::Visiting(self.get_current_location().clone());
                 self.reset_encounters();
             }
             _ => (),
@@ -230,29 +202,30 @@ impl<'a> GameState<'a> {
             }
             PlayerState::Travelling(_) => get_travelling_prompt(),
             PlayerState::Battle(encounter) => get_battle_prompt(encounter),
-            PlayerState::Quest(quest) => get_quest_prompt(quest, &self.accepted_quests),
+            PlayerState::Quest(quest) => get_quest_prompt(quest, self.accepted_quests.clone()),
             PlayerState::Treasure(item) => get_treasure_prompt(item),
-            _ => panic!("Unhandled PlayerState"),
+            PlayerState::Win => get_win_prompt(),
+            PlayerState::GameOver => get_game_over_prompt(),
         }
     }
 
-    pub fn get_actions(&self) -> Vec<Action> {
-        match self.state {
+    pub fn get_actions(&self, player: &Player) -> Vec<Action> {
+        match &self.state {
             PlayerState::Visiting(location) => {
-                get_visiting_actions(location, &self.completed_locations)
+                get_visiting_actions(location.clone(), self.completed_locations.clone())
             }
             PlayerState::Battle(_) => get_battle_actions(),
             PlayerState::Quest(quest) => {
-                get_quest_actions(quest, &self.accepted_quests, &self.player)
+                get_quest_actions(quest.clone(), self.accepted_quests.clone(), player)
             }
-            PlayerState::Travelling(locations) => get_locations_as_actions(locations),
+            PlayerState::Travelling(locations) => get_locations_as_actions(locations.clone()),
             PlayerState::Treasure(_) => get_treasure_actions(),
             _ => vec![],
         }
     }
 
-    pub fn get_actions_display_list(&self) -> String {
-        self.get_actions()
+    pub fn get_actions_display_list(&self, player: &Player) -> String {
+        self.get_actions(player)
             .iter()
             .map(|action| action.name.to_string())
             .collect::<Vec<String>>()
