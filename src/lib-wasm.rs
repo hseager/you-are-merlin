@@ -1,4 +1,4 @@
-use std::io;
+use std::{io, rc::Rc};
 
 use theme::select_theme;
 use wasm_bindgen::prelude::*;
@@ -6,7 +6,7 @@ use wasm_bindgen::prelude::*;
 use game_data::GameData;
 use game_state::GameState;
 use player_state::PlayerState;
-use web_sys::CustomEvent;
+use web_sys::{js_sys::Reflect::construct_with_new_target, CustomEvent, HtmlFormElement};
 
 use crate::theme::get_theme;
 
@@ -111,6 +111,8 @@ extern "C" {
     fn log(s: String);
 }
 
+// This is a mess but just trying to get something working now.
+// Didn't want to have to use RefCell but struggling to find a way with lifetimes
 #[wasm_bindgen]
 pub fn start(theme: String) -> Result<(), JsValue> {
     let theme_data = get_theme(theme);
@@ -126,6 +128,7 @@ pub fn start(theme: String) -> Result<(), JsValue> {
         .expect("Unable to find terminal element.")
         .unwrap();
 
+    // Initial prompt
     terminal.set_text_content(Some(""));
 
     terminal
@@ -149,10 +152,28 @@ pub fn start(theme: String) -> Result<(), JsValue> {
         )
         .expect("Unable to add update prompt");
 
-    // log(format!("You are {}.", &game_state.player.name));
-    // trigger_prompt_event(game_state.get_prompt());
+    // Main form event
 
-    // let prompt_update_event = CustomEvent::new("prompt-update");
+    let main_form = document
+        .query_selector("#main-form")
+        .expect("Unable to find terminal element.")
+        .unwrap();
+
+    {
+        let game_state = game_state.clone();
+        let listener = Closure::<dyn FnMut(_)>::new(move |event: web_sys::Event| {
+            let form = event.target().unwrap();
+            let form_element = form.dyn_into::<HtmlFormElement>().ok().unwrap();
+            let form_data = web_sys::FormData::new_with_form(&form_element).unwrap();
+            let user_input = form_data.get("input").as_string().unwrap();
+
+            game_state.handle_action(user_input.as_str());
+
+            log(user_input);
+        });
+        main_form.add_event_listener_with_callback("submit", listener.as_ref().unchecked_ref())?;
+        listener.forget();
+    }
 
     Ok(())
 
