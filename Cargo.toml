@@ -11,6 +11,7 @@ repository = "https://github.com/hseager/you-are-merlin"
 [lib]
 name = "you_are_merlin"
 path = "src/lib.rs"
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 colored = "2.1.0"

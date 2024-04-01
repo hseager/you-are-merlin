@@ -1,7 +1,8 @@
 use std::io;
 
 use colored::Colorize;
-use you_are_merlin::{theme::get_theme_display_list, utilities, Game};
+use theme::get_theme_display_list;
+use you_are_merlin::{theme, utilities, Game};
 
 fn main() {
     let theme = select_theme();

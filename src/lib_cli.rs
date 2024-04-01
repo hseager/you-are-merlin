@@ -1,10 +1,10 @@
 use characters::Player;
+use colored::ColoredString;
 use config::{PLAYER_ATTACK, PLAYER_LIFE};
 use game_data::GameData;
 use game_state::GameState;
 use player_state::PlayerState;
 use theme::get_theme;
-use wasm_bindgen::prelude::*;
 
 mod actions;
 mod battle_manager;
@@ -18,15 +18,12 @@ mod prompts;
 pub mod theme;
 pub mod utilities;
 
-#[wasm_bindgen]
 pub struct Game {
     game_state: GameState,
     player: Player,
 }
 
-#[wasm_bindgen]
 impl Game {
-    #[wasm_bindgen(constructor)]
     pub fn new(theme: String) -> Game {
         let theme_data = get_theme(theme);
         let game_data = GameData::new(theme_data);
@@ -44,8 +41,8 @@ impl Game {
         Game { game_state, player }
     }
 
-    pub fn get_player_name(&self) -> String {
-        self.player.name.to_string()
+    pub fn get_player_name(&self) -> &ColoredString {
+        &self.player.name
     }
 
     pub fn is_running(&self) -> bool {
