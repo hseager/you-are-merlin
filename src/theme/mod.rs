@@ -19,7 +19,6 @@ pub struct Theme {
     pub boss: ThemeEnemy,
 }
 
-// TODO dirty, redo clones
 pub fn get_theme_display_list() -> String {
     let themes = get_themes();
 
@@ -46,7 +45,6 @@ pub fn get_theme(input: String) -> Theme {
     }
 }
 
-// TODO clean up clones
 #[derive(Clone, Debug)]
 pub struct ThemeLocation {
     pub name: &'static str,

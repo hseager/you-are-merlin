@@ -44,8 +44,8 @@ impl Game {
         Game { game_state, player }
     }
 
-    pub fn get_player_name(&self) -> String {
-        self.player.name.to_string()
+    pub fn get_initial_prompt(&self) -> String {
+        format!("You are {}.", &self.player.name.to_string())
     }
 
     pub fn is_running(&self) -> bool {

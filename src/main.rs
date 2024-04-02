@@ -8,7 +8,7 @@ fn main() {
     let theme = select_theme();
     let mut game = Game::new(theme);
 
-    println!("You are {}.", game.get_player_name());
+    println!("{}", game.get_initial_prompt());
 
     while game.is_running() {
         let mut input = String::new();
@@ -23,7 +23,7 @@ fn main() {
     }
 }
 
-pub fn select_theme() -> String {
+fn select_theme() -> String {
     println!("{}", "Choose a theme.".bold());
     println!("{}", get_theme_display_list());
 
