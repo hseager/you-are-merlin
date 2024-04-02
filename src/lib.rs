@@ -7,7 +7,10 @@ use player_state::PlayerState;
 use theme::{get_theme, theme_data::get_themes};
 use wasm_bindgen::prelude::*;
 
-use crate::utilities::map_text_color;
+use crate::{
+    config::{BATTLE_INTERVAL_SECONDS, REST_INTERVAL_SECONDS},
+    utilities::map_text_color,
+};
 
 mod actions;
 mod battle_manager;
@@ -22,7 +25,9 @@ pub mod theme;
 pub mod utilities;
 
 #[wasm_bindgen]
+#[allow(dead_code)]
 pub struct Game {
+    pub config: WasmConfig,
     game_state: GameState,
     player: Player,
 }
@@ -36,7 +41,7 @@ impl Game {
 
         let player = Player {
             name: game_data.main_character.clone(),
-            max_life: 150,
+            max_life: PLAYER_LIFE,
             life: PLAYER_LIFE,
             attack: PLAYER_ATTACK,
             inventory: Vec::new(),
@@ -44,7 +49,16 @@ impl Game {
 
         let game_state = GameState::new(game_data);
 
-        Game { game_state, player }
+        let config = WasmConfig {
+            rest_interval_seconds: REST_INTERVAL_SECONDS,
+            battle_interval_seconds: BATTLE_INTERVAL_SECONDS,
+        };
+
+        Game {
+            config,
+            game_state,
+            player,
+        }
     }
 
     pub fn is_running(&self) -> bool {
@@ -81,7 +95,7 @@ impl Game {
     }
 
     // TODO This is getting pretty messy having this here
-    // Lets just see if it works in WASM and then refactor
+    // Lets just see if it works in WASM and then refactor later
     pub fn heal_player(&mut self) -> String {
         if self.player.life < self.player.max_life {
             self.player.heal()
@@ -108,4 +122,12 @@ pub fn get_theme_display_list() -> String {
         }
     }
     joined_themes
+}
+
+#[wasm_bindgen]
+#[allow(dead_code)]
+#[derive(Clone, Copy)]
+pub struct WasmConfig {
+    pub rest_interval_seconds: usize,
+    pub battle_interval_seconds: u8,
 }
