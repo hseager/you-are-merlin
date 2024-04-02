@@ -59,11 +59,11 @@ impl Game {
     }
 
     pub fn get_prompt(&self) -> String {
-        format!("{}", self.game_state.get_prompt())
+        self.game_state.get_prompt()
     }
 
     pub fn get_actions_display_list(&self) -> String {
-        format!("{}", self.game_state.get_actions_display_list(&self.player))
+        self.game_state.get_actions_display_list(&self.player)
     }
 
     pub fn handle_action(&mut self, input: String) -> Option<String> {
@@ -91,7 +91,7 @@ impl Game {
 
             self.game_state.actions = self.game_state.get_actions(&self.player);
 
-            format!("You fully recover your health.")
+            "You fully recover your health.".to_string()
         }
     }
 }

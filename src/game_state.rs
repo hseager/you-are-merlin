@@ -93,7 +93,7 @@ impl GameState {
                 ActionType::Rest => {
                     self.state = PlayerState::Healing;
 
-                    Some(format!("You stay and rest a while..."))
+                    Some("You stay and rest a while...".to_string())
                 }
                 ActionType::Accept => {
                     let encounter = self.get_current_encounter();
@@ -104,15 +104,16 @@ impl GameState {
 
                     self.state = PlayerState::Visiting(self.get_current_location().clone());
 
-                    Some(format!("You accept their request."))
+                    Some("You accept their request.".to_string())
                 }
                 ActionType::Continue => {
                     self.go_to_next_encounter(player);
                     self.state = PlayerState::Battle(self.get_current_encounter().clone());
 
-                    Some(format!(
+                    Some(
                         "You acknowledge their request and continue exploring the area."
-                    ))
+                            .to_string(),
+                    )
                 }
                 ActionType::GiveItem => {
                     self.completed_locations
@@ -123,7 +124,7 @@ impl GameState {
 
                     self.state = PlayerState::Treasure(item);
 
-                    Some(format!("\"Your assistance in retrieving this has been invaluable. Thank you for your help! Please take this.\""))
+                    Some("\"Your assistance in retrieving this has been invaluable. Thank you for your help! Please take this.\"".to_string())
                 }
             },
             None => Some(format!("This isn't the time to use {}!", search)),

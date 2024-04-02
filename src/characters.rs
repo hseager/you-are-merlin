@@ -1,12 +1,6 @@
-use std::{thread::sleep, time::Duration};
-
 use colored::ColoredString;
 
-use crate::{
-    battle_manager::calculate_damage,
-    config::{REST_HEAL_AMOUNT, REST_INTERVAL_SECONDS},
-    items::Item,
-};
+use crate::{battle_manager::calculate_damage, config::REST_HEAL_AMOUNT, items::Item};
 
 pub trait Fighter {
     fn name(&self) -> ColoredString;
