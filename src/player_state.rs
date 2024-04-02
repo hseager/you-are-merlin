@@ -9,6 +9,7 @@ pub enum PlayerState {
     Battle(Encounter),
     Quest(Quest),
     Treasure(Item),
+    Healing,
     GameOver,
     Win,
 }

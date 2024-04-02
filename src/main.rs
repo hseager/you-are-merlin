@@ -1,7 +1,9 @@
-use std::io;
+use std::{io, thread::sleep, time::Duration};
 
 use colored::Colorize;
-use you_are_merlin::{get_theme_display_list, utilities, Game};
+use you_are_merlin::{
+    config::REST_INTERVAL_SECONDS, get_theme_display_list, utilities::spacer, Game,
+};
 
 fn main() {
     let theme = select_theme();
@@ -19,7 +21,14 @@ fn main() {
             .read_line(&mut input)
             .expect("Failed to read line");
 
-        game.handle_action(input);
+        if let Some(response) = game.handle_action(input) {
+            println!("{response}");
+        }
+
+        while game.player_is_healing() {
+            println!("{}", game.heal_player());
+            sleep(Duration::from_secs(REST_INTERVAL_SECONDS as u64));
+        }
     }
 }
 
@@ -32,7 +41,7 @@ fn select_theme() -> String {
         .read_line(&mut input)
         .expect("Failed to theme selection.");
 
-    utilities::spacer();
+    spacer();
 
     input.trim().to_string()
 }

@@ -1,6 +1,7 @@
 pub const PLAYER_LIFE: i16 = 100;
 pub const PLAYER_ATTACK: u16 = 5;
 
+pub const REST_HEAL_AMOUNT: i16 = 10;
 pub const REST_INTERVAL_SECONDS: usize = 2;
 
 pub const BATTLE_INTERVAL_SECONDS: u8 = 1;

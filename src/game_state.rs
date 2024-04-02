@@ -43,20 +43,26 @@ impl GameState {
         }
     }
 
-    pub fn handle_action(&mut self, search: &str, player: &mut Player) {
+    pub fn handle_action(&mut self, search: &str, player: &mut Player) -> Option<String> {
         match &self.find_action(search) {
             Some(action) => match action.class {
                 ActionType::Travel => {
-                    self.state = PlayerState::Travelling(self.game_data.locations.clone())
+                    self.state = PlayerState::Travelling(self.game_data.locations.clone());
+                    None
                 }
                 ActionType::Explore => match self.get_current_encounter() {
                     Encounter::Battle(_) => {
-                        self.state = PlayerState::Battle(self.get_current_encounter().clone())
+                        self.state = PlayerState::Battle(self.get_current_encounter().clone());
+                        None
                     }
                     Encounter::BossFight(_) => {
-                        self.state = PlayerState::Battle(self.get_current_encounter().clone())
+                        self.state = PlayerState::Battle(self.get_current_encounter().clone());
+                        None
                     }
-                    Encounter::Quest(quest) => self.state = PlayerState::Quest(quest.clone()),
+                    Encounter::Quest(quest) => {
+                        self.state = PlayerState::Quest(quest.clone());
+                        None
+                    }
                 },
                 ActionType::MoveToLocation => {
                     let next_location_index = self.game_data
@@ -68,21 +74,28 @@ impl GameState {
                     self.current_location = next_location_index;
 
                     self.state = PlayerState::Visiting(self.get_current_location().clone());
+
+                    None
                 }
-                ActionType::Attack => battle_manager::handle_battle(self, player),
+                ActionType::Attack => {
+                    // TODO Battle manager return string
+                    battle_manager::handle_battle(self, player);
+
+                    None
+                }
                 ActionType::Run => {
                     self.state = PlayerState::Visiting(self.get_current_location().clone());
 
                     self.reset_encounters();
+
+                    None
                 }
                 ActionType::Rest => {
-                    println!("You stay and rest a while...");
+                    self.state = PlayerState::Healing;
 
-                    player.heal();
+                    Some(format!("You stay and rest a while..."))
                 }
                 ActionType::Accept => {
-                    println!("You accept their request.");
-
                     let encounter = self.get_current_encounter();
 
                     if let Encounter::Quest(Quest::SideQuest(side_quest)) = encounter {
@@ -90,16 +103,18 @@ impl GameState {
                     }
 
                     self.state = PlayerState::Visiting(self.get_current_location().clone());
+
+                    Some(format!("You accept their request."))
                 }
                 ActionType::Continue => {
-                    println!("You acknowledge their request and continue exploring the area.");
-
                     self.go_to_next_encounter(player);
                     self.state = PlayerState::Battle(self.get_current_encounter().clone());
+
+                    Some(format!(
+                        "You acknowledge their request and continue exploring the area."
+                    ))
                 }
                 ActionType::GiveItem => {
-                    println!("\"Your assistance in retrieving this has been invaluable. Thank you for your help! Please take this.\"");
-
                     self.completed_locations
                         .push(self.get_current_location().clone());
 
@@ -107,12 +122,12 @@ impl GameState {
                     player.equip_item(&item);
 
                     self.state = PlayerState::Treasure(item);
+
+                    Some(format!("\"Your assistance in retrieving this has been invaluable. Thank you for your help! Please take this.\""))
                 }
             },
-            None => println!("This isn't the time to use {}!", search),
+            None => Some(format!("This isn't the time to use {}!", search)),
         }
-
-        self.actions = self.get_actions(player);
     }
 
     fn find_action(&self, search: &str) -> Option<&Action> {
@@ -206,6 +221,7 @@ impl GameState {
             PlayerState::Treasure(item) => get_treasure_prompt(item),
             PlayerState::Win => get_win_prompt(),
             PlayerState::GameOver => get_game_over_prompt(),
+            PlayerState::Healing => String::new(), // TODO sort this
         }
     }
 

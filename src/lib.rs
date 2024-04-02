@@ -12,7 +12,7 @@ use crate::utilities::map_text_color;
 mod actions;
 mod battle_manager;
 mod characters;
-mod config;
+pub mod config;
 mod game_data;
 mod game_state;
 mod items;
@@ -36,7 +36,7 @@ impl Game {
 
         let player = Player {
             name: game_data.main_character.clone(),
-            max_life: PLAYER_LIFE,
+            max_life: 150,
             life: PLAYER_LIFE,
             attack: PLAYER_ATTACK,
             inventory: Vec::new(),
@@ -66,9 +66,33 @@ impl Game {
         format!("{}", self.game_state.get_actions_display_list(&self.player))
     }
 
-    pub fn handle_action(&mut self, input: String) {
-        self.game_state
+    pub fn handle_action(&mut self, input: String) -> Option<String> {
+        let response = self
+            .game_state
             .handle_action(input.trim(), &mut self.player);
+
+        self.game_state.actions = self.game_state.get_actions(&self.player);
+
+        response
+    }
+
+    pub fn player_is_healing(&self) -> bool {
+        matches!(self.game_state.state, PlayerState::Healing)
+    }
+
+    // TODO This is getting pretty messy having this here
+    // Lets just see if it works in WASM and then refactor
+    pub fn heal_player(&mut self) -> String {
+        if self.player.life < self.player.max_life {
+            self.player.heal()
+        } else {
+            self.game_state.state =
+                PlayerState::Visiting(self.game_state.get_current_location().clone());
+
+            self.game_state.actions = self.game_state.get_actions(&self.player);
+
+            format!("You fully recover your health.")
+        }
     }
 }
 
