@@ -1,8 +1,7 @@
 use std::io;
 
 use colored::Colorize;
-use theme::get_theme_display_list;
-use you_are_merlin::{theme, utilities, Game};
+use you_are_merlin::{get_theme_display_list, utilities, Game};
 
 fn main() {
     let theme = select_theme();
@@ -14,6 +13,7 @@ fn main() {
         let mut input = String::new();
 
         println!("{}", game.get_prompt());
+        println!("{}", game.get_actions_display_list());
 
         io::stdin()
             .read_line(&mut input)

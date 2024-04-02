@@ -7,7 +7,7 @@ use crate::{
 
 use self::theme_data::get_themes;
 
-mod theme_data;
+pub mod theme_data;
 
 #[derive(Clone, Debug)]
 pub struct Theme {
@@ -17,19 +17,6 @@ pub struct Theme {
     pub locations: [ThemeLocation; 6],
     pub items: [&'static str; 10],
     pub boss: ThemeEnemy,
-}
-
-pub fn get_theme_display_list() -> String {
-    let themes = get_themes();
-
-    let mut joined_themes = String::new();
-    for (i, theme) in themes.iter().enumerate() {
-        joined_themes.push_str(&theme.0.color(map_text_color(i)).to_string());
-        if i != themes.len() - 1 {
-            joined_themes.push_str(", ");
-        }
-    }
-    joined_themes
 }
 
 pub fn get_theme(input: String) -> Theme {
