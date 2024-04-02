@@ -1,5 +1,6 @@
 use super::Theme;
 
+mod fallout;
 mod game_of_thrones;
 mod merlin;
 mod pokemon;
@@ -7,7 +8,6 @@ mod pulp_fiction;
 mod star_wars;
 mod world_of_warcraft;
 mod zelda;
-mod fallout;
 
 type ThemeTemplate = (&'static str, Theme);
 

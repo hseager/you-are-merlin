@@ -70,7 +70,6 @@ impl Game {
         self.game_state
             .handle_action(input.trim(), &mut self.player);
     }
-
 }
 
 #[wasm_bindgen]

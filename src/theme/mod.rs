@@ -1,9 +1,4 @@
-use colored::Colorize;
-
-use crate::{
-    game_data::entities::{EnemyDifficulty, LocationType},
-    utilities::map_text_color,
-};
+use crate::game_data::entities::{EnemyDifficulty, LocationType};
 
 use self::theme_data::get_themes;
 

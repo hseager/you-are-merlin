@@ -1,7 +1,10 @@
-use crate::{game_data::entities::{EnemyDifficulty, LocationType}, theme::*};
+use crate::{
+    game_data::entities::{EnemyDifficulty, LocationType},
+    theme::*,
+};
 
 pub const THEME_DATA: Theme = Theme {
-    main_character: "Courier",
+    main_character: "a Courier",
     world_name: "Mojave Wasteland",
     friendly_characters: [
         "Doc Mitchell",
