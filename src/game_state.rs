@@ -79,7 +79,8 @@ impl GameState {
                 }
                 ActionType::Attack => {
                     // TODO Battle manager return string
-                    battle_manager::handle_battle(self, player);
+                    // battle_manager::handle_battle(self, player);
+                    self.state = PlayerState::Fighting;
 
                     None
                 }
@@ -222,7 +223,8 @@ impl GameState {
             PlayerState::Treasure(item) => get_treasure_prompt(item),
             PlayerState::Win => get_win_prompt(),
             PlayerState::GameOver => get_game_over_prompt(),
-            PlayerState::Healing => String::new(), // TODO sort this
+            PlayerState::Healing => String::new(), // TODO sort these
+            PlayerState::Fighting => String::new(),
         }
     }
 

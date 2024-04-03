@@ -8,7 +8,9 @@ use theme::{get_theme, theme_data::get_themes};
 use wasm_bindgen::prelude::*;
 
 use crate::{
+    characters::fighter::Fighter,
     config::{BATTLE_INTERVAL_SECONDS, REST_INTERVAL_SECONDS},
+    game_data::entities::Encounter,
     utilities::map_text_color,
 };
 
@@ -107,6 +109,98 @@ impl Game {
 
             "You fully recover your health.".to_string()
         }
+    }
+
+    // let below = techDebt + 1 yuck
+    pub fn player_is_fighting(&self) -> bool {
+        matches!(self.game_state.state, PlayerState::Fighting)
+    }
+
+    pub fn player_attack_enemy(&mut self) -> String {
+        match self.game_state.get_current_encounter() {
+            Encounter::Battle(battle) => {
+                let mut enemy = battle.enemy.clone();
+
+                if enemy.is_alive() {
+                    self.player.attack(&mut enemy)
+                } else {
+                    self.game_state.go_to_next_encounter(&mut self.player);
+                    format!("You defeated {}!", enemy.name)
+                }
+            }
+            Encounter::BossFight(battle) => {
+                let mut enemy = battle.enemy.clone();
+
+                if enemy.is_alive() {
+                    self.player.attack(&mut enemy)
+                } else {
+                    self.game_state.state = PlayerState::Win;
+                    format!(
+                        "You defeated {}! {} is saved!",
+                        enemy.name, &self.game_state.game_data.world_name
+                    )
+                }
+            }
+            _ => panic!("Shouldn't be fighting when not in a battle"),
+        }
+
+        // match game_state.get_current_encounter() {
+        //     Encounter::Battle(battle) => match start_battle(player, &battle.enemy) {
+        //         BattleResult::Win(enemy) => {
+        //             println!("You defeated {}!", enemy.name);
+        //             game_state.go_to_next_encounter(player);
+        //         }
+        //         BattleResult::Lose => {
+        //             println!("{} died!", &player.name);
+        //             game_state.state = PlayerState::GameOver;
+        //         }
+        //     },
+        //     Encounter::BossFight(battle) => match start_battle(player, &battle.enemy) {
+        //         BattleResult::Win(enemy) => {
+        //             println!(
+        //                 "You defeated {}! {} is saved!",
+        //                 enemy.name, game_state.game_data.world_name
+        //             );
+        //             game_state.state = PlayerState::Win;
+        //         }
+        //         BattleResult::Lose => {
+        //             println!("{} died!", player.name);
+        //             game_state.state = PlayerState::GameOver;
+        //         }
+        //     },
+        //     _ => (),
+        // }
+    }
+
+    pub fn enemy_attack_player(&mut self) -> String {
+        match self.game_state.get_current_encounter() {
+            Encounter::Battle(battle) | Encounter::BossFight(battle) => {
+                let enemy = battle.enemy.clone();
+
+                if self.player.is_alive() {
+                    enemy.attack(&mut self.player)
+                } else {
+                    self.game_state.state = PlayerState::GameOver;
+                    format!("{} died!", self.player.name)
+                }
+            }
+            _ => panic!("Shouldn't be fighting when not in a battle"),
+        }
+    }
+
+    pub fn is_enemy_alive(&self) -> bool {
+        match self.game_state.get_current_encounter() {
+            Encounter::Battle(battle) | Encounter::BossFight(battle) => {
+                let enemy = battle.enemy.clone();
+
+                enemy.is_alive()
+            }
+            _ => panic!("Shouldn't be an enemy when not in a battle"),
+        }
+    }
+
+    pub fn is_player_alive(&self) -> bool {
+        self.player.is_alive()
     }
 }
 

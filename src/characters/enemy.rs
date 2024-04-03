@@ -21,16 +21,16 @@ impl Fighter for Enemy {
         &self.life
     }
 
-    fn attack(&self, target: &mut dyn Fighter) {
+    fn attack(&self, target: &mut dyn Fighter) -> String {
         let damage = calculate_damage(self.attack);
         target.take_damage(damage);
 
-        println!(
+        format!(
             "{} attacks you for {} damage. (Your life: {})",
             &self.name(),
             damage,
             &target.life()
-        );
+        )
     }
 
     fn take_damage(&mut self, damage: u16) {

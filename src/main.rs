@@ -2,7 +2,10 @@ use std::{io, thread::sleep, time::Duration};
 
 use colored::Colorize;
 use you_are_merlin::{
-    config::REST_INTERVAL_SECONDS, get_theme_display_list, utilities::spacer, Game,
+    config::{BATTLE_INTERVAL_SECONDS, REST_INTERVAL_SECONDS},
+    get_theme_display_list,
+    utilities::spacer,
+    Game,
 };
 
 fn main() {
@@ -25,9 +28,28 @@ fn main() {
             println!("{response}");
         }
 
+        // This logic shouldn't live here, but need to find a way to handle loops & sleep in both rust CLI and WASM...
         while game.player_is_healing() {
             println!("{}", game.heal_player());
             sleep(Duration::from_secs(REST_INTERVAL_SECONDS as u64));
+        }
+
+        // This logic shouldn't live here, but need to find a way to handle loops & sleep in both rust CLI and WASM...
+        while game.player_is_fighting() {
+            println!("{}", game.player_attack_enemy());
+
+            if !game.is_enemy_alive() {
+                break;
+            }
+
+            sleep(Duration::from_secs(BATTLE_INTERVAL_SECONDS as u64));
+
+            if !game.is_player_alive() {
+                break;
+            }
+
+            println!("{}", game.enemy_attack_player());
+            sleep(Duration::from_secs(BATTLE_INTERVAL_SECONDS as u64));
         }
     }
 }

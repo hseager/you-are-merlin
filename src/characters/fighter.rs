@@ -6,6 +6,6 @@ pub trait Fighter {
     fn is_alive(&self) -> bool {
         self.life() > &0
     }
-    fn attack(&self, target: &mut dyn Fighter);
+    fn attack(&self, target: &mut dyn Fighter) -> String;
     fn take_damage(&mut self, damage: u16);
 }
