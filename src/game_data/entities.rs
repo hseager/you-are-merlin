@@ -1,6 +1,6 @@
 use colored::ColoredString;
 
-use crate::characters::Enemy;
+use crate::characters::enemy::Enemy;
 
 #[derive(Clone, Debug)]
 pub struct Location {

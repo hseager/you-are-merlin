@@ -3,7 +3,7 @@ use rand::{seq::SliceRandom, thread_rng};
 
 use crate::{
     battle_manager::map_theme_enemy_difficulty_to_stats,
-    characters::Enemy,
+    characters::enemy::Enemy,
     theme::{Theme, ThemeLocation},
     utilities::map_text_color,
 };

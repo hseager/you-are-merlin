@@ -3,7 +3,7 @@ use colored::Colorize;
 use crate::{
     actions::*,
     battle_manager,
-    characters::Player,
+    characters::player::Player,
     game_data::{entities::*, GameData},
     items::create_item,
     player_state::PlayerState,

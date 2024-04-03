@@ -3,7 +3,7 @@ use std::{thread::sleep, time::Duration};
 use rand::Rng;
 
 use crate::{
-    characters::{Fighter, Player},
+    characters::{fighter::Fighter, player::Player},
     config::{
         BATTLE_INTERVAL_SECONDS, ENEMY_BOSS_STATS, ENEMY_EASY_STATS, ENEMY_HARD_STATS,
         ENEMY_MEDIUM_STATS,
@@ -12,7 +12,7 @@ use crate::{
 };
 
 use crate::{
-    characters::Enemy, game_data::entities::Encounter, game_state::GameState,
+    characters::enemy::Enemy, game_data::entities::Encounter, game_state::GameState,
     player_state::PlayerState,
 };
 

@@ -1,4 +1,4 @@
-use characters::Player;
+use characters::player::Player;
 use colored::Colorize;
 use config::{PLAYER_ATTACK, PLAYER_LIFE};
 use game_data::GameData;

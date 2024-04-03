@@ -57,3 +57,5 @@ Had to move loops out to consuming code
 - top rated themes
 - Voting on themes
 - Save themes to database
+
+# Event system create that creates JS events

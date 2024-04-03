@@ -1,7 +1,7 @@
 use colored::{ColoredString, Colorize};
 
 use crate::{
-    characters::Player,
+    characters::player::Player,
     game_data::entities::{Location, LocationType, Quest, SideQuest},
 };
 
