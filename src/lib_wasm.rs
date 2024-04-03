@@ -1,35 +1,30 @@
-use characters::player::Player;
+use crate::characters::player::Player;
+use crate::config::{PLAYER_ATTACK, PLAYER_LIFE};
+use crate::game_data::GameData;
+use crate::game_state::GameState;
+use crate::player_state::PlayerState;
+use crate::theme::{get_theme, theme_data::get_themes};
 use colored::Colorize;
-use config::{PLAYER_ATTACK, PLAYER_LIFE};
-use game_data::GameData;
-use game_state::GameState;
-use player_state::PlayerState;
-use theme::{get_theme, theme_data::get_themes};
+use wasm_bindgen::prelude::*;
 
 use crate::{
-    characters::fighter::Fighter, game_data::entities::Encounter, utilities::map_text_color,
+    characters::fighter::Fighter,
+    config::{BATTLE_INTERVAL_SECONDS, REST_INTERVAL_SECONDS},
+    game_data::entities::Encounter,
+    utilities::map_text_color,
 };
 
-mod actions;
-mod battle_manager;
-mod characters;
-pub mod config;
-mod game_data;
-mod game_state;
-mod items;
-mod player_state;
-mod prompts;
-pub mod theme;
-pub mod utilities;
-
-mod lib_wasm;
-
+#[wasm_bindgen]
+#[allow(dead_code)]
 pub struct Game {
+    pub config: WasmConfig,
     game_state: GameState,
     player: Player,
 }
 
+#[wasm_bindgen]
 impl Game {
+    #[wasm_bindgen(constructor)]
     pub fn new(theme: String) -> Game {
         let theme_data = get_theme(theme);
         let game_data = GameData::new(theme_data);
@@ -44,7 +39,16 @@ impl Game {
 
         let game_state = GameState::new(game_data);
 
-        Game { game_state, player }
+        let config = WasmConfig {
+            rest_interval_seconds: REST_INTERVAL_SECONDS,
+            battle_interval_seconds: BATTLE_INTERVAL_SECONDS,
+        };
+
+        Game {
+            config,
+            game_state,
+            player,
+        }
     }
 
     pub fn is_running(&self) -> bool {
@@ -161,6 +165,7 @@ impl Game {
     }
 }
 
+#[wasm_bindgen]
 pub fn get_theme_display_list() -> String {
     let themes = get_themes();
 
@@ -172,4 +177,12 @@ pub fn get_theme_display_list() -> String {
         }
     }
     joined_themes
+}
+
+#[wasm_bindgen]
+#[allow(dead_code)]
+#[derive(Clone, Copy)]
+pub struct WasmConfig {
+    pub rest_interval_seconds: usize,
+    pub battle_interval_seconds: u8,
 }

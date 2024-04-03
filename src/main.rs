@@ -35,21 +35,23 @@ fn main() {
         }
 
         // This logic shouldn't live here, but need to find a way to handle loops & sleep in both rust CLI and WASM...
-        while game.player_is_fighting() {
-            println!("{}", game.player_attack_enemy());
+        if game.player_is_fighting() {
+            while game.player_is_fighting() {
+                println!("{}", game.player_attack_enemy());
 
-            if !game.is_enemy_alive() {
-                break;
+                if !game.is_enemy_alive() {
+                    break;
+                }
+
+                sleep(Duration::from_secs(BATTLE_INTERVAL_SECONDS as u64));
+
+                if !game.is_player_alive() {
+                    break;
+                }
+
+                println!("{}", game.enemy_attack_player());
+                sleep(Duration::from_secs(BATTLE_INTERVAL_SECONDS as u64));
             }
-
-            sleep(Duration::from_secs(BATTLE_INTERVAL_SECONDS as u64));
-
-            if !game.is_player_alive() {
-                break;
-            }
-
-            println!("{}", game.enemy_attack_player());
-            sleep(Duration::from_secs(BATTLE_INTERVAL_SECONDS as u64));
         }
     }
 }
