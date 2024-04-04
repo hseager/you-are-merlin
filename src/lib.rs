@@ -5,9 +5,13 @@ use game_data::GameData;
 use game_state::GameState;
 use player_state::PlayerState;
 use theme::{get_theme, theme_data::get_themes};
+use wasm_bindgen::prelude::*;
 
 use crate::{
-    characters::fighter::Fighter, game_data::entities::Encounter, utilities::map_text_color,
+    characters::fighter::Fighter,
+    config::{BATTLE_INTERVAL_SECONDS, REST_INTERVAL_SECONDS},
+    game_data::entities::Encounter,
+    utilities::map_text_color,
 };
 
 mod actions;
@@ -22,21 +26,32 @@ mod prompts;
 pub mod theme;
 pub mod utilities;
 
-mod lib_wasm;
-
 enum Turn {
     Player,
     Enemy,
 }
 
+#[wasm_bindgen]
+#[allow(dead_code)]
 pub struct Game {
     game_state: GameState,
     player: Player,
     current_target: Option<Enemy>,
     attack_turn: Option<Turn>,
+    pub config: WasmConfig,
 }
 
+#[wasm_bindgen]
+#[allow(dead_code)]
+#[derive(Clone, Copy)]
+pub struct WasmConfig {
+    pub rest_interval_seconds: usize,
+    pub battle_interval_seconds: u8,
+}
+
+#[wasm_bindgen]
 impl Game {
+    #[wasm_bindgen(constructor)]
     pub fn new(theme: String) -> Game {
         let theme_data = get_theme(theme);
         let game_data = GameData::new(theme_data);
@@ -51,11 +66,17 @@ impl Game {
 
         let game_state = GameState::new(game_data);
 
+        let config = WasmConfig {
+            rest_interval_seconds: REST_INTERVAL_SECONDS,
+            battle_interval_seconds: BATTLE_INTERVAL_SECONDS,
+        };
+
         Game {
             game_state,
             player,
             current_target: None,
             attack_turn: None,
+            config,
         }
     }
 
@@ -111,22 +132,12 @@ impl Game {
         matches!(self.game_state.state, PlayerState::Fighting)
     }
 
-    pub fn get_current_enemy(&self) -> Enemy {
-        if let Encounter::Battle(battle) | Encounter::BossFight(battle) =
-            self.game_state.get_current_encounter()
-        {
-            battle.enemy.clone()
-        } else {
-            panic!("Shouldn't be an enemy when not in a battle");
-        }
-    }
-
     // TODO What a mess, huge refactor needed...
     pub fn handle_battle(&mut self) -> String {
         // This gets run in a loop so we need to store the enemy somewhere so we can
         // track it's life each iteration
         if self.current_target.is_none() {
-            self.current_target = Some(self.get_current_enemy());
+            self.current_target = Some(self.game_state.get_current_enemy());
         }
 
         if self.attack_turn.is_none() {
@@ -184,16 +195,9 @@ impl Game {
 
         result
     }
-
-    pub fn is_game_over(&self) -> bool {
-        !matches!(self.game_state.state, PlayerState::GameOver)
-    }
-
-    pub fn is_game_won(&self) -> bool {
-        !matches!(self.game_state.state, PlayerState::Win)
-    }
 }
 
+#[wasm_bindgen]
 pub fn get_theme_display_list() -> String {
     let themes = get_themes();
 

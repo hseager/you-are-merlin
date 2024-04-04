@@ -2,7 +2,7 @@ use colored::Colorize;
 
 use crate::{
     actions::*,
-    characters::player::Player,
+    characters::{enemy::Enemy, player::Player},
     game_data::{entities::*, GameData},
     items::create_item,
     player_state::PlayerState,
@@ -246,5 +246,15 @@ impl GameState {
             .map(|action| action.name.to_string())
             .collect::<Vec<String>>()
             .join(", ")
+    }
+
+    pub fn get_current_enemy(&self) -> Enemy {
+        if let Encounter::Battle(battle) | Encounter::BossFight(battle) =
+            self.get_current_encounter()
+        {
+            battle.enemy.clone()
+        } else {
+            panic!("Shouldn't be an enemy when not in a battle");
+        }
     }
 }
