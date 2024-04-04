@@ -169,7 +169,11 @@ impl Game {
                         self.game_state.state = PlayerState::Win;
                     } else {
                         result = format!("You defeated {}!", enemy.name);
-                        self.game_state.go_to_next_encounter(&mut self.player);
+                        if let Some(reward_text) =
+                            self.game_state.go_to_next_encounter(&mut self.player)
+                        {
+                            result = format!("{}\n{}", result, reward_text);
+                        }
                     }
 
                     self.current_target = None;

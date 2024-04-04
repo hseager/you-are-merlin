@@ -159,7 +159,7 @@ impl GameState {
         self.current_encounter = 0;
     }
 
-    pub fn go_to_next_encounter(&mut self, player: &mut Player) {
+    pub fn go_to_next_encounter(&mut self, player: &mut Player) -> Option<String> {
         let next_encounter = self.current_encounter + 1;
         let location = self.get_current_location();
 
@@ -169,44 +169,55 @@ impl GameState {
             let encounter = self.get_current_encounter();
             match encounter {
                 Encounter::Battle(_) | Encounter::BossFight(_) => {
-                    self.state = PlayerState::Battle(encounter.clone())
+                    self.state = PlayerState::Battle(encounter.clone());
                 }
                 Encounter::Quest(quest) => self.state = PlayerState::Quest(quest.clone()),
             }
+            None
         } else {
-            self.handle_end_of_encounters(location.clone(), player);
+            self.handle_end_of_encounters(location.clone(), player)
         }
     }
 
-    // TODO convert println!s
-    fn handle_end_of_encounters(&mut self, location: Location, player: &mut Player) {
+    fn handle_end_of_encounters(
+        &mut self,
+        location: Location,
+        player: &mut Player,
+    ) -> Option<String> {
         match location.class {
-            LocationType::Dungeon(item) => {
-                println!(
-                    "You successfully clear {} of dangers and stumble upon a safe area.",
-                    location.name
-                );
-
-                let is_on_side_quest = self.accepted_quests.iter().any(|q| q.item == item.bold())
-                    && !player.has_item_in_inventory(&item.bold());
-
-                if is_on_side_quest {
-                    println!("You find {}!", item.bold());
-                    player.add_item_to_inventory(item.bold());
-                }
+            LocationType::Dungeon(quest_item) => {
+                let is_on_side_quest = self
+                    .accepted_quests
+                    .iter()
+                    .any(|q| q.item == quest_item.bold())
+                    && !player.has_item_in_inventory(&quest_item.bold());
 
                 let item = create_item(&mut self.items);
                 player.equip_item(&item);
 
-                println!("You spot a chest up ahead and eagerly pry it open.");
+                let mut result = format!(
+                    "You successfully clear {} of dangers and stumble upon a safe area.\n\
+                    You spot a chest up ahead and eagerly pry it open.",
+                    location.name
+                );
+
+                if is_on_side_quest {
+                    result = format!("{}\nYou find {}!", result, quest_item.bold());
+                    player.add_item_to_inventory(quest_item.bold());
+                }
+
                 self.state = PlayerState::Treasure(item);
                 self.reset_encounters();
+
+                Some(result)
             }
             LocationType::SafeZone => {
                 self.state = PlayerState::Visiting(self.get_current_location().clone());
                 self.reset_encounters();
+
+                None
             }
-            _ => (),
+            _ => None,
         }
     }
 

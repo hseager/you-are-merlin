@@ -28,7 +28,9 @@ pub fn get_battle_prompt(encounter: &Encounter) -> String {
             )
         }
         Encounter::BossFight(battle) => {
-            format!("A great danger approaches...\n{} (life: {}, attack: {})\n{}", battle.enemy.name, battle.enemy.life, battle.enemy.attack, battle.enemy.description)
+            format!("A great danger approaches...\n\
+            {} (life: {}, attack: {})\n\
+            {}", battle.enemy.name, battle.enemy.life, battle.enemy.attack, battle.enemy.description)
         }
         Encounter::Quest(_) => panic!("Shouldn't be possible to battle during a quest.. Unless you're trying to fight an ally?"),
     }
