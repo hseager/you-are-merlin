@@ -103,10 +103,10 @@ impl Game {
     pub fn player_attack_enemy(&mut self) -> String {
         match self.game_state.get_current_encounter() {
             Encounter::Battle(battle) => {
-                let mut enemy = battle.enemy.clone();
+                let mut enemy = &battle.enemy;
 
                 if enemy.is_alive() {
-                    self.player.attack(&mut enemy)
+                    self.player.attack(&mut battle.enemy)
                 } else {
                     self.game_state.go_to_next_encounter(&mut self.player);
                     format!("You defeated {}!", enemy.name)
@@ -158,6 +158,20 @@ impl Game {
 
     pub fn is_player_alive(&self) -> bool {
         self.player.is_alive()
+    }
+
+    pub fn handle_battle(&mut self) -> String {
+        format!("{}", self.player_attack_enemy())
+
+        // if !game.is_enemy_alive() {
+        //     break;
+        // }
+
+        // if !game.is_player_alive() {
+        //     break;
+        // }
+
+        // println!("{}", game.enemy_attack_player());
     }
 }
 
