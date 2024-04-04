@@ -2,7 +2,6 @@ use colored::Colorize;
 
 use crate::{
     actions::*,
-    battle_manager,
     characters::player::Player,
     game_data::{entities::*, GameData},
     items::create_item,
@@ -78,8 +77,6 @@ impl GameState {
                     None
                 }
                 ActionType::Attack => {
-                    // TODO Battle manager return string
-                    // battle_manager::handle_battle(self, player);
                     self.state = PlayerState::Fighting;
 
                     None
@@ -181,6 +178,7 @@ impl GameState {
         }
     }
 
+    // TODO convert println!s
     fn handle_end_of_encounters(&mut self, location: Location, player: &mut Player) {
         match location.class {
             LocationType::Dungeon(item) => {
@@ -221,10 +219,9 @@ impl GameState {
             PlayerState::Battle(encounter) => get_battle_prompt(encounter),
             PlayerState::Quest(quest) => get_quest_prompt(quest, self.accepted_quests.clone()),
             PlayerState::Treasure(item) => get_treasure_prompt(item),
-            PlayerState::Win => get_win_prompt(),
-            PlayerState::GameOver => get_game_over_prompt(),
             PlayerState::Healing => String::new(), // TODO sort these
             PlayerState::Fighting => String::new(),
+            _ => String::new(),
         }
     }
 

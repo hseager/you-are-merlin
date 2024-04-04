@@ -66,11 +66,3 @@ pub fn get_treasure_prompt(item: &Item) -> String {
         item.name, item.attack, item.max_life
     )
 }
-
-pub fn get_win_prompt() -> String {
-    "You Win!".to_string()
-}
-
-pub fn get_game_over_prompt() -> String {
-    "You Win!".to_string()
-}

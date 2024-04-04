@@ -1,4 +1,4 @@
-use characters::player::Player;
+use characters::{enemy::Enemy, player::Player};
 use colored::Colorize;
 use config::{PLAYER_ATTACK, PLAYER_LIFE};
 use game_data::GameData;
@@ -24,9 +24,16 @@ pub mod utilities;
 
 mod lib_wasm;
 
+enum Turn {
+    Player,
+    Enemy,
+}
+
 pub struct Game {
     game_state: GameState,
     player: Player,
+    current_target: Option<Enemy>,
+    attack_turn: Option<Turn>,
 }
 
 impl Game {
@@ -44,7 +51,12 @@ impl Game {
 
         let game_state = GameState::new(game_data);
 
-        Game { game_state, player }
+        Game {
+            game_state,
+            player,
+            current_target: None,
+            attack_turn: None,
+        }
     }
 
     pub fn is_running(&self) -> bool {
@@ -67,11 +79,11 @@ impl Game {
     }
 
     pub fn handle_action(&mut self, input: String) -> Option<String> {
+        self.game_state.actions = self.game_state.get_actions(&self.player);
+
         let response = self
             .game_state
             .handle_action(input.trim(), &mut self.player);
-
-        self.game_state.actions = self.game_state.get_actions(&self.player);
 
         response
     }
@@ -95,83 +107,90 @@ impl Game {
         }
     }
 
-    // let below = techDebt + 1 yuck
     pub fn player_is_fighting(&self) -> bool {
         matches!(self.game_state.state, PlayerState::Fighting)
     }
 
-    pub fn player_attack_enemy(&mut self) -> String {
-        match self.game_state.get_current_encounter() {
-            Encounter::Battle(battle) => {
-                let mut enemy = &battle.enemy;
-
-                if enemy.is_alive() {
-                    self.player.attack(&mut battle.enemy)
-                } else {
-                    self.game_state.go_to_next_encounter(&mut self.player);
-                    format!("You defeated {}!", enemy.name)
-                }
-            }
-            Encounter::BossFight(battle) => {
-                let mut enemy = battle.enemy.clone();
-
-                if enemy.is_alive() {
-                    self.player.attack(&mut enemy)
-                } else {
-                    self.game_state.state = PlayerState::Win;
-                    format!(
-                        "You defeated {}! {} is saved!",
-                        enemy.name, &self.game_state.game_data.world_name
-                    )
-                }
-            }
-            _ => panic!("Shouldn't be fighting when not in a battle"),
+    pub fn get_current_enemy(&self) -> Enemy {
+        if let Encounter::Battle(battle) | Encounter::BossFight(battle) =
+            self.game_state.get_current_encounter()
+        {
+            battle.enemy.clone()
+        } else {
+            panic!("Shouldn't be an enemy when not in a battle");
         }
     }
 
-    pub fn enemy_attack_player(&mut self) -> String {
-        match self.game_state.get_current_encounter() {
-            Encounter::Battle(battle) | Encounter::BossFight(battle) => {
-                let enemy = battle.enemy.clone();
-
-                if self.player.is_alive() {
-                    enemy.attack(&mut self.player)
-                } else {
-                    self.game_state.state = PlayerState::GameOver;
-                    format!("{} died!", self.player.name)
-                }
-            }
-            _ => panic!("Shouldn't be fighting when not in a battle"),
-        }
-    }
-
-    pub fn is_enemy_alive(&self) -> bool {
-        match self.game_state.get_current_encounter() {
-            Encounter::Battle(battle) | Encounter::BossFight(battle) => {
-                let enemy = battle.enemy.clone();
-
-                enemy.is_alive()
-            }
-            _ => panic!("Shouldn't be an enemy when not in a battle"),
-        }
-    }
-
-    pub fn is_player_alive(&self) -> bool {
-        self.player.is_alive()
-    }
-
+    // TODO What a mess, huge refactor needed...
     pub fn handle_battle(&mut self) -> String {
-        format!("{}", self.player_attack_enemy())
+        // This gets run in a loop so we need to store the enemy somewhere so we can
+        // track it's life each iteration
+        if self.current_target.is_none() {
+            self.current_target = Some(self.get_current_enemy());
+        }
 
-        // if !game.is_enemy_alive() {
-        //     break;
-        // }
+        if self.attack_turn.is_none() {
+            self.attack_turn = Some(Turn::Player)
+        }
 
-        // if !game.is_player_alive() {
-        //     break;
-        // }
+        let is_boss_fight = matches!(
+            self.game_state.get_current_encounter(),
+            Encounter::BossFight(_)
+        );
 
-        // println!("{}", game.enemy_attack_player());
+        let enemy = self
+            .current_target
+            .as_mut()
+            .expect("Should always be a current target in a battle.");
+
+        let mut result = String::new();
+
+        match self.attack_turn {
+            Some(Turn::Player) => {
+                result = self.player.attack(enemy);
+
+                if !enemy.is_alive() {
+                    if is_boss_fight {
+                        result = format!(
+                            "You defeated {}! {} is saved!\nYou win!",
+                            enemy.name, self.game_state.game_data.world_name
+                        );
+                        self.game_state.state = PlayerState::Win;
+                    } else {
+                        result = format!("You defeated {}!", enemy.name);
+                        self.game_state.go_to_next_encounter(&mut self.player);
+                    }
+
+                    self.current_target = None;
+                    self.attack_turn = None;
+                } else {
+                    self.attack_turn = Some(Turn::Enemy);
+                }
+            }
+            Some(Turn::Enemy) => {
+                result = enemy.attack(&mut self.player);
+
+                if !self.player.is_alive() {
+                    self.game_state.state = PlayerState::GameOver;
+                    result = format!("{} died!\nGame Over...", self.player.name);
+                    self.current_target = None;
+                    self.attack_turn = None;
+                } else {
+                    self.attack_turn = Some(Turn::Player);
+                }
+            }
+            None => (),
+        }
+
+        result
+    }
+
+    pub fn is_game_over(&self) -> bool {
+        !matches!(self.game_state.state, PlayerState::GameOver)
+    }
+
+    pub fn is_game_won(&self) -> bool {
+        !matches!(self.game_state.state, PlayerState::Win)
     }
 }
 
