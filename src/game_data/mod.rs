@@ -21,8 +21,6 @@ impl GameData {
         let items = theme.items.to_vec();
         let locations = world_builder::build_world(theme);
 
-        // println!("{:#?}", locations);
-
         GameData {
             world_name,
             main_character,

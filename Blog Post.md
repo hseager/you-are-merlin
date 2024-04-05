@@ -36,6 +36,11 @@ Need to make sure references are comsumed for each loop cycle
 https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=dc48248bf9b0dfd9cdeaca6f9e0f2b7b
 
 
+## Converting to WASM
+
+Had to give up on lifetimes and cloned everything.
+Had to move loops out to consuming code
+
 ## Items & Stats
 
 - Dodge + Chance to hit
@@ -52,3 +57,5 @@ https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=dc48248b
 - top rated themes
 - Voting on themes
 - Save themes to database
+
+# Event system create that creates JS events

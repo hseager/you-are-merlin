@@ -1,7 +1,7 @@
 use colored::{ColoredString, Colorize};
 
 use crate::{
-    characters::Player,
+    characters::player::Player,
     game_data::entities::{Location, LocationType, Quest, SideQuest},
 };
 
@@ -30,7 +30,7 @@ impl Action {
     }
 }
 
-pub fn get_visiting_actions(location: &Location, completed_locations: &[&Location]) -> Vec<Action> {
+pub fn get_visiting_actions(location: Location, completed_locations: Vec<Location>) -> Vec<Action> {
     let mut actions = vec![Action::new(ActionType::Travel, "Travel".yellow())];
 
     if !completed_locations.iter().any(|l| l.name == location.name) {
@@ -51,8 +51,8 @@ pub fn get_battle_actions() -> Vec<Action> {
 }
 
 pub fn get_quest_actions(
-    quest: &Quest,
-    accepted_quests: &[&SideQuest],
+    quest: Quest,
+    accepted_quests: Vec<SideQuest>,
     player: &Player,
 ) -> Vec<Action> {
     match quest {
@@ -77,7 +77,7 @@ pub fn get_quest_actions(
     }
 }
 
-pub fn get_locations_as_actions(locations: &[Location]) -> Vec<Action> {
+pub fn get_locations_as_actions(locations: Vec<Location>) -> Vec<Action> {
     locations
         .iter()
         .map(|location| Action::new(ActionType::MoveToLocation, location.name.to_owned()))

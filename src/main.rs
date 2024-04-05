@@ -1,52 +1,44 @@
-use std::io;
+use std::{io, thread::sleep, time::Duration};
 
 use colored::Colorize;
-use game_data::GameData;
-use game_state::GameState;
-use player_state::PlayerState;
-
-use crate::theme::{get_theme, get_theme_display_list};
-
-mod actions;
-mod battle_manager;
-mod characters;
-mod config;
-mod game_data;
-mod game_state;
-mod items;
-mod player_state;
-mod prompts;
-mod theme;
-mod utilities;
+use you_are_merlin::{
+    config::{BATTLE_INTERVAL_SECONDS, REST_INTERVAL_SECONDS},
+    get_theme_display_list,
+    utilities::spacer,
+    Game,
+};
 
 fn main() {
-    let theme_selection = select_theme();
-    let theme_data = get_theme(theme_selection);
-    let game_data = GameData::new(theme_data);
-    let mut game_state = GameState::new(&game_data);
+    let theme = select_theme();
+    let mut game = Game::new(theme);
 
-    println!("You are {}.", &game_state.player.name);
+    println!("{}", game.get_initial_prompt());
 
-    loop {
+    while game.is_running() {
         let mut input = String::new();
 
-        if let PlayerState::GameOver = game_state.state {
-            println!("Game Over...");
-            break;
-        }
-
-        if let PlayerState::Win = game_state.state {
-            println!("You Win!");
-            break;
-        }
-
-        game_state.get_prompt();
+        println!("{}", game.get_prompt());
+        println!("{}", game.get_actions_display_list());
 
         io::stdin()
             .read_line(&mut input)
             .expect("Failed to read line");
 
-        game_state.handle_action(input.trim());
+        if let Some(response) = game.handle_action(input) {
+            println!("{response}");
+        }
+
+        // This logic shouldn't live here, but need to find a way to handle loops & sleep in both rust CLI and WASM...
+        while game.player_is_healing() {
+            println!("{}", game.heal_player());
+            sleep(Duration::from_secs(REST_INTERVAL_SECONDS as u64));
+        }
+
+        // This logic shouldn't live here, but need to find a way to handle loops & sleep in both rust CLI and WASM...
+        while game.player_is_fighting() {
+            println!("{}", game.handle_battle());
+            sleep(Duration::from_secs(BATTLE_INTERVAL_SECONDS as u64));
+        }
     }
 }
 
@@ -59,8 +51,7 @@ fn select_theme() -> String {
         .read_line(&mut input)
         .expect("Failed to theme selection.");
 
-    utilities::spacer();
+    spacer();
 
     input.trim().to_string()
 }
-

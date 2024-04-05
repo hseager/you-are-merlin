@@ -3,7 +3,7 @@ use rand::{seq::SliceRandom, thread_rng};
 
 use crate::{
     battle_manager::map_theme_enemy_difficulty_to_stats,
-    characters::Enemy,
+    characters::enemy::Enemy,
     theme::{Theme, ThemeLocation},
     utilities::map_text_color,
 };
@@ -78,7 +78,10 @@ fn build_side_quest(theme: &Theme, characters: &mut Vec<&str>) -> Vec<Encounter>
         .choose(&mut rng)
         .expect("Unable to get a dungeon from Theme data when creating side quest.");
 
-    let dungeon_index = theme.locations.iter().position(|l| l.name == dungeon.name)
+    let dungeon_index = theme
+        .locations
+        .iter()
+        .position(|l| l.name == dungeon.name)
         .expect("Unable to get dungeon index when building side quest");
 
     if let LocationType::Dungeon(item) = &dungeon.class {
