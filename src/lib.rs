@@ -26,6 +26,8 @@ mod prompts;
 pub mod theme;
 pub mod utilities;
 
+mod events;
+
 enum Turn {
     Player,
     Enemy,

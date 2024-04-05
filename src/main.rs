@@ -1,6 +1,7 @@
 use std::{io, thread::sleep, time::Duration};
 
 use colored::Colorize;
+use events::visiting_event::VisitingEvent;
 use you_are_merlin::{
     config::{BATTLE_INTERVAL_SECONDS, REST_INTERVAL_SECONDS},
     get_theme_display_list,
@@ -8,7 +9,15 @@ use you_are_merlin::{
     Game,
 };
 
+mod actions;
+mod events;
+mod game_data;
+
 fn main() {
+    let visiting_event = VisitingEvent::new();
+}
+
+fn main1() {
     let theme = select_theme();
     let mut game = Game::new(theme);
 
