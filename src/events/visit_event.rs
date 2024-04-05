@@ -3,25 +3,26 @@ use colored::Colorize;
 use crate::{
     actions::{Action, ActionType},
     game_data::entities::{Location, LocationType},
+    game_state::GameState,
 };
 
-use super::event::Event;
+use super::{event::Event, travel_event::TravelEvent};
 
-pub struct VisitingEvent {
+pub struct VisitEvent {
     current_location: Location,
     completed_locations: Vec<Location>,
 }
 
-impl VisitingEvent {
-    pub fn new(location: Location, completed_locations: Vec<Location>) -> VisitingEvent {
-        VisitingEvent {
+impl VisitEvent {
+    pub fn new(location: Location, completed_locations: Vec<Location>) -> VisitEvent {
+        VisitEvent {
             current_location: location,
             completed_locations,
         }
     }
 }
 
-impl Event for VisitingEvent {
+impl Event for VisitEvent {
     fn prompt(&self) -> String {
         format!(
             "You are currently visiting {}. {}\nWhat would you like to do?",
@@ -45,5 +46,17 @@ impl Event for VisitingEvent {
         }
 
         actions
+    }
+
+    fn handle_action(
+        &self,
+        _search: &str,
+        action_type: ActionType,
+        game_state: &mut GameState,
+    ) -> Box<dyn Event> {
+        match action_type {
+            ActionType::Travel => Box::new(TravelEvent::new(game_state.get_locations())),
+            _ => panic!("Unhandled action when handling action."),
+        }
     }
 }

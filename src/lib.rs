@@ -1,54 +1,35 @@
-use characters::{enemy::Enemy, player::Player};
+use characters::player::Player;
 use colored::Colorize;
-use config::{PLAYER_ATTACK, PLAYER_LIFE};
-use game_data::GameData;
+use events::event::Event;
 use game_state::GameState;
-use player_state::PlayerState;
-use theme::{get_theme, theme_data::get_themes};
+use theme::theme_data::get_themes;
+use utilities::map_text_color;
 use wasm_bindgen::prelude::*;
 
 use crate::{
-    characters::fighter::Fighter,
-    config::{BATTLE_INTERVAL_SECONDS, REST_INTERVAL_SECONDS},
-    game_data::entities::Encounter,
-    utilities::map_text_color,
+    config::{PLAYER_ATTACK, PLAYER_LIFE},
+    events::visit_event::VisitEvent,
+    game_data::GameData,
+    theme::get_theme,
 };
 
 mod actions;
 mod battle_manager;
 mod characters;
 pub mod config;
+mod events;
 mod game_data;
 mod game_state;
 mod items;
-mod player_state;
-mod prompts;
 pub mod theme;
 pub mod utilities;
-
-mod events;
-
-enum Turn {
-    Player,
-    Enemy,
-}
 
 #[wasm_bindgen]
 #[allow(dead_code)]
 pub struct Game {
-    game_state: GameState,
     player: Player,
-    current_target: Option<Enemy>,
-    attack_turn: Option<Turn>,
-    pub config: WasmConfig,
-}
-
-#[wasm_bindgen]
-#[allow(dead_code)]
-#[derive(Clone, Copy)]
-pub struct WasmConfig {
-    pub rest_interval_seconds: usize,
-    pub battle_interval_seconds: u8,
+    game_state: GameState,
+    current_event: Box<dyn Event>,
 }
 
 #[wasm_bindgen]
@@ -57,149 +38,61 @@ impl Game {
     pub fn new(theme: String) -> Game {
         let theme_data = get_theme(theme);
         let game_data = GameData::new(theme_data);
+        let player = Player::new(game_data.main_character.clone(), PLAYER_LIFE, PLAYER_ATTACK);
+        let location = game_data
+            .locations
+            .first()
+            .expect("Unable to get location when creating a new game.");
 
-        let player = Player {
-            name: game_data.main_character.clone(),
-            max_life: PLAYER_LIFE,
-            life: PLAYER_LIFE,
-            attack: PLAYER_ATTACK,
-            inventory: Vec::new(),
-        };
+        let first_event = VisitEvent::new(location.clone(), Vec::new());
 
         let game_state = GameState::new(game_data);
 
-        let config = WasmConfig {
-            rest_interval_seconds: REST_INTERVAL_SECONDS,
-            battle_interval_seconds: BATTLE_INTERVAL_SECONDS,
-        };
-
         Game {
-            game_state,
             player,
-            current_target: None,
-            attack_turn: None,
-            config,
+            game_state,
+            current_event: Box::new(first_event),
         }
     }
 
-    pub fn is_running(&self) -> bool {
-        !matches!(
-            self.game_state.state,
-            PlayerState::Win | PlayerState::GameOver
-        )
-    }
-
-    pub fn get_initial_prompt(&self) -> String {
+    pub fn get_intro(&self) -> String {
         format!("You are {}.", &self.player.name.to_string())
     }
 
+    // TODO check game status
+    pub fn is_running(&self) -> bool {
+        true
+    }
+
     pub fn get_prompt(&self) -> String {
-        self.game_state.get_prompt()
+        self.current_event.prompt()
     }
 
-    pub fn get_actions_display_list(&self) -> String {
-        self.game_state.get_actions_display_list(&self.player)
+    pub fn get_actions(&self) -> String {
+        self.current_event
+            .actions()
+            .iter()
+            .map(|action| action.name.to_string())
+            .collect::<Vec<String>>()
+            .join(", ")
     }
 
-    pub fn handle_action(&mut self, input: String) -> Option<String> {
-        self.game_state.actions = self.game_state.get_actions(&self.player);
+    pub fn handle_action(&mut self, search: &str) -> Option<String> {
+        match self.current_event.find_action(search) {
+            Some(action) => {
+                let next_event =
+                    self.current_event
+                        .handle_action(search, action.class, &mut self.game_state);
 
-        let response = self
-            .game_state
-            .handle_action(input.trim(), &mut self.player);
-
-        response
-    }
-
-    pub fn player_is_healing(&self) -> bool {
-        matches!(self.game_state.state, PlayerState::Healing)
-    }
-
-    // TODO This is getting pretty messy having this here
-    // Lets just see if it works in WASM and then refactor later
-    pub fn heal_player(&mut self) -> String {
-        if self.player.life < self.player.max_life {
-            self.player.heal()
-        } else {
-            self.game_state.state =
-                PlayerState::Visiting(self.game_state.get_current_location().clone());
-
-            self.game_state.actions = self.game_state.get_actions(&self.player);
-
-            "You fully recover your health.".to_string()
-        }
-    }
-
-    pub fn player_is_fighting(&self) -> bool {
-        matches!(self.game_state.state, PlayerState::Fighting)
-    }
-
-    // TODO What a mess, huge refactor needed...
-    pub fn handle_battle(&mut self) -> String {
-        // This gets run in a loop so we need to store the enemy somewhere so we can
-        // track it's life each iteration
-        if self.current_target.is_none() {
-            self.current_target = Some(self.game_state.get_current_enemy());
-        }
-
-        if self.attack_turn.is_none() {
-            self.attack_turn = Some(Turn::Player)
-        }
-
-        let is_boss_fight = matches!(
-            self.game_state.get_current_encounter(),
-            Encounter::BossFight(_)
-        );
-
-        let enemy = self
-            .current_target
-            .as_mut()
-            .expect("Should always be a current target in a battle.");
-
-        let mut result = String::new();
-
-        match self.attack_turn {
-            Some(Turn::Player) => {
-                result = self.player.attack(enemy);
-
-                if !enemy.is_alive() {
-                    if is_boss_fight {
-                        result = format!(
-                            "You defeated {}! {} is saved!\nYou win!",
-                            enemy.name, self.game_state.game_data.world_name
-                        );
-                        self.game_state.state = PlayerState::Win;
-                    } else {
-                        result = format!("You defeated {}!", enemy.name);
-                        if let Some(reward_text) =
-                            self.game_state.go_to_next_encounter(&mut self.player)
-                        {
-                            result = format!("{}\n{}", result, reward_text);
-                        }
-                    }
-
-                    self.current_target = None;
-                    self.attack_turn = None;
-                } else {
-                    self.attack_turn = Some(Turn::Enemy);
-                }
+                self.change_event(next_event);
+                None
             }
-            Some(Turn::Enemy) => {
-                result = enemy.attack(&mut self.player);
-
-                if !self.player.is_alive() {
-                    self.game_state.state = PlayerState::GameOver;
-                    result = format!("{} died!\nGame Over...", self.player.name);
-                    self.current_target = None;
-                    self.attack_turn = None;
-                } else {
-                    self.attack_turn = Some(Turn::Player);
-                }
-            }
-            None => (),
+            None => Some(format!("This isn't the time to use {}!", search)),
         }
+    }
 
-        result
+    fn change_event(&mut self, next_event: Box<dyn Event>) {
+        self.current_event = next_event;
     }
 }
 
