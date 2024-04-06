@@ -77,14 +77,20 @@ impl Game {
             .join(", ")
     }
 
-    pub fn handle_action(&mut self, search: &str) -> Option<String> {
-        match self.current_event.find_action(search) {
-            Some(action) => {
-                let next_event =
-                    self.current_event
-                        .handle_action(search, action.class, &mut self.game_state);
+    pub fn handle_action(&mut self, search: &str) {
+        if let Some(action) = self.current_event.find_action(search) {
+            let next_event =
+                self.current_event
+                    .handle_action(search, action.class, &mut self.game_state);
 
-                self.change_event(next_event);
+            self.change_event(next_event);
+        }
+    }
+
+    pub fn get_action_response(&mut self, search: &str) -> Option<String> {
+        match self.current_event.find_action(search) {
+            Some(_) => {
+                // self.current_event.get_action_response();
                 None
             }
             None => Some(format!("This isn't the time to use {}!", search)),

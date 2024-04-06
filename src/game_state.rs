@@ -1,5 +1,5 @@
 use crate::game_data::{
-    entities::{Location, SideQuest},
+    entities::{Encounter, Location, SideQuest},
     GameData,
 };
 
@@ -47,5 +47,14 @@ impl GameState {
 
     pub fn change_location_by_name(&mut self, name: String) {
         self.current_location = self.get_location_index_by_name(name);
+    }
+
+    pub fn get_current_encounter(&self) -> &Encounter {
+        let location = self.get_current_location();
+
+        location
+            .encounters
+            .get(self.current_encounter)
+            .expect("Failed to get encounter.")
     }
 }

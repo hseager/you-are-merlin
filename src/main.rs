@@ -19,9 +19,11 @@ fn main() {
             .read_line(&mut input)
             .expect("Failed to read line");
 
-        if let Some(response) = game.handle_action(input.trim()) {
+        if let Some(response) = game.get_action_response(input.trim()) {
             println!("{response}");
         }
+
+        game.handle_action(input.trim());
     }
 }
 

@@ -2,11 +2,11 @@ use colored::Colorize;
 
 use crate::{
     actions::{Action, ActionType},
-    game_data::entities::{Location, LocationType},
+    game_data::entities::{Encounter, Location, LocationType},
     game_state::GameState,
 };
 
-use super::{event::Event, travel_event::TravelEvent};
+use super::{battle_event::BattleEvent, event::Event, travel_event::TravelEvent};
 
 pub struct VisitEvent {
     current_location: Location,
@@ -56,6 +56,11 @@ impl Event for VisitEvent {
     ) -> Box<dyn Event> {
         match action_type {
             ActionType::Travel => Box::new(TravelEvent::new(game_state.get_locations())),
+            ActionType::Explore => match game_state.get_current_encounter() {
+                Encounter::Battle(battle) => Box::new(BattleEvent::new(battle.clone())),
+                Encounter::BossFight(_) => panic!("Not implemented"),
+                Encounter::Quest(_) => panic!("Not implemented"),
+            },
             _ => panic!("Unhandled action when handling action."),
         }
     }
