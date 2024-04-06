@@ -12,6 +12,8 @@ pub trait Event {
         action_type: ActionType,
         game_state: &mut GameState,
     ) -> Box<dyn Event>;
+
+    fn as_any(&self) -> &dyn std::any::Any;
     // fn action_response(&self) -> Option<String>;
 
     fn find_action(&self, search: &str) -> Option<Action> {

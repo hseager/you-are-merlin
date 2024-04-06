@@ -46,4 +46,8 @@ impl Event for TravelEvent {
             _ => panic!("Unhandled action when handling action."),
         }
     }
+
+    fn as_any(&self) -> &dyn std::any::Any {
+        self
+    }
 }

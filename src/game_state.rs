@@ -1,6 +1,9 @@
-use crate::game_data::{
-    entities::{Encounter, Location, SideQuest},
-    GameData,
+use crate::{
+    characters::player::Player,
+    game_data::{
+        entities::{Encounter, Location, SideQuest},
+        GameData,
+    },
 };
 
 pub struct GameState {
@@ -57,4 +60,25 @@ impl GameState {
             .get(self.current_encounter)
             .expect("Failed to get encounter.")
     }
+
+    // pub fn go_to_next_encounter(&mut self, player: &mut Player) -> Option<String> {
+    //     let next_encounter = self.current_encounter + 1;
+    //     let location = self.get_current_location();
+
+    //     if next_encounter < location.encounters.len() {
+    //         self.current_encounter = next_encounter;
+
+    //         let encounter = self.get_current_encounter();
+    //         match encounter {
+    //             Encounter::Battle(battle) => {
+    //                 self.current_event = Box::new(BattleEvent::new(battle.clone()));
+    //             }
+    //             Encounter::BossFight(_) => {}
+    //             Encounter::Quest(quest) => self.state = PlayerState::Quest(quest.clone()),
+    //         }
+    //         None
+    //     } else {
+    //         self.handle_end_of_encounters(location.clone(), player)
+    //     }
+    // }
 }

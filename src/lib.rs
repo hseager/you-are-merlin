@@ -8,7 +8,7 @@ use wasm_bindgen::prelude::*;
 
 use crate::{
     config::{PLAYER_ATTACK, PLAYER_LIFE},
-    events::visit_event::VisitEvent,
+    events::{event_loop::EventLoop, visit_event::VisitEvent},
     game_data::GameData,
     theme::get_theme,
 };
@@ -99,6 +99,21 @@ impl Game {
 
     fn change_event(&mut self, next_event: Box<dyn Event>) {
         self.current_event = next_event;
+    }
+
+    pub fn handle_event_loop(&mut self) -> String {
+        if let Some(event_loop) = self
+            .current_event
+            .as_mut()
+            .as_any()
+            .downcast_ref::<Box<dyn EventLoop>>()
+        {
+            // The current event implements EventLoop
+            event_loop.handle_event_loop(&mut self.player)
+        } else {
+            // The current event does not implement EventLoop
+            "No event loop active".to_string()
+        }
     }
 }
 

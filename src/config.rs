@@ -4,7 +4,7 @@ pub const PLAYER_ATTACK: u16 = 5;
 pub const REST_HEAL_AMOUNT: i16 = 10;
 pub const REST_INTERVAL_SECONDS: usize = 2;
 
-pub const BATTLE_INTERVAL_SECONDS: u8 = 1;
+pub const BATTLE_INTERVAL_SECONDS: u64 = 1;
 
 // life, attack
 pub const ENEMY_EASY_STATS: (i16, u16) = (20, 3);

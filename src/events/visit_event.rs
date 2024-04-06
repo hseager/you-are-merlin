@@ -64,4 +64,8 @@ impl Event for VisitEvent {
             _ => panic!("Unhandled action when handling action."),
         }
     }
+
+    fn as_any(&self) -> &dyn std::any::Any {
+        self
+    }
 }
