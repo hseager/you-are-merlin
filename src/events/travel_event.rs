@@ -4,7 +4,7 @@ use crate::{
     game_state::GameState,
 };
 
-use super::{event::Event, visit_event::VisitEvent};
+use super::{event::Event, event_loop::event_loop::EventLoop, visit_event::VisitEvent};
 
 pub struct TravelEvent {
     locations: Vec<Location>,
@@ -47,7 +47,7 @@ impl Event for TravelEvent {
         }
     }
 
-    fn as_any(&self) -> &dyn std::any::Any {
-        self
+    fn get_event_loop(&self) -> Option<Box<dyn EventLoop>> {
+        None
     }
 }

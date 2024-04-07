@@ -1,4 +1,4 @@
-use std::io;
+use std::{io, thread::sleep, time::Duration};
 
 use colored::Colorize;
 use you_are_merlin::{get_theme_display_list, utilities::spacer, Game};
@@ -25,9 +25,14 @@ fn main() {
 
         game.handle_action(input.trim());
 
-        while game.is_event_loop_active() {
-            println!("{}", game.handle_event_loop());
-            sleep(Duration::from_secs(game.get_event_loop_interval()));
+        // while game.is_event_loop_active() {
+        //     println!("{}", game.progress_event_loop());
+        //     sleep(Duration::from_secs(game.get_event_loop_interval()));
+        // }
+
+        while game.has_game_loop() {
+            println!("{}", game.progress_event_loop());
+            sleep(Duration::from_secs(2));
         }
     }
 }

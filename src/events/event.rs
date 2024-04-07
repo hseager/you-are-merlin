@@ -3,6 +3,8 @@ use crate::{
     game_state::GameState,
 };
 
+use super::event_loop::event_loop::EventLoop;
+
 pub trait Event {
     fn prompt(&self) -> String;
     fn actions(&self) -> Vec<Action>;
@@ -13,8 +15,7 @@ pub trait Event {
         game_state: &mut GameState,
     ) -> Box<dyn Event>;
 
-    fn as_any(&self) -> &dyn std::any::Any;
-    // fn action_response(&self) -> Option<String>;
+    fn get_event_loop(&self) -> Option<Box<dyn EventLoop>>;
 
     fn find_action(&self, search: &str) -> Option<Action> {
         self.actions()

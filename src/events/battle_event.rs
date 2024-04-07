@@ -9,7 +9,10 @@ use crate::{
 };
 
 use super::{
-    event::Event, event_loop::EventLoop, travel_event::TravelEvent, visit_event::VisitEvent,
+    event::Event,
+    event_loop::{battle_event_loop::BattleEventLoop, event_loop::EventLoop},
+    travel_event::TravelEvent,
+    visit_event::VisitEvent,
 };
 
 enum Turn {
@@ -20,13 +23,19 @@ enum Turn {
 pub struct BattleEvent {
     enemy: Enemy,
     attack_turn: Turn,
+    event_loop: BattleEventLoop,
 }
 
 impl BattleEvent {
     pub fn new(battle: Battle) -> BattleEvent {
+        let event_loop = BattleEventLoop {
+            interval: BATTLE_INTERVAL_SECONDS,
+        };
+
         BattleEvent {
             enemy: battle.enemy,
             attack_turn: Turn::Player,
+            event_loop,
         }
     }
 }
@@ -62,51 +71,7 @@ impl Event for BattleEvent {
         }
     }
 
-    fn as_any(&self) -> &dyn std::any::Any {
-        self
-    }
-}
-
-impl EventLoop for BattleEvent {
-    fn get_event_loop_interval(&self) -> u64 {
-        BATTLE_INTERVAL_SECONDS
-    }
-
-    fn is_event_loop_active(&self) -> bool {
-        true
-    }
-
-    fn handle_event_loop(&mut self, player: &mut Player) -> String {
-        let mut result = String::new();
-        let enemy = &mut self.enemy;
-
-        match self.attack_turn {
-            Turn::Player => {
-                result = player.attack(enemy);
-
-                if !enemy.is_alive() {
-                    result = format!("You defeated {}!", enemy.name);
-                    // if let Some(reward_text) = self.game_state.go_to_next_encounter(player) {
-                    //     result = format!("{}\n{}", result, reward_text);
-                    // }
-
-                    self.attack_turn = Turn::Player;
-                } else {
-                    self.attack_turn = Turn::Enemy;
-                }
-                result
-            }
-            Turn::Enemy => {
-                result = enemy.attack(player);
-
-                if player.is_alive() {
-                    // self.game_state.state = PlayerState::GameOver;
-                    result = format!("{} died!\nGame Over...", player.name);
-                } else {
-                    self.attack_turn = Turn::Player;
-                }
-                result
-            }
-        }
+    fn get_event_loop(&self) -> Option<Box<dyn EventLoop>> {
+        Some(Box::new(self.event_loop.clone()))
     }
 }
