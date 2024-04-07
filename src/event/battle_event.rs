@@ -2,39 +2,41 @@ use colored::Colorize;
 
 use crate::{
     actions::{Action, ActionType},
-    characters::{enemy::Enemy, fighter::Fighter, player::Player},
-    config::BATTLE_INTERVAL_SECONDS,
+    characters::enemy::Enemy,
     game_data::entities::Battle,
     game_state::GameState,
 };
 
 use super::{
-    event::Event,
-    event_loop::{battle_event_loop::BattleEventLoop, EventLoop},
-    travel_event::TravelEvent,
+    event_loop::{
+        battle_event_loop::{BattleEventLoop, Turn},
+        EventLoop,
+    },
     visit_event::VisitEvent,
+    Event,
 };
 
-enum Turn {
-    Player,
-    Enemy,
+pub enum BattleState {
+    Identifing,
+    Fighting,
 }
 
 pub struct BattleEvent {
     enemy: Enemy,
-    attack_turn: Turn,
+    pub state: BattleState,
     event_loop: BattleEventLoop,
 }
 
 impl BattleEvent {
     pub fn new(battle: Battle) -> BattleEvent {
         let event_loop = BattleEventLoop {
-            interval: BATTLE_INTERVAL_SECONDS,
+            attack_turn: Turn::Player,
+            enemy: battle.enemy.clone(),
         };
 
         BattleEvent {
             enemy: battle.enemy,
-            attack_turn: Turn::Player,
+            state: BattleState::Identifing,
             event_loop,
         }
     }
@@ -56,22 +58,29 @@ impl Event for BattleEvent {
     }
 
     fn handle_action(
-        &self,
+        &mut self,
         _search: &str,
         action_type: ActionType,
         game_state: &mut GameState,
-    ) -> Box<dyn Event> {
+    ) -> Option<Box<dyn Event>> {
         match action_type {
-            ActionType::Attack => Box::new(TravelEvent::new(game_state.get_locations())),
-            ActionType::Run => Box::new(VisitEvent::new(
+            ActionType::Attack => {
+                self.state = BattleState::Fighting;
+                None
+            }
+            ActionType::Run => Some(Box::new(VisitEvent::new(
                 game_state.get_current_location().clone(),
                 game_state.completed_locations.clone(),
-            )),
+            ))),
             _ => panic!("Unhandled action when handling action."),
         }
     }
 
-    fn get_event_loop(&self) -> Option<Box<dyn EventLoop>> {
-        Some(Box::new(self.event_loop.clone()))
+    fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop<EventType = BattleEvent>> {
+        Some(&mut self.event_loop)
     }
+
+    // fn progress_event_loop(&self) {
+    //     self.event_loop.progress_event_loop(player, self);
+    // }
 }

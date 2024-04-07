@@ -6,9 +6,7 @@ use crate::{
     game_state::GameState,
 };
 
-use super::{
-    battle_event::BattleEvent, event::Event, event_loop::EventLoop, travel_event::TravelEvent,
-};
+use super::{battle_event::BattleEvent, travel_event::TravelEvent, Event};
 
 pub struct VisitEvent {
     current_location: Location,
@@ -51,23 +49,19 @@ impl Event for VisitEvent {
     }
 
     fn handle_action(
-        &self,
+        &mut self,
         _search: &str,
         action_type: ActionType,
         game_state: &mut GameState,
-    ) -> Box<dyn Event> {
+    ) -> Option<Box<dyn Event>> {
         match action_type {
-            ActionType::Travel => Box::new(TravelEvent::new(game_state.get_locations())),
+            ActionType::Travel => Some(Box::new(TravelEvent::new(game_state.get_locations()))),
             ActionType::Explore => match game_state.get_current_encounter() {
-                Encounter::Battle(battle) => Box::new(BattleEvent::new(battle.clone())),
+                Encounter::Battle(battle) => Some(Box::new(BattleEvent::new(battle.clone()))),
                 Encounter::BossFight(_) => panic!("Not implemented"),
                 Encounter::Quest(_) => panic!("Not implemented"),
             },
             _ => panic!("Unhandled action when handling action."),
         }
-    }
-
-    fn get_event_loop(&self) -> Option<Box<dyn EventLoop>> {
-        None
     }
 }

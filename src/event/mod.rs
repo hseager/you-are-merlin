@@ -1,21 +1,24 @@
+pub mod battle_event;
+pub mod event_loop;
+pub mod travel_event;
+pub mod visit_event;
+
 use crate::{
     actions::{Action, ActionType},
     game_state::GameState,
 };
 
-use super::event_loop::EventLoop;
+use crate::event::event_loop::EventLoop;
 
 pub trait Event {
     fn prompt(&self) -> String;
     fn actions(&self) -> Vec<Action>;
     fn handle_action(
-        &self,
+        &mut self,
         search: &str,
         action_type: ActionType,
         game_state: &mut GameState,
-    ) -> Box<dyn Event>;
-
-    fn get_event_loop(&self) -> Option<Box<dyn EventLoop>>;
+    ) -> Option<Box<dyn Event>>;
 
     fn find_action(&self, search: &str) -> Option<Action> {
         self.actions()
@@ -29,4 +32,6 @@ pub trait Event {
             })
             .cloned()
     }
+
+    fn get_event_loop<T>(&mut self) -> Option<&mut dyn EventLoop<EventType = T>>;
 }

@@ -1,6 +1,6 @@
 use characters::player::Player;
 use colored::Colorize;
-use events::event::Event;
+use event::Event;
 use game_state::GameState;
 use theme::theme_data::get_themes;
 use utilities::map_text_color;
@@ -8,7 +8,7 @@ use wasm_bindgen::prelude::*;
 
 use crate::{
     config::{PLAYER_ATTACK, PLAYER_LIFE},
-    events::visit_event::VisitEvent,
+    event::visit_event::VisitEvent,
     game_data::GameData,
     theme::get_theme,
 };
@@ -17,7 +17,7 @@ mod actions;
 mod battle_manager;
 mod characters;
 pub mod config;
-mod events;
+mod event;
 mod game_data;
 mod game_state;
 mod items;
@@ -79,11 +79,12 @@ impl Game {
 
     pub fn handle_action(&mut self, search: &str) {
         if let Some(action) = self.current_event.find_action(search) {
-            let next_event =
+            if let Some(next_event) =
                 self.current_event
-                    .handle_action(search, action.class, &mut self.game_state);
-
-            self.change_event(next_event);
+                    .handle_action(search, action.class, &mut self.game_state)
+            {
+                self.change_event(next_event);
+            }
         }
     }
 
@@ -101,16 +102,28 @@ impl Game {
         self.current_event = next_event;
     }
 
-    pub fn progress_event_loop(&self) -> String {
+    pub fn progress_event_loop(&mut self) -> String {
         let mut result = String::new();
-        if let Some(mut event_loop) = self.current_event.get_event_loop() {
-            result = event_loop.progress_event_loop();
+        if let Some(event_loop) = self.current_event.get_event_loop() {
+            result = event_loop.progress_event_loop(&mut self.player);
         }
         result
     }
 
-    pub fn has_game_loop(&self) -> bool {
-        self.current_event.get_event_loop().is_some()
+    pub fn has_event_loop(&mut self) -> bool {
+        if let Some(event_loop) = self.current_event.get_event_loop() {
+            event_loop.is_event_loop_active()
+        } else {
+            false
+        }
+    }
+
+    pub fn get_event_loop_interval(&mut self) -> u64 {
+        if let Some(event_loop) = self.current_event.get_event_loop() {
+            event_loop.get_event_loop_interval()
+        } else {
+            0
+        }
     }
 }
 

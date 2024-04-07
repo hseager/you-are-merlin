@@ -1,9 +1,6 @@
-use crate::{
-    characters::player::Player,
-    game_data::{
-        entities::{Encounter, Location, SideQuest},
-        GameData,
-    },
+use crate::game_data::{
+    entities::{Encounter, Location, SideQuest},
+    GameData,
 };
 
 pub struct GameState {
