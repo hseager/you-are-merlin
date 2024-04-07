@@ -1,4 +1,4 @@
-use super::event_loop::EventLoop;
+use super::EventLoop;
 
 #[derive(Clone)]
 pub struct BattleEventLoop {

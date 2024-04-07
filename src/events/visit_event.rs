@@ -7,8 +7,7 @@ use crate::{
 };
 
 use super::{
-    battle_event::BattleEvent, event::Event, event_loop::event_loop::EventLoop,
-    travel_event::TravelEvent,
+    battle_event::BattleEvent, event::Event, event_loop::EventLoop, travel_event::TravelEvent,
 };
 
 pub struct VisitEvent {

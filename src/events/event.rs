@@ -3,7 +3,7 @@ use crate::{
     game_state::GameState,
 };
 
-use super::event_loop::event_loop::EventLoop;
+use super::event_loop::EventLoop;
 
 pub trait Event {
     fn prompt(&self) -> String;

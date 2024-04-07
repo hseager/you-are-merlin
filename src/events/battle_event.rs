@@ -10,7 +10,7 @@ use crate::{
 
 use super::{
     event::Event,
-    event_loop::{battle_event_loop::BattleEventLoop, event_loop::EventLoop},
+    event_loop::{battle_event_loop::BattleEventLoop, EventLoop},
     travel_event::TravelEvent,
     visit_event::VisitEvent,
 };

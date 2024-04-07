@@ -4,7 +4,7 @@ use crate::{
     game_state::GameState,
 };
 
-use super::{event::Event, event_loop::event_loop::EventLoop, visit_event::VisitEvent};
+use super::{event::Event, event_loop::EventLoop, visit_event::VisitEvent};
 
 pub struct TravelEvent {
     locations: Vec<Location>,
