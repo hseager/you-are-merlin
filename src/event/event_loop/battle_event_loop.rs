@@ -1,7 +1,7 @@
 use crate::{
     characters::{enemy::Enemy, fighter::Fighter, player::Player},
     config::BATTLE_INTERVAL_SECONDS,
-    event::{battle_event::BattleEvent, Event},
+    event::battle_event::BattleEvent,
 };
 
 use super::EventLoop;

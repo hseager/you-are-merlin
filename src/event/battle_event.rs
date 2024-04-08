@@ -13,7 +13,7 @@ use super::{
         EventLoop,
     },
     visit_event::VisitEvent,
-    Event,
+    Event, EventResponse, EventType,
 };
 
 pub enum BattleState {
@@ -62,21 +62,23 @@ impl Event for BattleEvent {
         _search: &str,
         action_type: ActionType,
         game_state: &mut GameState,
-    ) -> Option<Box<dyn Event>> {
+    ) -> Option<EventResponse> {
         match action_type {
             ActionType::Attack => {
                 self.state = BattleState::Fighting;
                 None
             }
-            ActionType::Run => Some(Box::new(VisitEvent::new(
-                game_state.get_current_location().clone(),
-                game_state.completed_locations.clone(),
-            ))),
+            ActionType::Run => Some(EventResponse {
+                next_event: EventType::VisitEvent(VisitEvent::new(
+                    game_state.get_current_location().clone(),
+                    game_state.completed_locations.clone(),
+                )),
+            }),
             _ => panic!("Unhandled action when handling action."),
         }
     }
 
-    fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop<EventType = BattleEvent>> {
+    fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop<EventType = Self>> {
         Some(&mut self.event_loop)
     }
 

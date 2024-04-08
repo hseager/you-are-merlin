@@ -10,6 +10,10 @@ use crate::{
 
 use crate::event::event_loop::EventLoop;
 
+pub struct EventResponse {
+    pub next_event: Box<dyn Event>,
+}
+
 pub trait Event {
     fn prompt(&self) -> String;
     fn actions(&self) -> Vec<Action>;
@@ -18,7 +22,7 @@ pub trait Event {
         search: &str,
         action_type: ActionType,
         game_state: &mut GameState,
-    ) -> Option<Box<dyn Event>>;
+    ) -> Option<EventResponse>;
 
     fn find_action(&self, search: &str) -> Option<Action> {
         self.actions()
@@ -33,5 +37,5 @@ pub trait Event {
             .cloned()
     }
 
-    fn get_event_loop<T>(&mut self) -> Option<&mut dyn EventLoop<EventType = T>>;
+    fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop<EventType = Self>>;
 }
