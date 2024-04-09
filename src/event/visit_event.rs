@@ -8,7 +8,7 @@ use crate::{
 
 use super::{
     battle_event::BattleEvent, event_loop::EventLoop, travel_event::TravelEvent, Event,
-    EventResponse, EventType,
+    EventResponse,
 };
 
 pub struct VisitEvent {
@@ -59,7 +59,7 @@ impl Event for VisitEvent {
     ) -> Option<EventResponse> {
         match action_type {
             ActionType::Travel => Some(EventResponse {
-                next_event: EventType::TravelEvent(TravelEvent::new(game_state.get_locations())),
+                next_event: Box::new(TravelEvent::new(game_state.get_locations())),
             }),
             ActionType::Explore => match game_state.get_current_encounter() {
                 // Encounter::Battle(battle) => Some(EventType::BattleEvent::new(battle.clone())),
@@ -71,7 +71,7 @@ impl Event for VisitEvent {
         }
     }
 
-    fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop<EventType = Self>> {
+    fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop<Self, EventType = Self>> {
         None
     }
 }

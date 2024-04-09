@@ -18,7 +18,7 @@ pub struct BattleEventLoop {
     pub attack_turn: Turn,
 }
 
-impl EventLoop for BattleEventLoop {
+impl EventLoop<BattleEvent> for BattleEventLoop {
     type EventType = BattleEvent;
 
     fn get_event_loop_interval(&self) -> u64 {

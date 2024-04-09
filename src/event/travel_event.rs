@@ -4,7 +4,7 @@ use crate::{
     game_state::GameState,
 };
 
-use super::{event_loop::EventLoop, visit_event::VisitEvent, Event, EventResponse, EventType};
+use super::{event_loop::EventLoop, visit_event::VisitEvent, Event, EventResponse};
 
 pub struct TravelEvent {
     locations: Vec<Location>,
@@ -39,7 +39,7 @@ impl Event for TravelEvent {
                 game_state.change_location_by_name(search.to_string());
 
                 Some(EventResponse {
-                    next_event: EventType::VisitEvent(VisitEvent::new(
+                    next_event: Box::new(VisitEvent::new(
                         game_state.get_current_location().clone(),
                         game_state.completed_locations.clone(),
                     )),
@@ -49,7 +49,7 @@ impl Event for TravelEvent {
         }
     }
 
-    fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop<EventType = Self>> {
+    fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop<Self, EventType = Self>> {
         None
     }
 }

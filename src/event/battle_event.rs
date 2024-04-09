@@ -13,7 +13,7 @@ use super::{
         EventLoop,
     },
     visit_event::VisitEvent,
-    Event, EventResponse, EventType,
+    Event, EventResponse,
 };
 
 pub enum BattleState {
@@ -69,7 +69,7 @@ impl Event for BattleEvent {
                 None
             }
             ActionType::Run => Some(EventResponse {
-                next_event: EventType::VisitEvent(VisitEvent::new(
+                next_event: Box::new(VisitEvent::new(
                     game_state.get_current_location().clone(),
                     game_state.completed_locations.clone(),
                 )),
@@ -78,7 +78,7 @@ impl Event for BattleEvent {
         }
     }
 
-    fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop<EventType = Self>> {
+    fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop<Self, EventType = Self>> {
         Some(&mut self.event_loop)
     }
 
