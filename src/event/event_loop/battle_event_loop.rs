@@ -45,15 +45,14 @@ impl EventLoop for BattleEventLoop {
             Turn::Player => {
                 result = player.attack(enemy);
 
-                if !enemy.is_alive() {
+                if enemy.is_alive() {
+                    self.attack_turn = Turn::Enemy;
+                } else {
                     result = format!("You defeated {}!", enemy.name);
+                    self.is_active = false;
                     // if let Some(reward_text) = self.game_state.go_to_next_encounter(player) {
                     //     result = format!("{}\n{}", result, reward_text);
                     // }
-
-                    self.attack_turn = Turn::Player;
-                } else {
-                    self.attack_turn = Turn::Enemy;
                 }
                 result
             }
@@ -61,10 +60,11 @@ impl EventLoop for BattleEventLoop {
                 result = enemy.attack(player);
 
                 if player.is_alive() {
+                    self.attack_turn = Turn::Player;
+                } else {
                     // self.game_state.state = PlayerState::GameOver;
                     result = format!("{} died!\nGame Over...", player.name);
-                } else {
-                    self.attack_turn = Turn::Player;
+                    self.is_active = false;
                 }
                 result
             }
