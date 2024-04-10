@@ -58,12 +58,15 @@ impl Event for VisitEvent {
         game_state: &mut GameState,
     ) -> Option<EventResponse> {
         match action_type {
-            ActionType::Travel => Some(EventResponse {
-                next_event: Box::new(TravelEvent::new(game_state.get_locations())),
-            }),
+            ActionType::Travel => {
+                let next_event = Box::new(TravelEvent::new(game_state.get_locations()));
+                Some(EventResponse::new(next_event))
+            }
             ActionType::Explore => match game_state.get_current_encounter() {
-                // Encounter::Battle(battle) => Some(EventType::BattleEvent::new(battle.clone())),
-                Encounter::Battle(battle) => None,
+                Encounter::Battle(battle) => {
+                    let next_event = Box::new(BattleEvent::new(battle.clone()));
+                    Some(EventResponse::new(next_event))
+                }
                 Encounter::BossFight(_) => None,
                 Encounter::Quest(_) => None,
             },
@@ -71,7 +74,7 @@ impl Event for VisitEvent {
         }
     }
 
-    fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop<Self, EventType = Self>> {
+    fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop> {
         None
     }
 }

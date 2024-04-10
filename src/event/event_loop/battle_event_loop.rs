@@ -1,7 +1,6 @@
 use crate::{
     characters::{enemy::Enemy, fighter::Fighter, player::Player},
     config::BATTLE_INTERVAL_SECONDS,
-    event::battle_event::BattleEvent,
 };
 
 use super::EventLoop;
@@ -14,22 +13,31 @@ pub enum Turn {
 
 #[derive(Clone)]
 pub struct BattleEventLoop {
+    pub is_active: bool,
     pub enemy: Enemy,
     pub attack_turn: Turn,
 }
 
-impl EventLoop<BattleEvent> for BattleEventLoop {
-    type EventType = BattleEvent;
+impl BattleEventLoop {
+    pub fn new(enemy: Enemy, attack_turn: Turn) -> BattleEventLoop {
+        BattleEventLoop {
+            is_active: false,
+            enemy,
+            attack_turn,
+        }
+    }
+}
 
+impl EventLoop for BattleEventLoop {
     fn get_event_loop_interval(&self) -> u64 {
         BATTLE_INTERVAL_SECONDS
     }
 
     fn is_event_loop_active(&self) -> bool {
-        false
+        self.is_active
     }
 
-    fn progress_event_loop(&mut self, player: &mut Player, event: BattleEvent) -> String {
+    fn progress_event_loop(&mut self, player: &mut Player) -> String {
         let mut result = String::new();
         let enemy = &mut self.enemy;
 

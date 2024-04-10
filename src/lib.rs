@@ -79,15 +79,16 @@ impl Game {
 
     pub fn handle_action(&mut self, search: &str) {
         if let Some(action) = self.current_event.find_action(search) {
-            if let Some(next_event) =
+            if let Some(event_response) =
                 self.current_event
                     .handle_action(search, action.class, &mut self.game_state)
             {
-                self.change_event(next_event);
+                self.change_event(event_response.next_event);
             }
         }
     }
 
+    // TODO Change this to use event_response
     pub fn get_action_response(&mut self, search: &str) -> Option<String> {
         match self.current_event.find_action(search) {
             Some(_) => {

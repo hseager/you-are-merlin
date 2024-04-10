@@ -16,27 +16,17 @@ use super::{
     Event, EventResponse,
 };
 
-pub enum BattleState {
-    Identifing,
-    Fighting,
-}
-
 pub struct BattleEvent {
     enemy: Enemy,
-    pub state: BattleState,
     event_loop: BattleEventLoop,
 }
 
 impl BattleEvent {
     pub fn new(battle: Battle) -> BattleEvent {
-        let event_loop = BattleEventLoop {
-            attack_turn: Turn::Player,
-            enemy: battle.enemy.clone(),
-        };
+        let event_loop = BattleEventLoop::new(battle.enemy.clone(), Turn::Player);
 
         BattleEvent {
             enemy: battle.enemy,
-            state: BattleState::Identifing,
             event_loop,
         }
     }
@@ -65,20 +55,21 @@ impl Event for BattleEvent {
     ) -> Option<EventResponse> {
         match action_type {
             ActionType::Attack => {
-                self.state = BattleState::Fighting;
+                self.event_loop.is_active = true;
                 None
             }
-            ActionType::Run => Some(EventResponse {
-                next_event: Box::new(VisitEvent::new(
+            ActionType::Run => {
+                let next_event = Box::new(VisitEvent::new(
                     game_state.get_current_location().clone(),
                     game_state.completed_locations.clone(),
-                )),
-            }),
+                ));
+                Some(EventResponse::new(next_event))
+            }
             _ => panic!("Unhandled action when handling action."),
         }
     }
 
-    fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop<Self, EventType = Self>> {
+    fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop> {
         Some(&mut self.event_loop)
     }
 

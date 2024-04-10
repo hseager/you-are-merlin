@@ -1,5 +1,6 @@
 pub mod battle_event;
 pub mod event_loop;
+pub mod event_response;
 pub mod travel_event;
 pub mod visit_event;
 
@@ -8,11 +9,8 @@ use crate::{
     game_state::GameState,
 };
 
-use crate::event::event_loop::EventLoop;
-
-pub struct EventResponse {
-    pub next_event: Box<dyn Event>,
-}
+use self::event_loop::EventLoop;
+use self::event_response::EventResponse;
 
 pub trait Event {
     fn prompt(&self) -> String;
@@ -37,5 +35,6 @@ pub trait Event {
             .cloned()
     }
 
-    fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop<Self, EventType = Self>>;
+    // fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop<Self, EventType = Self>>;
+    fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop>;
 }
