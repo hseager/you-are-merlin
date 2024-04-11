@@ -2,7 +2,7 @@ use colored::Colorize;
 
 use crate::{
     actions::{Action, ActionType},
-    characters::enemy::Enemy,
+    characters::{enemy::Enemy, player::Player},
     game_data::entities::Battle,
     game_state::GameState,
 };
@@ -52,6 +52,7 @@ impl Event for BattleEvent {
         _search: &str,
         action_type: ActionType,
         game_state: &mut GameState,
+        _player: &mut Player,
     ) -> Option<EventResponse> {
         match action_type {
             ActionType::Attack => {
@@ -63,7 +64,7 @@ impl Event for BattleEvent {
                     game_state.get_current_location().clone(),
                     game_state.completed_locations.clone(),
                 ));
-                Some(EventResponse::new(next_event))
+                Some(EventResponse::new(next_event, None))
             }
             _ => panic!("Unhandled action when handling action."),
         }

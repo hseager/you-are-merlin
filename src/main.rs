@@ -19,11 +19,9 @@ fn main() {
             .read_line(&mut input)
             .expect("Failed to read line");
 
-        if let Some(response) = game.get_action_response(input.trim()) {
+        if let Some(response) = game.handle_action(input.trim()) {
             println!("{response}");
         }
-
-        game.handle_action(input.trim());
 
         while game.has_event_loop() {
             println!("{}", game.progress_event_loop());

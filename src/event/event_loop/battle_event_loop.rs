@@ -1,8 +1,10 @@
+use colored::Colorize;
+
 use crate::{
     characters::{enemy::Enemy, fighter::Fighter, player::Player},
     config::BATTLE_INTERVAL_SECONDS,
-    event::{battle_event::BattleEvent, travel_event::TravelEvent},
-    game_data::entities::Encounter,
+    event::{battle_event::BattleEvent, reward_event::RewardEvent, travel_event::TravelEvent},
+    game_data::entities::{Encounter, LocationType},
     game_state::GameState,
 };
 
@@ -37,18 +39,35 @@ impl BattleEventLoop {
     ) -> EventLoopResponse {
         self.is_active = false;
 
+        // TODO other encounters
         match game_state.go_to_next_encounter() {
-            Encounter::Battle(battle) => {
-                EventLoopResponse::Complete(message, Box::new(BattleEvent::new(battle.clone())))
+            Some(encounter) => match encounter {
+                Encounter::Battle(battle) => {
+                    EventLoopResponse::Complete(message, Box::new(BattleEvent::new(battle.clone())))
+                }
+                Encounter::Quest(_) => EventLoopResponse::Complete(
+                    message,
+                    Box::new(TravelEvent::new(game_state.get_locations())),
+                ),
+                Encounter::BossFight(_) => EventLoopResponse::Complete(
+                    message,
+                    Box::new(TravelEvent::new(game_state.get_locations())),
+                ),
+            },
+            None => {
+                let current_location = game_state.get_current_location();
+
+                match current_location.class {
+                    LocationType::Dungeon(quest_item) => EventLoopResponse::Complete(
+                        message,
+                        Box::new(RewardEvent::new(
+                            game_state.get_current_location().clone(),
+                            quest_item.bold(),
+                        )),
+                    ),
+                    _ => panic!("Shouldn't be anything apart from a Dungeon at the end of a battle.. For now..."),
+                }
             }
-            Encounter::Quest(_) => EventLoopResponse::Complete(
-                message,
-                Box::new(TravelEvent::new(game_state.get_locations())),
-            ),
-            Encounter::BossFight(_) => EventLoopResponse::Complete(
-                message,
-                Box::new(TravelEvent::new(game_state.get_locations())),
-            ),
         }
 
         // let next_encounter = self.current_encounter + 1;
@@ -72,9 +91,9 @@ impl BattleEventLoop {
         // }
     }
 
-    // pub fn handle_battle_fail(&mut self) {
-    //     self.is_active = false;
-    // }
+    pub fn handle_battle_fail(&mut self) {
+        self.is_active = false;
+    }
 }
 
 impl EventLoop for BattleEventLoop {
@@ -91,40 +110,32 @@ impl EventLoop for BattleEventLoop {
         player: &mut Player,
         game_state: &mut GameState,
     ) -> EventLoopResponse {
-        let mut result = String::new();
+        let mut response_text: String;
         let enemy = &mut self.enemy;
 
         match self.attack_turn {
             Turn::Player => {
-                result = player.attack(enemy);
+                response_text = player.attack(enemy);
 
                 if enemy.is_alive() {
                     self.attack_turn = Turn::Enemy;
                 } else {
-                    self.is_active = false;
-                    result = format!("You defeated {}!", enemy.name);
-                    // self.handle_battle_success(game_state, current_event);
-                    // if let Some(reward_text) = self.game_state.go_to_next_encounter(player) {
-                    //     result = format!("{}\n{}", result, reward_text);
-                    // }
-
-                    return self.handle_battle_success(game_state, result);
+                    response_text = format!("You defeated {}!", enemy.name);
+                    return self.handle_battle_success(game_state, response_text);
                 }
-                // result
-                EventLoopResponse::InProgress(result)
+                EventLoopResponse::InProgress(response_text)
             }
             Turn::Enemy => {
-                result = enemy.attack(player);
+                response_text = enemy.attack(player);
 
                 if player.is_alive() {
                     self.attack_turn = Turn::Player;
                 } else {
-                    self.is_active = false;
                     // self.game_state.state = PlayerState::GameOver;
-                    result = format!("{} died!\nGame Over...", player.name);
-                    // self.handle_battle_fail();
+                    response_text = format!("{} died!\nGame Over...", player.name);
+                    self.handle_battle_fail();
                 }
-                EventLoopResponse::InProgress(result)
+                EventLoopResponse::InProgress(response_text)
             }
         }
     }

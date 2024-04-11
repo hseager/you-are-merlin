@@ -2,6 +2,7 @@ use colored::Colorize;
 
 use crate::{
     actions::{Action, ActionType},
+    characters::player::Player,
     game_data::entities::{Encounter, Location, LocationType},
     game_state::GameState,
 };
@@ -56,16 +57,17 @@ impl Event for VisitEvent {
         _search: &str,
         action_type: ActionType,
         game_state: &mut GameState,
+        _player: &mut Player,
     ) -> Option<EventResponse> {
         match action_type {
             ActionType::Travel => {
                 let next_event = Box::new(TravelEvent::new(game_state.get_locations()));
-                Some(EventResponse::new(next_event))
+                Some(EventResponse::new(next_event, None))
             }
             ActionType::Explore => match game_state.get_current_encounter() {
                 Encounter::Battle(battle) => {
                     let next_event = Box::new(BattleEvent::new(battle.clone()));
-                    Some(EventResponse::new(next_event))
+                    Some(EventResponse::new(next_event, None))
                 }
                 Encounter::BossFight(_) => None,
                 Encounter::Quest(_) => None,

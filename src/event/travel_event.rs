@@ -1,5 +1,6 @@
 use crate::{
     actions::{Action, ActionType},
+    characters::player::Player,
     game_data::entities::Location,
     game_state::GameState,
 };
@@ -33,19 +34,20 @@ impl Event for TravelEvent {
         search: &str,
         action_type: ActionType,
         game_state: &mut GameState,
+        _player: &mut Player,
     ) -> Option<EventResponse> {
         match action_type {
             ActionType::MoveToLocation => {
                 game_state.change_location_by_name(search.to_string());
 
-                Some(EventResponse {
-                    next_event: Box::new(VisitEvent::new(
-                        game_state.get_current_location().clone(),
-                        game_state.completed_locations.clone(),
-                    )),
-                })
+                let next_event = Box::new(VisitEvent::new(
+                    game_state.get_current_location().clone(),
+                    game_state.completed_locations.clone(),
+                ));
+
+                Some(EventResponse::new(next_event, None))
             }
-            _ => None,
+            _ => panic!("Unhandled action when handling action."),
         }
     }
 
