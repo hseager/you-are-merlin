@@ -26,6 +26,10 @@ impl BattleEventLoop {
             attack_turn,
         }
     }
+
+    pub fn handle_battle_success(&self) {}
+
+    pub fn handle_battle_fail(&self) {}
 }
 
 impl EventLoop for BattleEventLoop {
@@ -50,6 +54,7 @@ impl EventLoop for BattleEventLoop {
                 } else {
                     result = format!("You defeated {}!", enemy.name);
                     self.is_active = false;
+                    self.handle_battle_success();
                     // if let Some(reward_text) = self.game_state.go_to_next_encounter(player) {
                     //     result = format!("{}\n{}", result, reward_text);
                     // }

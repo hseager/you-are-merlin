@@ -72,8 +72,4 @@ impl Event for BattleEvent {
     fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop> {
         Some(&mut self.event_loop)
     }
-
-    // fn progress_event_loop(&self) {
-    //     self.event_loop.progress_event_loop(player, self);
-    // }
 }
