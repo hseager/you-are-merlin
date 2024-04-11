@@ -1,6 +1,6 @@
 use characters::player::Player;
 use colored::Colorize;
-use event::Event;
+use event::{event_loop::event_loop_response::EventLoopResponse, Event};
 use game_state::GameState;
 use theme::theme_data::get_themes;
 use utilities::map_text_color;
@@ -106,7 +106,15 @@ impl Game {
     pub fn progress_event_loop(&mut self) -> String {
         let mut result = String::new();
         if let Some(event_loop) = self.current_event.get_event_loop() {
-            result = event_loop.progress_event_loop(&mut self.player);
+            let response = event_loop.progress_event_loop(&mut self.player, &mut self.game_state);
+
+            match response {
+                EventLoopResponse::InProgress(response_text) => result = response_text,
+                EventLoopResponse::Complete(response_text, next_event) => {
+                    self.change_event(next_event);
+                    result = response_text;
+                }
+            }
         }
         result
     }

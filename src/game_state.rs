@@ -61,7 +61,7 @@ impl GameState {
             .expect("Failed to get encounter.")
     }
 
-    pub fn go_to_next_encounter(&mut self, player: &mut Player) -> Option<String> {
+    pub fn go_to_next_encounter(&mut self) -> &Encounter {
         let next_encounter = self.current_encounter + 1;
         let location = self.get_current_location();
 
@@ -69,16 +69,17 @@ impl GameState {
             self.current_encounter = next_encounter;
 
             let encounter = self.get_current_encounter();
-            match encounter {
-                Encounter::Battle(battle) => {
-                    self.current_event = Box::new(BattleEvent::new(battle.clone()));
-                }
-                Encounter::BossFight(_) => {}
-                Encounter::Quest(quest) => self.state = PlayerState::Quest(quest.clone()),
-            }
-            None
+            // match encounter {
+            //     Encounter::Battle(battle) => {
+            //         self.current_event = Box::new(BattleEvent::new(battle.clone()));
+            //     }
+            //     Encounter::BossFight(_) => {}
+            //     Encounter::Quest(quest) => self.state = PlayerState::Quest(quest.clone()),
+            // }
+            encounter
         } else {
-            self.handle_end_of_encounters(location.clone(), player)
+            // self.handle_end_of_encounters(location.clone(), player)
+            self.get_current_encounter()
         }
     }
 }
