@@ -12,7 +12,10 @@ fn main() {
     while game.is_running() {
         let mut input = String::new();
 
-        println!("{}", game.get_prompt());
+        if let Some(prompt) = game.get_prompt() {
+            println!("{prompt}");
+        }
+
         println!("{}", game.get_actions());
 
         io::stdin()

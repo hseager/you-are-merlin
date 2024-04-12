@@ -37,19 +37,19 @@ impl SideQuestEvent {
 }
 
 impl Event for SideQuestEvent {
-    fn prompt(&self) -> String {
+    fn prompt(&self) -> Option<String> {
         if self.is_quest_accepted() {
-            format!(
+            Some(format!(
                 "You find a calm area. {} wants to ask you something.\n\
                 \"Do you have it? Please, bring me {} back from {}.\"",
                 self.side_quest.character, self.side_quest.item, self.side_quest.location_name
-            )
+            ))
         } else {
-            format!(
+            Some(format!(
                 "You find a calm area. {} wants to ask you something.\n\
                 \"Will you find {} from {} and bring it back to me? I will make it worth your while!\"",
                 self.side_quest.character, self.side_quest.item, self.side_quest.location_name
-            )
+            ))
         }
     }
 
@@ -72,14 +72,14 @@ impl Event for SideQuestEvent {
         action_type: ActionType,
         game_state: &mut GameState,
         player: &mut Player,
-    ) -> Option<EventResponse> {
+    ) -> EventResponse {
         match action_type {
             ActionType::Run => {
                 let next_event = Box::new(VisitEvent::new(
                     game_state.get_current_location().clone(),
                     game_state.completed_locations.clone(),
                 ));
-                Some(EventResponse::new(next_event, None))
+                EventResponse::new(Some(next_event), None)
             }
             ActionType::Accept => {
                 game_state.accepted_quests.push(self.side_quest.clone());
@@ -89,10 +89,10 @@ impl Event for SideQuestEvent {
                     game_state.completed_locations.clone(),
                 ));
 
-                Some(EventResponse::new(
-                    next_event,
+                EventResponse::new(
+                    Some(next_event),
                     Some("You accept their request.".to_string()),
-                ))
+                )
             }
             ActionType::GiveItem => {
                 game_state
@@ -113,7 +113,8 @@ impl Event for SideQuestEvent {
                     game_state.get_current_location().clone(),
                     game_state.completed_locations.clone(),
                 ));
-                Some(EventResponse::new(next_event, Some(response_text)))
+
+                EventResponse::new(Some(next_event), Some(response_text))
             }
             _ => panic!("Unhandled action when handling action."),
         }

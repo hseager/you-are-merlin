@@ -18,8 +18,8 @@ impl TravelEvent {
 }
 
 impl Event for TravelEvent {
-    fn prompt(&self) -> String {
-        "Where would you like to go?".to_string()
+    fn prompt(&self) -> Option<String> {
+        Some("Where would you like to go?".to_string())
     }
 
     fn actions(&self) -> Vec<Action> {
@@ -35,7 +35,7 @@ impl Event for TravelEvent {
         action_type: ActionType,
         game_state: &mut GameState,
         _player: &mut Player,
-    ) -> Option<EventResponse> {
+    ) -> EventResponse {
         match action_type {
             ActionType::MoveToLocation => {
                 game_state.change_location_by_name(search.to_string());
@@ -45,7 +45,7 @@ impl Event for TravelEvent {
                     game_state.completed_locations.clone(),
                 ));
 
-                Some(EventResponse::new(next_event, None))
+                EventResponse::new(Some(next_event), None)
             }
             _ => panic!("Unhandled action when handling action."),
         }

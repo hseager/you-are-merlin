@@ -27,11 +27,11 @@ impl VisitEvent {
 }
 
 impl Event for VisitEvent {
-    fn prompt(&self) -> String {
-        format!(
+    fn prompt(&self) -> Option<String> {
+        Some(format!(
             "You are currently visiting {}. {}\nWhat would you like to do?",
             &self.current_location.name, &self.current_location.description
-        )
+        ))
     }
 
     fn actions(&self) -> Vec<Action> {
@@ -58,16 +58,16 @@ impl Event for VisitEvent {
         action_type: ActionType,
         game_state: &mut GameState,
         player: &mut Player,
-    ) -> Option<EventResponse> {
+    ) -> EventResponse {
         match action_type {
             ActionType::Travel => {
                 let next_event = Box::new(TravelEvent::new(game_state.get_locations()));
-                Some(EventResponse::new(next_event, None))
+                EventResponse::new(Some(next_event), None)
             }
             ActionType::Explore => match game_state.get_current_encounter() {
                 Encounter::Battle(battle) => {
                     let next_event = Box::new(BattleEvent::new(battle.clone()));
-                    Some(EventResponse::new(next_event, None))
+                    EventResponse::new(Some(next_event), None)
                 }
                 Encounter::Quest(quest) => match quest {
                     Quest::SideQuest(quest) => {
@@ -76,9 +76,9 @@ impl Event for VisitEvent {
                             game_state.accepted_quests.clone(),
                             player.has_item_in_inventory(&quest.item),
                         ));
-                        Some(EventResponse::new(next_event, None))
+                        EventResponse::new(Some(next_event), None)
                     }
-                    Quest::MainQuest(_) => None,
+                    Quest::MainQuest(_) => panic!("Not implemented MainQuest while visiting yet?"),
                 },
                 Encounter::BossFight(_) => panic!("Shouldn't be a boss fight when visiting?"),
             },

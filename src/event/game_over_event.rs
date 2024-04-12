@@ -10,8 +10,8 @@ use super::{event_loop::EventLoop, Event, EventResponse};
 pub struct GameOverEvent {}
 
 impl Event for GameOverEvent {
-    fn prompt(&self) -> String {
-        String::new()
+    fn prompt(&self) -> Option<String> {
+        None
     }
 
     fn actions(&self) -> Vec<Action> {
@@ -24,8 +24,8 @@ impl Event for GameOverEvent {
         _action_type: ActionType,
         _game_state: &mut GameState,
         _player: &mut Player,
-    ) -> Option<EventResponse> {
-        None
+    ) -> EventResponse {
+        EventResponse::new(None, None)
     }
 
     fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop> {

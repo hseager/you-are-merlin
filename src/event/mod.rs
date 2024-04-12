@@ -17,7 +17,7 @@ use self::event_loop::EventLoop;
 use self::event_response::EventResponse;
 
 pub trait Event {
-    fn prompt(&self) -> String;
+    fn prompt(&self) -> Option<String>;
     fn actions(&self) -> Vec<Action>;
     fn handle_action(
         &mut self,
@@ -25,7 +25,7 @@ pub trait Event {
         action_type: ActionType,
         game_state: &mut GameState,
         player: &mut Player,
-    ) -> Option<EventResponse>;
+    ) -> EventResponse;
 
     fn find_action(&self, search: &str) -> Option<Action> {
         self.actions()

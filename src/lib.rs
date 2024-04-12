@@ -8,7 +8,7 @@ use wasm_bindgen::prelude::*;
 
 use crate::{
     config::{PLAYER_ATTACK, PLAYER_LIFE},
-    event::visit_event::VisitEvent,
+    event::{event_response::EventResponse, visit_event::VisitEvent},
     game_data::GameData,
     theme::get_theme,
 };
@@ -63,7 +63,7 @@ impl Game {
         self.game_state.is_running
     }
 
-    pub fn get_prompt(&self) -> String {
+    pub fn get_prompt(&self) -> Option<String> {
         self.current_event.prompt()
     }
 
@@ -78,18 +78,21 @@ impl Game {
 
     pub fn handle_action(&mut self, search: &str) -> Option<String> {
         if let Some(action) = self.current_event.find_action(search) {
-            if let Some(event_response) = self.current_event.handle_action(
+            let EventResponse {
+                next_event,
+                message,
+            } = self.current_event.handle_action(
                 search,
                 action.class,
                 &mut self.game_state,
                 &mut self.player,
-            ) {
-                self.change_event(event_response.next_event);
+            );
 
-                event_response.message
-            } else {
-                None
+            if let Some(event) = next_event {
+                self.change_event(event);
             }
+
+            message
         } else {
             Some(format!("This isn't the time to use {}!", search))
         }

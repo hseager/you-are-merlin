@@ -33,11 +33,11 @@ impl BattleEvent {
 }
 
 impl Event for BattleEvent {
-    fn prompt(&self) -> String {
-        format!(
+    fn prompt(&self) -> Option<String> {
+        Some(format!(
             "A wild {} appears! (life: {}, attack: {})\n{}",
             &self.enemy.name, &self.enemy.life, &self.enemy.attack, &self.enemy.description
-        )
+        ))
     }
 
     fn actions(&self) -> Vec<Action> {
@@ -53,18 +53,18 @@ impl Event for BattleEvent {
         action_type: ActionType,
         game_state: &mut GameState,
         _player: &mut Player,
-    ) -> Option<EventResponse> {
+    ) -> EventResponse {
         match action_type {
             ActionType::Attack => {
                 self.event_loop.is_active = true;
-                None
+                EventResponse::new(None, None)
             }
             ActionType::Run => {
                 let next_event = Box::new(VisitEvent::new(
                     game_state.get_current_location().clone(),
                     game_state.completed_locations.clone(),
                 ));
-                Some(EventResponse::new(next_event, None))
+                EventResponse::new(Some(next_event), None)
             }
             _ => panic!("Unhandled action when handling action."),
         }

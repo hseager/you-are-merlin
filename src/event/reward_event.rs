@@ -8,11 +8,20 @@ use crate::{
     items::create_item,
 };
 
-use super::{event_loop::EventLoop, event_response::EventResponse, visit_event::VisitEvent, Event};
+use super::{
+    event_loop::EventLoop, event_response::EventResponse, travel_event::TravelEvent,
+    visit_event::VisitEvent, Event,
+};
+
+enum RewardState {
+    Discover,
+    Recieved,
+}
 
 pub struct RewardEvent {
     location: Location,
     quest_item: ColoredString,
+    state: RewardState,
 }
 
 impl RewardEvent {
@@ -20,6 +29,7 @@ impl RewardEvent {
         RewardEvent {
             location,
             quest_item,
+            state: RewardState::Discover,
         }
     }
 
@@ -30,16 +40,24 @@ impl RewardEvent {
 }
 
 impl Event for RewardEvent {
-    fn prompt(&self) -> String {
-        format!(
-            "You successfully clear {} of dangers and stumble upon a safe area.\n\
-            You spot a chest up ahead.",
-            self.location.name
-        )
+    fn prompt(&self) -> Option<String> {
+        if let RewardState::Discover = self.state {
+            Some(format!(
+                "You successfully clear {} of dangers and stumble upon a safe area.\n\
+                You spot a chest up ahead.",
+                self.location.name
+            ))
+        } else {
+            None
+        }
     }
 
     fn actions(&self) -> Vec<Action> {
-        vec![Action::new(ActionType::Run, "Open".yellow())]
+        if let RewardState::Discover = self.state {
+            vec![Action::new(ActionType::Open, "Open".yellow())]
+        } else {
+            vec![Action::new(ActionType::Continue, "Continue".green())]
+        }
     }
 
     fn handle_action(
@@ -48,9 +66,9 @@ impl Event for RewardEvent {
         action_type: ActionType,
         game_state: &mut GameState,
         player: &mut Player,
-    ) -> Option<EventResponse> {
+    ) -> EventResponse {
         match action_type {
-            ActionType::Run => {
+            ActionType::Open => {
                 let mut response_text: String;
 
                 let item = create_item(&mut game_state.items);
@@ -67,15 +85,16 @@ impl Event for RewardEvent {
                     player.add_item_to_inventory(self.quest_item.clone());
                 }
 
-                // TODO Maybe do continue or travel event here
-                let next_event = Box::new(VisitEvent::new(
-                    game_state.get_current_location().clone(),
-                    game_state.completed_locations.clone(),
-                ));
-
                 game_state.reset_encounters();
 
-                Some(EventResponse::new(next_event, Some(response_text)))
+                self.state = RewardState::Recieved;
+
+                EventResponse::new(None, Some(response_text))
+            }
+            ActionType::Continue => {
+                let next_event = Box::new(TravelEvent::new(game_state.get_locations()));
+
+                EventResponse::new(Some(next_event), None)
             }
             _ => panic!("Unhandled action when handling action."),
         }

@@ -16,6 +16,7 @@ pub enum ActionType {
     Accept,
     Continue,
     GiveItem,
+    Open,
 }
 
 #[derive(Clone)]
