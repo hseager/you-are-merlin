@@ -3,7 +3,10 @@ use colored::Colorize;
 use crate::{
     characters::{enemy::Enemy, fighter::Fighter, player::Player},
     config::BATTLE_INTERVAL_SECONDS,
-    event::{battle_event::BattleEvent, game_over_event::GameOverEvent, reward_event::RewardEvent},
+    event::{
+        battle_event::BattleEvent, boss_fight_event::BossFightEvent,
+        game_over_event::GameOverEvent, reward_event::RewardEvent,
+    },
     game_data::entities::{Encounter, LocationType},
     game_state::GameState,
 };
@@ -39,12 +42,27 @@ impl BattleEventLoop {
     ) -> EventLoopResponse {
         self.is_active = false;
 
+        match game_state.get_current_encounter() {
+            Encounter::Battle(_) => self.handle_normal_battle_success(game_state, message),
+            Encounter::BossFight(_) => self.handle_boss_battle_success(game_state),
+            _ => panic!("Unhandled encounter at the end of a battle loop."),
+        }
+    }
+
+    fn handle_normal_battle_success(
+        &self,
+        game_state: &mut GameState,
+        message: String,
+    ) -> EventLoopResponse {
         match game_state.go_to_next_encounter() {
             Some(encounter) => match encounter {
                 Encounter::Battle(battle) => {
                     EventLoopResponse::Complete(message, Box::new(BattleEvent::new(battle.clone())))
                 }
-                Encounter::BossFight(_) => panic!("Unimplemented handling boss fight after battle"),
+                Encounter::BossFight(battle) => EventLoopResponse::Complete(
+                    message,
+                    Box::new(BossFightEvent::new(battle.clone())),
+                ),
                 Encounter::Quest(_) => panic!("Not implemented quests after a battle. yet..."),
             },
             None => {
@@ -64,6 +82,18 @@ impl BattleEventLoop {
         }
     }
 
+    fn handle_boss_battle_success(&self, game_state: &mut GameState) -> EventLoopResponse {
+        game_state.is_running = false;
+
+        EventLoopResponse::Complete(
+            format!(
+                "You defeated {}! {} is saved!\nYou win!",
+                &self.enemy.name, game_state.game_data.world_name
+            ),
+            Box::new(GameOverEvent {}),
+        )
+    }
+
     pub fn handle_battle_fail(
         &mut self,
         response_text: String,
@@ -71,8 +101,8 @@ impl BattleEventLoop {
         player: &mut Player,
     ) -> EventLoopResponse {
         self.is_active = false;
-
         game_state.is_running = false;
+
         EventLoopResponse::Complete(
             format!("{}\n{} died!\nGame Over...", response_text, player.name),
             Box::new(GameOverEvent {}),

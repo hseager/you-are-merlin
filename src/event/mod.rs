@@ -1,4 +1,5 @@
 pub mod battle_event;
+pub mod boss_fight_event;
 pub mod event_loop;
 pub mod event_response;
 pub mod game_over_event;
