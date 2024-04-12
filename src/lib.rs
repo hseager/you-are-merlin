@@ -132,7 +132,7 @@ impl Game {
         }
     }
 
-    pub fn get_event_loop_interval(&mut self) -> u64 {
+    pub fn get_event_loop_interval(&mut self) -> u8 {
         if let Some(event_loop) = self.current_event.get_event_loop() {
             event_loop.get_event_loop_interval()
         } else {

@@ -111,7 +111,7 @@ impl BattleEventLoop {
 }
 
 impl EventLoop for BattleEventLoop {
-    fn get_event_loop_interval(&self) -> u64 {
+    fn get_event_loop_interval(&self) -> u8 {
         BATTLE_INTERVAL_SECONDS
     }
 

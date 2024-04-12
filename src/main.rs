@@ -30,7 +30,7 @@ fn main() {
 
         while game.has_event_loop() {
             println!("{}", game.progress_event_loop());
-            sleep(Duration::from_secs(game.get_event_loop_interval()));
+            sleep(Duration::from_secs(game.get_event_loop_interval().into()));
         }
     }
 }

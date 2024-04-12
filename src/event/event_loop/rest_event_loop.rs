@@ -16,7 +16,7 @@ impl RestEventLoop {
 }
 
 impl EventLoop for RestEventLoop {
-    fn get_event_loop_interval(&self) -> u64 {
+    fn get_event_loop_interval(&self) -> u8 {
         REST_INTERVAL_SECONDS
     }
 

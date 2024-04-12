@@ -8,7 +8,7 @@ pub mod rest_event_loop;
 
 pub trait EventLoop {
     fn is_event_loop_active(&self) -> bool;
-    fn get_event_loop_interval(&self) -> u64;
+    fn get_event_loop_interval(&self) -> u8;
     fn progress_event_loop(
         &mut self,
         player: &mut Player,
