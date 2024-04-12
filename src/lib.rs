@@ -67,13 +67,20 @@ impl Game {
         self.current_event.prompt()
     }
 
-    pub fn get_actions(&self) -> String {
-        self.current_event
-            .actions()
-            .iter()
-            .map(|action| action.name.to_string())
-            .collect::<Vec<String>>()
-            .join(", ")
+    pub fn get_actions(&self) -> Option<String> {
+        let actions = self.current_event.actions();
+
+        if actions.len() > 0 {
+            Some(
+                actions
+                    .iter()
+                    .map(|action| action.name.to_string())
+                    .collect::<Vec<String>>()
+                    .join(", "),
+            )
+        } else {
+            None
+        }
     }
 
     pub fn handle_action(&mut self, search: &str) -> Option<String> {

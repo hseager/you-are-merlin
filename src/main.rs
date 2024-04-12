@@ -16,11 +16,13 @@ fn main() {
             println!("{prompt}");
         }
 
-        println!("{}", game.get_actions());
+        if let Some(actions) = game.get_actions() {
+            println!("{}", actions);
 
-        io::stdin()
-            .read_line(&mut input)
-            .expect("Failed to read line");
+            io::stdin()
+                .read_line(&mut input)
+                .expect("Failed to read line");
+        }
 
         if let Some(response) = game.handle_action(input.trim()) {
             println!("{response}");

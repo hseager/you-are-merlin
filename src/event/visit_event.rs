@@ -8,8 +8,8 @@ use crate::{
 };
 
 use super::{
-    battle_event::BattleEvent, event_loop::EventLoop, side_quest_event::SideQuestEvent,
-    travel_event::TravelEvent, Event, EventResponse,
+    battle_event::BattleEvent, event_loop::EventLoop, rest_event::RestEvent,
+    side_quest_event::SideQuestEvent, travel_event::TravelEvent, Event, EventResponse,
 };
 
 pub struct VisitEvent {
@@ -62,6 +62,10 @@ impl Event for VisitEvent {
         match action_type {
             ActionType::Travel => {
                 let next_event = Box::new(TravelEvent::new(game_state.get_locations()));
+                EventResponse::new(Some(next_event), None)
+            }
+            ActionType::Rest => {
+                let next_event = Box::new(RestEvent {});
                 EventResponse::new(Some(next_event), None)
             }
             ActionType::Explore => match game_state.get_current_encounter() {
