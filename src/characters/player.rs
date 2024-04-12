@@ -1,6 +1,6 @@
 use colored::ColoredString;
 
-use crate::{battle_manager::calculate_damage, config::REST_HEAL_AMOUNT, items::Item};
+use crate::{characters::fighter::calculate_damage, config::REST_HEAL_AMOUNT, items::Item};
 
 use super::fighter::Fighter;
 
@@ -13,6 +13,16 @@ pub struct Player {
 }
 
 impl Player {
+    pub fn new(name: ColoredString, life: i16, attack: u16) -> Player {
+        Player {
+            name,
+            max_life: life,
+            life,
+            attack,
+            inventory: Vec::new(),
+        }
+    }
+
     pub fn add_item_to_inventory(&mut self, item: ColoredString) {
         self.inventory.push(item);
     }

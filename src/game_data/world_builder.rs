@@ -2,8 +2,8 @@ use colored::Colorize;
 use rand::{seq::SliceRandom, thread_rng};
 
 use crate::{
-    battle_manager::map_theme_enemy_difficulty_to_stats,
     characters::enemy::Enemy,
+    config::{ENEMY_BOSS_STATS, ENEMY_EASY_STATS, ENEMY_HARD_STATS, ENEMY_MEDIUM_STATS},
     theme::{Theme, ThemeLocation},
     utilities::map_text_color,
 };
@@ -159,4 +159,13 @@ fn add_main_quest(
     location
         .encounters
         .push(Encounter::BossFight(Battle { enemy: boss }));
+}
+
+fn map_theme_enemy_difficulty_to_stats(difficulty: EnemyDifficulty) -> (i16, u16) {
+    match difficulty {
+        EnemyDifficulty::Easy => ENEMY_EASY_STATS,
+        EnemyDifficulty::Normal => ENEMY_MEDIUM_STATS,
+        EnemyDifficulty::Hard => ENEMY_HARD_STATS,
+        EnemyDifficulty::Boss => ENEMY_BOSS_STATS,
+    }
 }

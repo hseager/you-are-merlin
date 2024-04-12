@@ -1,43 +1,36 @@
 use std::{io, thread::sleep, time::Duration};
 
 use colored::Colorize;
-use you_are_merlin::{
-    config::{BATTLE_INTERVAL_SECONDS, REST_INTERVAL_SECONDS},
-    get_theme_display_list,
-    utilities::spacer,
-    Game,
-};
+use you_are_merlin::{get_theme_display_list, utilities::spacer, Game};
 
 fn main() {
     let theme = select_theme();
     let mut game = Game::new(theme);
 
-    println!("{}", game.get_initial_prompt());
+    println!("{}", game.get_intro());
 
     while game.is_running() {
         let mut input = String::new();
 
-        println!("{}", game.get_prompt());
-        println!("{}", game.get_actions_display_list());
+        if let Some(prompt) = game.get_prompt() {
+            println!("{prompt}");
+        }
 
-        io::stdin()
-            .read_line(&mut input)
-            .expect("Failed to read line");
+        if let Some(actions) = game.get_actions() {
+            println!("{}", actions);
 
-        if let Some(response) = game.handle_action(input) {
+            io::stdin()
+                .read_line(&mut input)
+                .expect("Failed to read line");
+        }
+
+        if let Some(response) = game.handle_action(input.trim()) {
             println!("{response}");
         }
 
-        // This logic shouldn't live here, but need to find a way to handle loops & sleep in both rust CLI and WASM...
-        while game.player_is_healing() {
-            println!("{}", game.heal_player());
-            sleep(Duration::from_secs(REST_INTERVAL_SECONDS as u64));
-        }
-
-        // This logic shouldn't live here, but need to find a way to handle loops & sleep in both rust CLI and WASM...
-        while game.player_is_fighting() {
-            println!("{}", game.handle_battle());
-            sleep(Duration::from_secs(BATTLE_INTERVAL_SECONDS as u64));
+        while game.has_event_loop() {
+            println!("{}", game.progress_event_loop());
+            sleep(Duration::from_secs(game.get_event_loop_interval()));
         }
     }
 }
@@ -49,7 +42,7 @@ fn select_theme() -> String {
     let mut input = String::new();
     io::stdin()
         .read_line(&mut input)
-        .expect("Failed to theme selection.");
+        .expect("Failed to get theme selection.");
 
     spacer();
 

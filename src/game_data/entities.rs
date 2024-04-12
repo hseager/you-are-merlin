@@ -42,14 +42,6 @@ pub struct SideQuest {
     pub item: ColoredString,
 }
 
-impl SideQuest {
-    pub fn is_accepted(&self, accepted_quests: Vec<SideQuest>) -> bool {
-        accepted_quests
-            .iter()
-            .any(|q| q.character == self.character)
-    }
-}
-
 #[derive(Clone, Debug)]
 pub struct MainQuest {
     pub character: ColoredString,
