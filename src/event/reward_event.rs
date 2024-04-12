@@ -9,8 +9,7 @@ use crate::{
 };
 
 use super::{
-    event_loop::EventLoop, event_response::EventResponse, travel_event::TravelEvent,
-    visit_event::VisitEvent, Event,
+    event_loop::EventLoop, event_response::EventResponse, travel_event::TravelEvent, Event,
 };
 
 enum RewardState {

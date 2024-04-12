@@ -4,9 +4,22 @@ use crate::{
     game_state::GameState,
 };
 
-use super::{event_loop::EventLoop, Event, EventResponse};
+use super::{
+    event_loop::{rest_event_loop::RestEventLoop, EventLoop},
+    Event, EventResponse,
+};
 
-pub struct RestEvent {}
+pub struct RestEvent {
+    event_loop: RestEventLoop,
+}
+
+impl RestEvent {
+    pub fn new() -> RestEvent {
+        let event_loop = RestEventLoop::new();
+
+        RestEvent { event_loop }
+    }
+}
 
 impl Event for RestEvent {
     fn prompt(&self) -> Option<String> {
@@ -28,6 +41,6 @@ impl Event for RestEvent {
     }
 
     fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop> {
-        None
+        Some(&mut self.event_loop)
     }
 }

@@ -70,7 +70,7 @@ impl Game {
     pub fn get_actions(&self) -> Option<String> {
         let actions = self.current_event.actions();
 
-        if actions.len() > 0 {
+        if !actions.is_empty() {
             Some(
                 actions
                     .iter()

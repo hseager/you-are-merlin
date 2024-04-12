@@ -72,26 +72,6 @@ impl BattleEventLoop {
                 }
             }
         }
-
-        // let next_encounter = self.current_encounter + 1;
-        // let location = self.get_current_location();
-
-        // if next_encounter < location.encounters.len() {
-        //     self.current_encounter = next_encounter;
-
-        //     let encounter = self.get_current_encounter();
-        //     match encounter {
-        //         Encounter::Battle(battle) => {
-        //             self.current_event = Box::new(BattleEvent::new(battle.clone()));
-        //         }
-        //         Encounter::BossFight(_) => {}
-        //         //Encounter::Quest(quest) => self.state = PlayerState::Quest(quest.clone()),
-        //         Encounter::Quest(quest) => {}
-        //     }
-        //     None
-        // } else {
-        //     self.handle_end_of_encounters(location.clone(), player)
-        // }
     }
 
     pub fn handle_battle_fail(

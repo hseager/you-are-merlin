@@ -65,7 +65,7 @@ impl Event for VisitEvent {
                 EventResponse::new(Some(next_event), None)
             }
             ActionType::Rest => {
-                let next_event = Box::new(RestEvent {});
+                let next_event = Box::new(RestEvent::new());
                 EventResponse::new(Some(next_event), None)
             }
             ActionType::Explore => match game_state.get_current_encounter() {

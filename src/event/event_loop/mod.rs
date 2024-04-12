@@ -4,6 +4,7 @@ use self::event_loop_response::EventLoopResponse;
 
 pub mod battle_event_loop;
 pub mod event_loop_response;
+pub mod rest_event_loop;
 
 pub trait EventLoop {
     fn is_event_loop_active(&self) -> bool;
