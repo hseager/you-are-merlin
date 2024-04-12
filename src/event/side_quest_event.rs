@@ -82,7 +82,7 @@ impl Event for SideQuestEvent {
                 Some(EventResponse::new(next_event, None))
             }
             ActionType::Accept => {
-                self.accepted_quests.push(self.side_quest.clone());
+                game_state.accepted_quests.push(self.side_quest.clone());
 
                 let next_event = Box::new(VisitEvent::new(
                     game_state.get_current_location().clone(),
