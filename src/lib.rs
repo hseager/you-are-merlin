@@ -14,7 +14,6 @@ use crate::{
 };
 
 mod actions;
-mod battle_manager;
 mod characters;
 pub mod config;
 mod event;

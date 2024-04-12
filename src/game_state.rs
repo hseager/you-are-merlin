@@ -15,10 +15,8 @@ pub struct GameState {
 
 impl GameState {
     pub fn new(game_data: GameData) -> GameState {
-        let current_location = 0;
-
         GameState {
-            current_location,
+            current_location: 0,
             current_encounter: 0,
             items: game_data.items.clone(),
             game_data,

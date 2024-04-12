@@ -1,6 +1,6 @@
 use colored::ColoredString;
 
-use crate::battle_manager::calculate_damage;
+use crate::characters::fighter::calculate_damage;
 
 use super::fighter::Fighter;
 

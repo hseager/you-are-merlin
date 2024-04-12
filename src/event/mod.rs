@@ -43,6 +43,5 @@ pub trait Event {
             .cloned()
     }
 
-    // fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop<Self, EventType = Self>>;
     fn get_event_loop(&mut self) -> Option<&mut dyn EventLoop>;
 }
