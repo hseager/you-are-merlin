@@ -3,7 +3,7 @@ use colored::Colorize;
 use crate::{
     actions::{Action, ActionType},
     characters::player::Player,
-    game_data::entities::{Encounter, Quest, SideQuest},
+    game_data::entities::SideQuest,
     game_state::GameState,
     items::create_item,
 };

@@ -10,6 +10,7 @@ pub struct GameState {
     pub items: Vec<&'static str>,
     pub accepted_quests: Vec<SideQuest>,
     pub completed_locations: Vec<Location>,
+    pub is_running: bool,
 }
 
 impl GameState {
@@ -23,6 +24,7 @@ impl GameState {
             game_data,
             accepted_quests: Vec::new(),
             completed_locations: Vec::new(),
+            is_running: true,
         }
     }
 

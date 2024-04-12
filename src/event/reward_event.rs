@@ -67,6 +67,7 @@ impl Event for RewardEvent {
                     player.add_item_to_inventory(self.quest_item.clone());
                 }
 
+                // TODO Maybe do continue or travel event here
                 let next_event = Box::new(VisitEvent::new(
                     game_state.get_current_location().clone(),
                     game_state.completed_locations.clone(),

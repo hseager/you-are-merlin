@@ -59,9 +59,8 @@ impl Game {
         format!("You are {}.", &self.player.name.to_string())
     }
 
-    // TODO check game status
     pub fn is_running(&self) -> bool {
-        true
+        self.game_state.is_running
     }
 
     pub fn get_prompt(&self) -> String {
