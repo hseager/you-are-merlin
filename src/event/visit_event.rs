@@ -3,13 +3,13 @@ use colored::Colorize;
 use crate::{
     actions::{Action, ActionType},
     characters::player::Player,
-    game_data::entities::{Encounter, Location, LocationType},
+    game_data::entities::{Encounter, Location, LocationType, Quest},
     game_state::GameState,
 };
 
 use super::{
-    battle_event::BattleEvent, event_loop::EventLoop, travel_event::TravelEvent, Event,
-    EventResponse,
+    battle_event::BattleEvent, event_loop::EventLoop, side_quest_event::SideQuestEvent,
+    travel_event::TravelEvent, Event, EventResponse,
 };
 
 pub struct VisitEvent {
@@ -57,7 +57,7 @@ impl Event for VisitEvent {
         _search: &str,
         action_type: ActionType,
         game_state: &mut GameState,
-        _player: &mut Player,
+        player: &mut Player,
     ) -> Option<EventResponse> {
         match action_type {
             ActionType::Travel => {
@@ -69,8 +69,18 @@ impl Event for VisitEvent {
                     let next_event = Box::new(BattleEvent::new(battle.clone()));
                     Some(EventResponse::new(next_event, None))
                 }
-                Encounter::BossFight(_) => None,
-                Encounter::Quest(_) => None,
+                Encounter::Quest(quest) => match quest {
+                    Quest::SideQuest(quest) => {
+                        let next_event = Box::new(SideQuestEvent::new(
+                            quest.clone(),
+                            game_state.accepted_quests.clone(),
+                            player.has_item_in_inventory(&quest.item),
+                        ));
+                        Some(EventResponse::new(next_event, None))
+                    }
+                    Quest::MainQuest(_) => None,
+                },
+                Encounter::BossFight(_) => panic!("Shouldn't be a boss fight when visiting?"),
             },
             _ => panic!("Unhandled action when handling action."),
         }

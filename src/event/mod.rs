@@ -2,6 +2,7 @@ pub mod battle_event;
 pub mod event_loop;
 pub mod event_response;
 pub mod reward_event;
+pub mod side_quest_event;
 pub mod travel_event;
 pub mod visit_event;
 
