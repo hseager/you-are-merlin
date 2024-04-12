@@ -1,11 +1,7 @@
 use colored::Colorize;
 
 use crate::{
-    characters::{
-        enemy::Enemy,
-        fighter::Fighter,
-        player::{self, Player},
-    },
+    characters::{enemy::Enemy, fighter::Fighter, player::Player},
     config::BATTLE_INTERVAL_SECONDS,
     event::{
         battle_event::BattleEvent, game_over_event::GameOverEvent, reward_event::RewardEvent,
@@ -100,6 +96,7 @@ impl BattleEventLoop {
 
     pub fn handle_battle_fail(
         &mut self,
+        response_text: String,
         game_state: &mut GameState,
         player: &mut Player,
     ) -> EventLoopResponse {
@@ -107,7 +104,7 @@ impl BattleEventLoop {
 
         game_state.is_running = false;
         EventLoopResponse::Complete(
-            format!("{} died!\nGame Over...", player.name),
+            format!("{}\n{} died!\nGame Over...", response_text, player.name),
             Box::new(GameOverEvent {}),
         )
     }
@@ -145,11 +142,10 @@ impl EventLoop for BattleEventLoop {
             Turn::Enemy => {
                 response_text = enemy.attack(player);
 
-                // TODO player is attacking after they are dead here somewhere
                 if player.is_alive() {
                     self.attack_turn = Turn::Player;
                 } else {
-                    return self.handle_battle_fail(game_state, player);
+                    return self.handle_battle_fail(response_text, game_state, player);
                 }
                 EventLoopResponse::InProgress(response_text)
             }
