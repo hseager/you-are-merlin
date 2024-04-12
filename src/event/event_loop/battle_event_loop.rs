@@ -3,10 +3,7 @@ use colored::Colorize;
 use crate::{
     characters::{enemy::Enemy, fighter::Fighter, player::Player},
     config::BATTLE_INTERVAL_SECONDS,
-    event::{
-        battle_event::BattleEvent, game_over_event::GameOverEvent, reward_event::RewardEvent,
-        travel_event::TravelEvent,
-    },
+    event::{battle_event::BattleEvent, game_over_event::GameOverEvent, reward_event::RewardEvent},
     game_data::entities::{Encounter, LocationType},
     game_state::GameState,
 };
@@ -42,20 +39,13 @@ impl BattleEventLoop {
     ) -> EventLoopResponse {
         self.is_active = false;
 
-        // TODO other encounters
         match game_state.go_to_next_encounter() {
             Some(encounter) => match encounter {
                 Encounter::Battle(battle) => {
                     EventLoopResponse::Complete(message, Box::new(BattleEvent::new(battle.clone())))
                 }
-                Encounter::Quest(_) => EventLoopResponse::Complete(
-                    message,
-                    Box::new(TravelEvent::new(game_state.get_locations())),
-                ),
-                Encounter::BossFight(_) => EventLoopResponse::Complete(
-                    message,
-                    Box::new(TravelEvent::new(game_state.get_locations())),
-                ),
+                Encounter::BossFight(_) => panic!("Unimplemented handling boss fight after battle"),
+                Encounter::Quest(_) => panic!("Not implemented quests after a battle. yet..."),
             },
             None => {
                 let current_location = game_state.get_current_location();

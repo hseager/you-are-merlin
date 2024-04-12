@@ -8,8 +8,9 @@ use crate::{
 };
 
 use super::{
-    battle_event::BattleEvent, event_loop::EventLoop, rest_event::RestEvent,
-    side_quest_event::SideQuestEvent, travel_event::TravelEvent, Event, EventResponse,
+    battle_event::BattleEvent, event_loop::EventLoop, main_quest_event::MainQuestEvent,
+    rest_event::RestEvent, side_quest_event::SideQuestEvent, travel_event::TravelEvent, Event,
+    EventResponse,
 };
 
 pub struct VisitEvent {
@@ -82,7 +83,10 @@ impl Event for VisitEvent {
                         ));
                         EventResponse::new(Some(next_event), None)
                     }
-                    Quest::MainQuest(_) => panic!("Not implemented MainQuest while visiting yet?"),
+                    Quest::MainQuest(quest) => {
+                        let next_event = Box::new(MainQuestEvent::new(quest.clone()));
+                        EventResponse::new(Some(next_event), None)
+                    }
                 },
                 Encounter::BossFight(_) => panic!("Shouldn't be a boss fight when visiting?"),
             },
