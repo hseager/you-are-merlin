@@ -12,6 +12,8 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 - Different Themes
 - Side quests
 - Items
+- Battles
+- Recovery
 
 ### Tips
 
