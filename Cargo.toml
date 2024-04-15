@@ -1,6 +1,6 @@
 [package]
 name = "you_are_merlin"
-description = "A text adventure game built with Rust (obviously)"
+description = "A text adventure game built with Rust. Compiles to CLI and WASM."
 version = "0.1.0"
 edition = "2021"
 authors = ["Harvey Seager <harvey.seager@googlemail.com>"]
