@@ -4,7 +4,7 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 
 ![CLI Screenshot](screenshots/CLI-screenshot.png)
 
-[Click here for the WebAssembly (WASM) project with a web with a demo](https://github.com/hseager/you-are-merlin-www)
+[Click here for the WebAssembly (WASM) version with a web demo](https://github.com/hseager/you-are-merlin-www)
 
 ## Game Features
 
