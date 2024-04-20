@@ -121,7 +121,7 @@ impl TextFormatter for &str {
     #[cfg(target_arch = "wasm32")]
     fn text_color(self, index: usize) -> String {
         let colors = [
-            BLUE, GREEN, YELLOW, RED, MAGENTA, CYAN, SKY, PINK, AMBER, INDIGO, EMERALD,
+            RED, BLUE, GREEN, YELLOW, INDIGO, CYAN, MAGENTA, EMERALD, AMBER, SKY, PINK,
         ];
 
         let color = colors
