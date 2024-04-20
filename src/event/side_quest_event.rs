@@ -12,19 +12,19 @@ use super::{event_loop::EventLoop, event_response::EventResponse, visit_event::V
 pub struct SideQuestEvent {
     side_quest: SideQuest,
     accepted_quests: Vec<SideQuest>,
-    has_quest_item_in_invetory: bool,
+    has_quest_item_in_inventory: bool,
 }
 
 impl SideQuestEvent {
     pub fn new(
         quest: SideQuest,
         accepted_quests: Vec<SideQuest>,
-        has_quest_item_in_invetory: bool,
+        has_quest_item_in_inventory: bool,
     ) -> SideQuestEvent {
         SideQuestEvent {
             side_quest: quest,
             accepted_quests,
-            has_quest_item_in_invetory,
+            has_quest_item_in_inventory,
         }
     }
 
@@ -53,7 +53,7 @@ impl Event for SideQuestEvent {
     }
 
     fn actions(&self) -> Vec<Action> {
-        if self.has_quest_item_in_invetory {
+        if self.has_quest_item_in_inventory {
             vec![Action::new(ActionType::GiveItem, "Give".text_blue())]
         } else if self.is_quest_accepted() {
             vec![Action::new(ActionType::Run, "Continue".text_green())]
