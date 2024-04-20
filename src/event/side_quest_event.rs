@@ -1,11 +1,10 @@
-use colored::Colorize;
-
 use crate::{
     actions::{Action, ActionType},
     characters::player::Player,
     game_data::entities::SideQuest,
     game_state::GameState,
     items::create_item,
+    text_format::TextFormatter,
 };
 
 use super::{event_loop::EventLoop, event_response::EventResponse, visit_event::VisitEvent, Event};
@@ -55,13 +54,13 @@ impl Event for SideQuestEvent {
 
     fn actions(&self) -> Vec<Action> {
         if self.has_quest_item_in_invetory {
-            vec![Action::new(ActionType::GiveItem, "Give".blue())]
+            vec![Action::new(ActionType::GiveItem, "Give".text_blue())]
         } else if self.is_quest_accepted() {
-            vec![Action::new(ActionType::Run, "Continue".green())]
+            vec![Action::new(ActionType::Run, "Continue".text_green())]
         } else {
             vec![
-                Action::new(ActionType::Accept, "Accept".green()),
-                Action::new(ActionType::Run, "Decline".red()),
+                Action::new(ActionType::Accept, "Accept".text_green()),
+                Action::new(ActionType::Run, "Decline".text_red()),
             ]
         }
     }

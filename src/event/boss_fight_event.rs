@@ -1,10 +1,9 @@
-use colored::Colorize;
-
 use crate::{
     actions::{Action, ActionType},
     characters::{enemy::Enemy, player::Player},
     game_data::entities::Battle,
     game_state::GameState,
+    text_format::TextFormatter,
 };
 
 use super::{
@@ -42,7 +41,7 @@ impl Event for BossFightEvent {
     }
 
     fn actions(&self) -> Vec<Action> {
-        vec![Action::new(ActionType::Attack, "Attack".red())]
+        vec![Action::new(ActionType::Attack, "Attack".text_red())]
     }
 
     fn handle_action(

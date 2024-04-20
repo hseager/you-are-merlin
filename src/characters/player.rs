@@ -1,19 +1,18 @@
-use colored::ColoredString;
-
 use crate::{characters::fighter::calculate_damage, config::REST_HEAL_AMOUNT, items::Item};
 
 use super::fighter::Fighter;
+use crate::text_format::TextFormatter;
 
 pub struct Player {
-    pub name: ColoredString,
+    pub name: String,
     pub max_life: i16,
     pub life: i16,
     pub attack: u16,
-    pub inventory: Vec<ColoredString>, // TODO change to vec of items
+    pub inventory: Vec<String>, // TODO change to vec of items
 }
 
 impl Player {
-    pub fn new(name: ColoredString, life: i16, attack: u16) -> Player {
+    pub fn new(name: String, life: i16, attack: u16) -> Player {
         Player {
             name,
             max_life: life,
@@ -23,11 +22,11 @@ impl Player {
         }
     }
 
-    pub fn add_item_to_inventory(&mut self, item: ColoredString) {
+    pub fn add_item_to_inventory(&mut self, item: String) {
         self.inventory.push(item);
     }
 
-    pub fn has_item_in_inventory(&self, item: &ColoredString) -> bool {
+    pub fn has_item_in_inventory(&self, item: &String) -> bool {
         self.inventory.iter().any(|i| i == item)
     }
 
@@ -50,13 +49,14 @@ impl Player {
 
         format!(
             "Your life increases by {} (life: {})",
-            heal_amount, self.life
+            heal_amount.to_string().text_green(),
+            self.life.to_string().text_green()
         )
     }
 }
 
 impl Fighter for Player {
-    fn name(&self) -> ColoredString {
+    fn name(&self) -> String {
         self.name.clone()
     }
 
@@ -71,8 +71,8 @@ impl Fighter for Player {
         format!(
             "You attack {} for {} damage. (Enemy life: {})",
             &target.name(),
-            damage,
-            target.life()
+            damage.to_string().text_blue(),
+            target.life().to_string().text_blue()
         )
     }
 

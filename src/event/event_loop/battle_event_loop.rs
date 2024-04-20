@@ -1,5 +1,3 @@
-use colored::Colorize;
-
 use crate::{
     characters::{enemy::Enemy, fighter::Fighter, player::Player},
     config::BATTLE_INTERVAL_SECONDS,
@@ -9,6 +7,7 @@ use crate::{
     },
     game_data::entities::{Encounter, LocationType},
     game_state::GameState,
+    text_format::TextFormatter,
 };
 
 use super::{event_loop_response::EventLoopResponse, EventLoop};
@@ -73,7 +72,7 @@ impl BattleEventLoop {
                         message,
                         Box::new(RewardEvent::new(
                             game_state.get_current_location().clone(),
-                            quest_item.bold(),
+                            quest_item.text_bold(),
                         )),
                     ),
                     _ => panic!("Shouldn't be anything apart from a Dungeon at the end of a battle.. For now..."),

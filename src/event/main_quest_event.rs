@@ -1,10 +1,9 @@
-use colored::Colorize;
-
 use crate::{
     actions::{Action, ActionType},
     characters::player::Player,
     game_data::entities::{Encounter, MainQuest},
     game_state::GameState,
+    text_format::TextFormatter,
 };
 
 use super::{
@@ -38,8 +37,8 @@ impl Event for MainQuestEvent {
 
     fn actions(&self) -> Vec<Action> {
         vec![
-            Action::new(ActionType::Continue, "Continue".green()),
-            Action::new(ActionType::Run, "Run".cyan()),
+            Action::new(ActionType::Continue, "Continue".text_green()),
+            Action::new(ActionType::Run, "Run".text_cyan()),
         ]
     }
 

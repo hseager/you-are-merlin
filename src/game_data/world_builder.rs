@@ -1,11 +1,10 @@
-use colored::Colorize;
 use rand::{seq::SliceRandom, thread_rng};
 
 use crate::{
     characters::enemy::Enemy,
     config::{ENEMY_BOSS_STATS, ENEMY_EASY_STATS, ENEMY_HARD_STATS, ENEMY_MEDIUM_STATS},
+    text_format::TextFormatter,
     theme::{Theme, ThemeLocation},
-    utilities::map_text_color,
 };
 
 use super::entities::*;
@@ -17,7 +16,7 @@ pub fn build_world(theme: Theme) -> Vec<Location> {
 
     let (boss_life, boss_attack) = map_theme_enemy_difficulty_to_stats(theme.boss.difficulty);
     let boss = Enemy {
-        name: theme.boss.name.bold().red(),
+        name: theme.boss.name.text_red_bold(),
         description: theme.boss.description,
         life: boss_life,
         attack: boss_attack,
@@ -37,7 +36,7 @@ fn build_locations(theme: &Theme, characters: &mut Vec<&str>) -> Vec<Location> {
 
     for (i, theme_location) in theme.locations.iter().enumerate() {
         locations.push(Location {
-            name: theme_location.name.color(map_text_color(i)),
+            name: theme_location.name.text_color(i),
             description: theme_location.description,
             encounters: build_encounters(theme, theme_location, characters),
             class: theme_location.class,
@@ -86,9 +85,9 @@ fn build_side_quest(theme: &Theme, characters: &mut Vec<&str>) -> Vec<Encounter>
 
     if let LocationType::Dungeon(item) = &dungeon.class {
         vec![Encounter::Quest(Quest::SideQuest(SideQuest {
-            character: character.bold(),
-            location_name: dungeon.name.color(map_text_color(dungeon_index)),
-            item: item.bold(),
+            character: character.text_bold(),
+            location_name: dungeon.name.text_color(dungeon_index),
+            item: item.text_bold(),
         }))]
     } else {
         panic!("Unexpected class when creating a sidequest. Should be a dungeon");
@@ -108,7 +107,7 @@ fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
         let (life, attack) = map_theme_enemy_difficulty_to_stats(enemy.difficulty);
         let battle: Battle = Battle {
             enemy: Enemy {
-                name: enemy.name.bold(),
+                name: enemy.name.text_bold(),
                 description: enemy.description,
                 life,
                 attack,
@@ -135,9 +134,9 @@ fn build_main_quest(
     characters.retain(|c| *c != character);
 
     Encounter::Quest(Quest::MainQuest(MainQuest {
-        character: character.bold(),
+        character: character.text_bold(),
         world_name,
-        boss_name: boss.name.clone(),
+        boss_name: boss.name.text_red_bold(),
     }))
 }
 

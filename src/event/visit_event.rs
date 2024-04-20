@@ -1,10 +1,9 @@
-use colored::Colorize;
-
 use crate::{
     actions::{Action, ActionType},
     characters::player::Player,
     game_data::entities::{Encounter, Location, LocationType, Quest},
     game_state::GameState,
+    text_format::TextFormatter,
 };
 
 use super::{
@@ -36,18 +35,18 @@ impl Event for VisitEvent {
     }
 
     fn actions(&self) -> Vec<Action> {
-        let mut actions = vec![Action::new(ActionType::Travel, "Travel".yellow())];
+        let mut actions = vec![Action::new(ActionType::Travel, "Travel".text_yellow())];
 
         if !self
             .completed_locations
             .iter()
             .any(|l| l.name == self.current_location.name)
         {
-            actions.push(Action::new(ActionType::Explore, "Explore".blue()))
+            actions.push(Action::new(ActionType::Explore, "Explore".text_blue()))
         }
 
         if let LocationType::SafeZone = &self.current_location.class {
-            actions.push(Action::new(ActionType::Rest, "Rest".green()));
+            actions.push(Action::new(ActionType::Rest, "Rest".text_green()));
         }
 
         actions

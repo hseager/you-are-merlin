@@ -1,10 +1,8 @@
-use colored::ColoredString;
-
 use crate::characters::enemy::Enemy;
 
 #[derive(Clone, Debug)]
 pub struct Location {
-    pub name: ColoredString,
+    pub name: String,
     pub description: &'static str,
     pub encounters: Vec<Encounter>,
     pub class: LocationType,
@@ -37,16 +35,16 @@ pub enum Quest {
 
 #[derive(Clone, Debug)]
 pub struct SideQuest {
-    pub character: ColoredString,
-    pub location_name: ColoredString,
-    pub item: ColoredString,
+    pub character: String,
+    pub location_name: String,
+    pub item: String,
 }
 
 #[derive(Clone, Debug)]
 pub struct MainQuest {
-    pub character: ColoredString,
+    pub character: String,
     pub world_name: &'static str,
-    pub boss_name: ColoredString,
+    pub boss_name: String,
 }
 
 #[derive(Clone, Copy, Debug)]

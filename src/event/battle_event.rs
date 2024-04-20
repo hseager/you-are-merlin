@@ -1,10 +1,9 @@
-use colored::Colorize;
-
 use crate::{
     actions::{Action, ActionType},
     characters::{enemy::Enemy, player::Player},
     game_data::entities::Battle,
     game_state::GameState,
+    text_format::TextFormatter,
 };
 
 use super::{
@@ -42,8 +41,8 @@ impl Event for BattleEvent {
 
     fn actions(&self) -> Vec<Action> {
         vec![
-            Action::new(ActionType::Attack, "Attack".red()),
-            Action::new(ActionType::Run, "Run".cyan()),
+            Action::new(ActionType::Attack, "Attack".text_red()),
+            Action::new(ActionType::Run, "Run".text_cyan()),
         ]
     }
 

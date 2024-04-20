@@ -1,5 +1,3 @@
-use colored::ColoredString;
-
 #[derive(Clone)]
 pub enum ActionType {
     Travel,
@@ -17,11 +15,11 @@ pub enum ActionType {
 #[derive(Clone)]
 pub struct Action {
     pub class: ActionType,
-    pub name: ColoredString,
+    pub name: String,
 }
 
 impl Action {
-    pub fn new(class: ActionType, name: ColoredString) -> Action {
+    pub fn new(class: ActionType, name: String) -> Action {
         Action { class, name }
     }
 }

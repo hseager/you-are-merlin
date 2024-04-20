@@ -1,11 +1,10 @@
-use colored::{ColoredString, Colorize};
-
 use crate::{
     actions::{Action, ActionType},
     characters::player::Player,
     game_data::entities::{Location, SideQuest},
     game_state::GameState,
     items::create_item,
+    text_format::TextFormatter,
 };
 
 use super::{
@@ -19,12 +18,12 @@ enum RewardState {
 
 pub struct RewardEvent {
     location: Location,
-    quest_item: ColoredString,
+    quest_item: String,
     state: RewardState,
 }
 
 impl RewardEvent {
-    pub fn new(location: Location, quest_item: ColoredString) -> RewardEvent {
+    pub fn new(location: Location, quest_item: String) -> RewardEvent {
         RewardEvent {
             location,
             quest_item,
@@ -53,9 +52,9 @@ impl Event for RewardEvent {
 
     fn actions(&self) -> Vec<Action> {
         if let RewardState::Discover = self.state {
-            vec![Action::new(ActionType::Open, "Open".yellow())]
+            vec![Action::new(ActionType::Open, "Open".text_yellow())]
         } else {
-            vec![Action::new(ActionType::Continue, "Continue".green())]
+            vec![Action::new(ActionType::Continue, "Continue".text_green())]
         }
     }
 

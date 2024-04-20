@@ -1,19 +1,18 @@
-use colored::ColoredString;
-
 use crate::characters::fighter::calculate_damage;
 
 use super::fighter::Fighter;
+use crate::text_format::TextFormatter;
 
 #[derive(Clone, Debug)]
 pub struct Enemy {
-    pub name: ColoredString,
+    pub name: String,
     pub description: &'static str,
     pub life: i16,
     pub attack: u16,
 }
 
 impl Fighter for Enemy {
-    fn name(&self) -> ColoredString {
+    fn name(&self) -> String {
         self.name.clone()
     }
 
@@ -28,8 +27,8 @@ impl Fighter for Enemy {
         format!(
             "{} attacks you for {} damage. (Your life: {})",
             &self.name(),
-            damage,
-            &target.life()
+            damage.to_string().text_red(),
+            &target.life().to_string().text_red()
         )
     }
 

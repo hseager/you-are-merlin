@@ -1,9 +1,8 @@
 use characters::player::Player;
-use colored::Colorize;
 use event::{event_loop::event_loop_response::EventLoopResponse, Event};
 use game_state::GameState;
+use text_format::TextFormatter;
 use theme::theme_data::get_themes;
-use utilities::map_text_color;
 use wasm_bindgen::prelude::*;
 
 use crate::{
@@ -20,6 +19,7 @@ mod event;
 mod game_data;
 mod game_state;
 mod items;
+mod text_format;
 pub mod theme;
 pub mod utilities;
 
@@ -147,7 +147,7 @@ pub fn get_theme_display_list() -> String {
 
     let mut joined_themes = String::new();
     for (i, theme) in themes.iter().enumerate() {
-        joined_themes.push_str(&theme.0.color(map_text_color(i)).to_string());
+        joined_themes.push_str(&theme.0.text_color(i).to_string());
         if i != themes.len() - 1 {
             joined_themes.push_str(", ");
         }

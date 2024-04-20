@@ -1,10 +1,10 @@
-use colored::{ColoredString, Colorize};
+use crate::text_format::TextFormatter;
 use rand::{seq::SliceRandom, thread_rng, Rng};
 
 use crate::config::{ITEM_GEN_ATTACK, ITEM_GEN_LIFE};
 
 pub struct Item {
-    pub name: ColoredString,
+    pub name: String,
     pub max_life: i16,
     pub attack: u16,
 }
@@ -18,7 +18,7 @@ pub fn create_item(items: &mut Vec<&str>) -> Item {
     let (max_life, attack) = create_item_stats();
 
     Item {
-        name: item_name.bold(),
+        name: item_name.text_bold(),
         attack,
         max_life,
     }

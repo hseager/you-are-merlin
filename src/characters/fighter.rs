@@ -1,8 +1,7 @@
-use colored::ColoredString;
 use rand::Rng;
 
 pub trait Fighter {
-    fn name(&self) -> ColoredString;
+    fn name(&self) -> String;
     fn life(&self) -> &i16;
     fn is_alive(&self) -> bool {
         self.life() > &0

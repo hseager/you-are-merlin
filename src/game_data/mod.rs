@@ -1,4 +1,4 @@
-use colored::{ColoredString, Colorize};
+use crate::text_format::TextFormatter;
 
 use self::entities::Location;
 use crate::theme::Theme;
@@ -8,7 +8,7 @@ mod world_builder;
 
 pub struct GameData {
     pub world_name: &'static str,
-    pub main_character: ColoredString,
+    pub main_character: String,
     pub locations: Vec<Location>,
     pub items: Vec<&'static str>,
 }
@@ -17,7 +17,7 @@ impl GameData {
     pub fn new(theme_data: Theme) -> GameData {
         let theme = theme_data;
         let world_name = theme.world_name;
-        let main_character = theme.main_character.bold();
+        let main_character = theme.main_character.text_bold();
         let items = theme.items.to_vec();
         let locations = world_builder::build_world(theme);
 
