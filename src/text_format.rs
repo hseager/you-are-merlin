@@ -36,7 +36,7 @@ const EMERALD: &str = "var(--theme-emerald)";
 impl TextFormatter for &str {
     #[cfg(target_arch = "wasm32")]
     fn text_bold(self) -> String {
-        format!("<span style='font-weight: bold;'>{}</span>", self)
+        format!("<strong>{}</strong>", self)
     }
 
     #[cfg(not(target_arch = "wasm32"))]
@@ -48,10 +48,7 @@ impl TextFormatter for &str {
 
     #[cfg(target_arch = "wasm32")]
     fn text_red_bold(self) -> String {
-        format!(
-            "<span style='font-weight: bold; color: {};'>{}</span>",
-            RED, self
-        )
+        format!("<strong style='color: {};'>{}</strong>", RED, self)
     }
 
     #[cfg(not(target_arch = "wasm32"))]

@@ -27,7 +27,7 @@ impl Fighter for Enemy {
         format!(
             "{} attacks you for {} damage. (Your life: {})",
             &self.name(),
-            damage.to_string().text_red(),
+            damage.to_string().text_bold(),
             &target.life().to_string().text_red()
         )
     }

@@ -49,7 +49,7 @@ impl Player {
 
         format!(
             "Your life increases by {} (life: {})",
-            heal_amount.to_string().text_green(),
+            heal_amount.to_string().text_bold(),
             self.life.to_string().text_green()
         )
     }
@@ -71,7 +71,7 @@ impl Fighter for Player {
         format!(
             "You attack {} for {} damage. (Enemy life: {})",
             &target.name(),
-            damage.to_string().text_blue(),
+            damage.to_string().text_bold(),
             target.life().to_string().text_blue()
         )
     }
