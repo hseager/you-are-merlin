@@ -13,6 +13,10 @@ name = "you_are_merlin"
 path = "src/lib.rs"
 crate-type = ["cdylib", "rlib"]
 
+[[bin]]
+name = "you_are_merlin_bin"
+path = "src/main.rs"
+
 [dependencies]
 colored = "2.1.0"
 getrandom = { version = "0.2", features = ["js"] }

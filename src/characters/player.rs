@@ -48,7 +48,7 @@ impl Player {
         self.life = new_life;
 
         format!(
-            "Your life increases by {} (life: {})",
+            "Your restore {} life (life: {})",
             heal_amount.to_string().text_bold(),
             self.life.to_string().text_green()
         )

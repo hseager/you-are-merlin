@@ -1,9 +1,13 @@
 use std::{io, thread::sleep, time::Duration};
 
-use colored::Colorize;
+use colored::{control, Colorize};
 use you_are_merlin::{get_theme_display_list, utilities::spacer, Game};
 
 fn main() {
+    if cfg!(target_os = "windows") {
+        control::set_virtual_terminal(true).unwrap();
+    }
+
     let theme = select_theme();
     let mut game = Game::new(theme);
 
