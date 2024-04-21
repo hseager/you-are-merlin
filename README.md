@@ -45,7 +45,19 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 - Stop cloning everything... try to reference locations etc
 - Unit tests
 
-## Dev
+## Building
+
+### Development
 
 - cargo build
 - cargo run
+
+### WASM
+
+- wasm-pack build
+
+### CLI Production
+
+- cargo build -r
+
+
