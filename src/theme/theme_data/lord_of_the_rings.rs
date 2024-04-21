@@ -9,7 +9,7 @@ use crate::{
  * with the following rules:
  * - There should be 6 friendly_characters that doesn't include the main character
  * - There should be 6 locations, with only 1 SafeZone and 1 BossDungeon
- * - Each Dungeon should have 3 enemies, a mix between Easy, Normal and Hard, but never 3 Hard
+ * - Each Dungeon should only have 3 enemies, a mix between Easy, Normal and Hard, but never 3 Hard, and never a Boss.
  * - The Dungeon enum value should be an item reward
  * - The Items array should be 10 items not include Dungeon rewards
  */
