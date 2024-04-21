@@ -1,7 +1,7 @@
 use super::Theme;
 
 mod fallout;
-mod game_of_thrones;
+mod lord_of_the_rings;
 mod merlin;
 mod pokemon;
 mod pulp_fiction;
@@ -15,7 +15,7 @@ pub fn get_themes() -> Vec<ThemeTemplate> {
     vec![
         ("Merlin", merlin::THEME_DATA),
         ("Zelda", zelda::THEME_DATA),
-        ("Game Of Thrones", game_of_thrones::THEME_DATA),
+        ("Lord of the Rings", lord_of_the_rings::THEME_DATA),
         ("Star Wars", star_wars::THEME_DATA),
         ("Pulp Fiction", pulp_fiction::THEME_DATA),
         ("Pokemon", pokemon::THEME_DATA),
