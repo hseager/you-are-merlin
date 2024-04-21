@@ -87,12 +87,9 @@ impl Game {
             let EventResponse {
                 next_event,
                 message,
-            } = self.current_event.handle_action(
-                search,
-                action.class,
-                &mut self.game_state,
-                &mut self.player,
-            );
+            } = self
+                .current_event
+                .handle_action(action, &mut self.game_state, &mut self.player);
 
             if let Some(event) = next_event {
                 self.change_event(event);

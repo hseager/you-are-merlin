@@ -31,14 +31,13 @@ impl Event for TravelEvent {
 
     fn handle_action(
         &mut self,
-        search: &str,
-        action_type: ActionType,
+        action: Action,
         game_state: &mut GameState,
         _player: &mut Player,
     ) -> EventResponse {
-        match action_type {
+        match action.class {
             ActionType::MoveToLocation => {
-                game_state.change_location_by_name(search.to_string());
+                game_state.change_location_by_name(action.name);
 
                 let next_event = Box::new(VisitEvent::new(
                     game_state.get_current_location().clone(),

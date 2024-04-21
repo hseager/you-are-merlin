@@ -1,8 +1,4 @@
-use crate::{
-    actions::{Action, ActionType},
-    characters::player::Player,
-    game_state::GameState,
-};
+use crate::{actions::Action, characters::player::Player, game_state::GameState};
 
 use super::{event_loop::EventLoop, Event, EventResponse};
 
@@ -20,8 +16,7 @@ impl Event for GameOverEvent {
 
     fn handle_action(
         &mut self,
-        _search: &str,
-        _action_type: ActionType,
+        _action: Action,
         _game_state: &mut GameState,
         _player: &mut Player,
     ) -> EventResponse {

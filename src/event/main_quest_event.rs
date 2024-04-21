@@ -44,12 +44,11 @@ impl Event for MainQuestEvent {
 
     fn handle_action(
         &mut self,
-        _search: &str,
-        action_type: ActionType,
+        action: Action,
         game_state: &mut GameState,
         _player: &mut Player,
     ) -> EventResponse {
-        match action_type {
+        match action.class {
             ActionType::Continue => match game_state.go_to_next_encounter() {
                 Some(encounter) => match encounter {
                     Encounter::Battle(battle) => {

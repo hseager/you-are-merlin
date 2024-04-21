@@ -10,11 +10,7 @@ pub mod side_quest_event;
 pub mod travel_event;
 pub mod visit_event;
 
-use crate::{
-    actions::{Action, ActionType},
-    characters::player::Player,
-    game_state::GameState,
-};
+use crate::{actions::Action, characters::player::Player, game_state::GameState};
 
 use self::event_loop::EventLoop;
 use self::event_response::EventResponse;
@@ -24,8 +20,7 @@ pub trait Event {
     fn actions(&self) -> Vec<Action>;
     fn handle_action(
         &mut self,
-        search: &str,
-        action_type: ActionType,
+        action: Action,
         game_state: &mut GameState,
         player: &mut Player,
     ) -> EventResponse;

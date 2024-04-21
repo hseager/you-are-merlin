@@ -54,12 +54,11 @@ impl Event for VisitEvent {
 
     fn handle_action(
         &mut self,
-        _search: &str,
-        action_type: ActionType,
+        action: Action,
         game_state: &mut GameState,
         player: &mut Player,
     ) -> EventResponse {
-        match action_type {
+        match action.class {
             ActionType::Travel => {
                 let next_event = Box::new(TravelEvent::new(game_state.get_locations()));
                 EventResponse::new(Some(next_event), None)

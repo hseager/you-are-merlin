@@ -60,12 +60,11 @@ impl Event for RewardEvent {
 
     fn handle_action(
         &mut self,
-        _search: &str,
-        action_type: ActionType,
+        action: Action,
         game_state: &mut GameState,
         player: &mut Player,
     ) -> EventResponse {
-        match action_type {
+        match action.class {
             ActionType::Open => {
                 let mut response_text: String;
 

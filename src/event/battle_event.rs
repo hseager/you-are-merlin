@@ -48,12 +48,11 @@ impl Event for BattleEvent {
 
     fn handle_action(
         &mut self,
-        _search: &str,
-        action_type: ActionType,
+        action: Action,
         game_state: &mut GameState,
         _player: &mut Player,
     ) -> EventResponse {
-        match action_type {
+        match action.class {
             ActionType::Attack => {
                 self.event_loop.is_active = true;
                 EventResponse::new(None, None)

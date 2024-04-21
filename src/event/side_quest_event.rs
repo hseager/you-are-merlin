@@ -67,12 +67,11 @@ impl Event for SideQuestEvent {
 
     fn handle_action(
         &mut self,
-        _search: &str,
-        action_type: ActionType,
+        action: Action,
         game_state: &mut GameState,
         player: &mut Player,
     ) -> EventResponse {
-        match action_type {
+        match action.class {
             ActionType::Run => {
                 let next_event = Box::new(VisitEvent::new(
                     game_state.get_current_location().clone(),
