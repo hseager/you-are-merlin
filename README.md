@@ -18,7 +18,7 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 ### Tips
 
 - Finding a safezone will make your journey easier!
-- Try exploring and get stronger before facing the final boss
+- Try exploring to get stronger before facing the final boss
 - You don't have to type out the full action, a partial match will do
 
 ## To do
