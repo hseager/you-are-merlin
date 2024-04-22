@@ -43,14 +43,29 @@ Had to move loops out to consuming code
 
 ## Items & Stats
 
-- Dodge + Chance to hit
-- Block (reduces incoming damage)
-- Chance to stun
-- attack speed
-- Crit chance & multi
-- Attack speed
-- Increases gold
+### Stats
 
+Rarity, Corrupted versions
+
+_Weapons_
+- Power
+- Crit multi/chance
+- Attack speed
+- Parry chance
+- Chance to hit/miss
+- Chance to stun
+
+_Armor_
+- Defence
+- Chance to block
+- Dodge/Chance
+- Max life
+
+_Artifact_
+- Increases gold find
+- Double attack
+- Special abilities in battle
+- Better sell prices
 
 ## Website
 - Auth 
@@ -58,4 +73,4 @@ Had to move loops out to consuming code
 - Voting on themes
 - Save themes to database
 
-# Event system create that creates JS events
+

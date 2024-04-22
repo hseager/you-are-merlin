@@ -9,6 +9,25 @@ pub struct Enemy {
     pub description: &'static str,
     pub life: i16,
     pub attack: u16,
+    pub attack_speed: u64,
+}
+
+impl Enemy {
+    pub fn new(
+        name: String,
+        description: &'static str,
+        life: i16,
+        attack: u16,
+        attack_speed: u64,
+    ) -> Enemy {
+        Enemy {
+            name,
+            description,
+            life,
+            attack,
+            attack_speed,
+        }
+    }
 }
 
 impl Fighter for Enemy {

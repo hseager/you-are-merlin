@@ -9,18 +9,20 @@ use crate::{
 
 use super::entities::*;
 
-// TODO clean up clones here
 pub fn build_world(theme: Theme) -> Vec<Location> {
     let mut characters = theme.friendly_characters.to_vec();
     let mut locations = build_locations(&theme, &mut characters);
 
-    let (boss_life, boss_attack) = map_theme_enemy_difficulty_to_stats(theme.boss.difficulty);
-    let boss = Enemy {
-        name: theme.boss.name.text_red_bold(),
-        description: theme.boss.description,
-        life: boss_life,
-        attack: boss_attack,
-    };
+    // TODO move this somewhere better
+    let (boss_life, boss_attack, boss_attack_speed) =
+        map_theme_enemy_difficulty_to_stats(theme.boss.difficulty);
+    let boss = Enemy::new(
+        theme.boss.name.text_red_bold(),
+        theme.boss.description,
+        boss_life,
+        boss_attack,
+        boss_attack_speed,
+    );
 
     let mut rng = thread_rng();
 
@@ -104,14 +106,15 @@ fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
     );
 
     for enemy in enemies {
-        let (life, attack) = map_theme_enemy_difficulty_to_stats(enemy.difficulty);
+        let (life, attack, attack_speed) = map_theme_enemy_difficulty_to_stats(enemy.difficulty);
         let battle: Battle = Battle {
-            enemy: Enemy {
-                name: enemy.name.text_bold(),
-                description: enemy.description,
+            enemy: Enemy::new(
+                enemy.name.text_bold(),
+                enemy.description,
                 life,
                 attack,
-            },
+                attack_speed,
+            ),
         };
 
         battles.push(Encounter::Battle(battle))
@@ -160,7 +163,7 @@ fn add_main_quest(
         .push(Encounter::BossFight(Battle { enemy: boss }));
 }
 
-fn map_theme_enemy_difficulty_to_stats(difficulty: EnemyDifficulty) -> (i16, u16) {
+fn map_theme_enemy_difficulty_to_stats(difficulty: EnemyDifficulty) -> (i16, u16, u64) {
     match difficulty {
         EnemyDifficulty::Easy => ENEMY_EASY_STATS,
         EnemyDifficulty::Normal => ENEMY_MEDIUM_STATS,

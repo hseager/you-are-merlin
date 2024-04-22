@@ -1,6 +1,8 @@
+use std::time::{Duration, Instant};
+
 use crate::{
     characters::{enemy::Enemy, fighter::Fighter, player::Player},
-    config::BATTLE_INTERVAL_SECONDS,
+    config::BATTLE_INTERVAL_MILLIS,
     event::{
         battle_event::BattleEvent, boss_fight_event::BossFightEvent,
         game_over_event::GameOverEvent, reward_event::RewardEvent,
@@ -13,25 +15,27 @@ use crate::{
 use super::{event_loop_response::EventLoopResponse, EventLoop};
 
 #[derive(Clone)]
-pub enum Turn {
-    Player,
-    Enemy,
-}
-
-#[derive(Clone)]
 pub struct BattleEventLoop {
     pub is_active: bool,
     pub enemy: Enemy,
-    pub attack_turn: Turn,
+    pub player_last_attack: Instant,
+    pub enemy_last_attack: Instant,
 }
 
 impl BattleEventLoop {
-    pub fn new(enemy: Enemy, attack_turn: Turn) -> BattleEventLoop {
+    pub fn new(enemy: Enemy) -> BattleEventLoop {
         BattleEventLoop {
             is_active: false,
             enemy,
-            attack_turn,
+            player_last_attack: Instant::now(),
+            enemy_last_attack: Instant::now(),
         }
+    }
+
+    pub fn start(&mut self) {
+        self.is_active = true;
+        self.player_last_attack = Instant::now();
+        self.enemy_last_attack = Instant::now();
     }
 
     pub fn handle_battle_success(
@@ -110,8 +114,8 @@ impl BattleEventLoop {
 }
 
 impl EventLoop for BattleEventLoop {
-    fn get_event_loop_interval(&self) -> u8 {
-        BATTLE_INTERVAL_SECONDS
+    fn get_event_loop_interval(&self) -> u32 {
+        BATTLE_INTERVAL_MILLIS
     }
 
     fn is_event_loop_active(&self) -> bool {
@@ -126,28 +130,31 @@ impl EventLoop for BattleEventLoop {
         let mut response_text: String;
         let enemy = &mut self.enemy;
 
-        match self.attack_turn {
-            Turn::Player => {
-                response_text = player.attack(enemy);
+        if Instant::now() - self.player_last_attack >= Duration::from_millis(player.attack_speed) {
+            response_text = player.attack(enemy);
 
-                if enemy.is_alive() {
-                    self.attack_turn = Turn::Enemy;
-                } else {
-                    response_text = format!("You defeated {}!", enemy.name);
-                    return self.handle_battle_success(game_state, response_text);
-                }
-                EventLoopResponse::InProgress(response_text)
+            if !enemy.is_alive() {
+                response_text = format!("You defeated {}!", enemy.name);
+                return self.handle_battle_success(game_state, response_text);
             }
-            Turn::Enemy => {
-                response_text = enemy.attack(player);
 
-                if player.is_alive() {
-                    self.attack_turn = Turn::Player;
-                } else {
-                    return self.handle_battle_fail(response_text, game_state, player);
-                }
-                EventLoopResponse::InProgress(response_text)
-            }
+            self.player_last_attack = Instant::now();
+
+            return EventLoopResponse::InProgress(Some(response_text));
         }
+
+        if Instant::now() - self.enemy_last_attack >= Duration::from_millis(enemy.attack_speed) {
+            response_text = enemy.attack(player);
+
+            if !player.is_alive() {
+                return self.handle_battle_fail(response_text, game_state, player);
+            }
+
+            self.enemy_last_attack = Instant::now();
+
+            return EventLoopResponse::InProgress(Some(response_text));
+        }
+
+        EventLoopResponse::InProgress(None)
     }
 }

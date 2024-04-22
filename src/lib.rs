@@ -6,7 +6,7 @@ use theme::theme_data::get_themes;
 use wasm_bindgen::prelude::*;
 
 use crate::{
-    config::{PLAYER_ATTACK, PLAYER_LIFE},
+    config::{PLAYER_ATTACK, PLAYER_ATTACK_SPEED, PLAYER_LIFE},
     event::{event_response::EventResponse, visit_event::VisitEvent},
     game_data::GameData,
     theme::get_theme,
@@ -37,7 +37,12 @@ impl Game {
     pub fn new(theme: String) -> Game {
         let theme_data = get_theme(theme);
         let game_data = GameData::new(theme_data);
-        let player = Player::new(game_data.main_character.clone(), PLAYER_LIFE, PLAYER_ATTACK);
+        let player = Player::new(
+            game_data.main_character.clone(),
+            PLAYER_LIFE,
+            PLAYER_ATTACK,
+            PLAYER_ATTACK_SPEED,
+        );
         let mut game_state = GameState::new(game_data);
         let current_event = VisitEvent::build(&mut game_state);
 
@@ -99,8 +104,8 @@ impl Game {
         self.current_event = next_event;
     }
 
-    pub fn progress_event_loop(&mut self) -> String {
-        let mut result = String::new();
+    pub fn progress_event_loop(&mut self) -> Option<String> {
+        let mut result = None;
         if let Some(event_loop) = self.current_event.get_event_loop() {
             let response = event_loop.progress_event_loop(&mut self.player, &mut self.game_state);
 
@@ -108,7 +113,7 @@ impl Game {
                 EventLoopResponse::InProgress(response_text) => result = response_text,
                 EventLoopResponse::Complete(response_text, next_event) => {
                     self.change_event(next_event);
-                    result = response_text;
+                    result = Some(response_text);
                 }
             }
         }
@@ -123,7 +128,7 @@ impl Game {
         }
     }
 
-    pub fn get_event_loop_interval(&mut self) -> u8 {
+    pub fn get_event_loop_interval(&mut self) -> u32 {
         if let Some(event_loop) = self.current_event.get_event_loop() {
             event_loop.get_event_loop_interval()
         } else {

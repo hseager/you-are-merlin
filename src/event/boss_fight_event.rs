@@ -7,10 +7,7 @@ use crate::{
 };
 
 use super::{
-    event_loop::{
-        battle_event_loop::{BattleEventLoop, Turn},
-        EventLoop,
-    },
+    event_loop::{battle_event_loop::BattleEventLoop, EventLoop},
     Event, EventResponse,
 };
 
@@ -21,7 +18,7 @@ pub struct BossFightEvent {
 
 impl BossFightEvent {
     pub fn new(battle: Battle) -> BossFightEvent {
-        let event_loop = BattleEventLoop::new(battle.enemy.clone(), Turn::Player);
+        let event_loop = BattleEventLoop::new(battle.enemy.clone());
 
         BossFightEvent {
             enemy: battle.enemy,

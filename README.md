@@ -23,6 +23,8 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 
 ## To do
 
+### Ideas 
+
 #### v1.0
 - Boss quote
 - chatGPT API
@@ -36,6 +38,7 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
     - Choice encounter with reward or damage
 - Split items into types like weapons, armor, utilities with unique stats
 - Inventory
+- Multithreading attacks
 
 #### later
 - Require key for main boss

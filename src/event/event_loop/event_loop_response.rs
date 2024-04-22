@@ -1,6 +1,6 @@
 use crate::event::Event;
 
 pub enum EventLoopResponse {
-    InProgress(String),
+    InProgress(Option<String>),
     Complete(String, Box<dyn Event>),
 }

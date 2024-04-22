@@ -33,8 +33,10 @@ fn main() {
         }
 
         while game.has_event_loop() {
-            println!("{}", game.progress_event_loop());
-            sleep(Duration::from_secs(game.get_event_loop_interval().into()));
+            if let Some(response) = game.progress_event_loop() {
+                println!("{}", response);
+            }
+            sleep(Duration::from_millis(game.get_event_loop_interval().into()));
         }
     }
 }

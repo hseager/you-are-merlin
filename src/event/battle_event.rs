@@ -7,10 +7,7 @@ use crate::{
 };
 
 use super::{
-    event_loop::{
-        battle_event_loop::{BattleEventLoop, Turn},
-        EventLoop,
-    },
+    event_loop::{battle_event_loop::BattleEventLoop, EventLoop},
     visit_event::VisitEvent,
     Event, EventResponse,
 };
@@ -22,7 +19,7 @@ pub struct BattleEvent {
 
 impl BattleEvent {
     pub fn new(battle: Battle) -> BattleEvent {
-        let event_loop = BattleEventLoop::new(battle.enemy.clone(), Turn::Player);
+        let event_loop = BattleEventLoop::new(battle.enemy.clone());
 
         BattleEvent {
             enemy: battle.enemy,
@@ -54,7 +51,7 @@ impl Event for BattleEvent {
     ) -> EventResponse {
         match action.class {
             ActionType::Attack => {
-                self.event_loop.is_active = true;
+                self.event_loop.start();
                 EventResponse::new(None, None)
             }
             ActionType::Run => {
