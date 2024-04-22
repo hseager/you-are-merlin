@@ -30,7 +30,7 @@ impl EventLoop for RestEventLoop {
         game_state: &mut GameState,
     ) -> EventLoopResponse {
         if player.life < player.max_life {
-            EventLoopResponse::InProgress(player.heal())
+            EventLoopResponse::InProgress(player.rest())
         } else {
             EventLoopResponse::Complete(
                 "You fully recover your health.".to_string(),

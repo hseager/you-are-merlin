@@ -35,6 +35,7 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 - More types of encounters like puzzles and riddles etc
     - Choice encounter with reward or damage
 - Split items into types like weapons, armor, utilities with unique stats
+- Inventory
 
 #### later
 - Require key for main boss

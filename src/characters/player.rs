@@ -35,7 +35,7 @@ impl Player {
         self.max_life += item.max_life;
     }
 
-    pub fn heal(&mut self) -> String {
+    pub fn rest(&mut self) -> String {
         let heal_amount = REST_HEAL_AMOUNT;
         let mut new_life = self.life + heal_amount;
 
