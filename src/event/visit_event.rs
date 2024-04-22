@@ -24,6 +24,13 @@ impl VisitEvent {
             completed_locations,
         }
     }
+
+    pub fn build(game_state: &mut GameState) -> Box<dyn Event> {
+        Box::new(VisitEvent::new(
+            game_state.get_current_location().clone(),
+            game_state.completed_locations.clone(),
+        ))
+    }
 }
 
 impl Event for VisitEvent {

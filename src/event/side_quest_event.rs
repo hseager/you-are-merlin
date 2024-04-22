@@ -72,23 +72,12 @@ impl Event for SideQuestEvent {
         player: &mut Player,
     ) -> EventResponse {
         match action.class {
-            ActionType::Run => {
-                let next_event = Box::new(VisitEvent::new(
-                    game_state.get_current_location().clone(),
-                    game_state.completed_locations.clone(),
-                ));
-                EventResponse::new(Some(next_event), None)
-            }
+            ActionType::Run => EventResponse::new(Some(VisitEvent::build(game_state)), None),
             ActionType::Accept => {
                 game_state.accepted_quests.push(self.side_quest.clone());
 
-                let next_event = Box::new(VisitEvent::new(
-                    game_state.get_current_location().clone(),
-                    game_state.completed_locations.clone(),
-                ));
-
                 EventResponse::new(
-                    Some(next_event),
+                    Some(VisitEvent::build(game_state)),
                     Some("You accept their request.".to_string()),
                 )
             }
@@ -107,12 +96,7 @@ impl Event for SideQuestEvent {
                     response_text, item.name, item.attack, item.max_life
                 );
 
-                let next_event = Box::new(VisitEvent::new(
-                    game_state.get_current_location().clone(),
-                    game_state.completed_locations.clone(),
-                ));
-
-                EventResponse::new(Some(next_event), Some(response_text))
+                EventResponse::new(Some(VisitEvent::build(game_state)), Some(response_text))
             }
             _ => panic!("Unhandled action when handling action."),
         }

@@ -38,19 +38,13 @@ impl Game {
         let theme_data = get_theme(theme);
         let game_data = GameData::new(theme_data);
         let player = Player::new(game_data.main_character.clone(), PLAYER_LIFE, PLAYER_ATTACK);
-        let location = game_data
-            .locations
-            .first()
-            .expect("Unable to get location when creating a new game.");
-
-        let first_event = VisitEvent::new(location.clone(), Vec::new());
-
-        let game_state = GameState::new(game_data);
+        let mut game_state = GameState::new(game_data);
+        let current_event = VisitEvent::build(&mut game_state);
 
         Game {
             player,
             game_state,
-            current_event: Box::new(first_event),
+            current_event,
         }
     }
 

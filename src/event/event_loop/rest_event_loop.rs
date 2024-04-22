@@ -32,11 +32,10 @@ impl EventLoop for RestEventLoop {
         if player.life < player.max_life {
             EventLoopResponse::InProgress(player.heal())
         } else {
-            let next_event = Box::new(VisitEvent::new(
-                game_state.get_current_location().clone(),
-                game_state.completed_locations.clone(),
-            ));
-            EventLoopResponse::Complete("You fully recover your health.".to_string(), next_event)
+            EventLoopResponse::Complete(
+                "You fully recover your health.".to_string(),
+                VisitEvent::build(game_state),
+            )
         }
     }
 }

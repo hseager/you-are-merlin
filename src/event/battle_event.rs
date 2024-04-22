@@ -60,11 +60,7 @@ impl Event for BattleEvent {
             ActionType::Run => {
                 game_state.reset_encounters();
 
-                let next_event = Box::new(VisitEvent::new(
-                    game_state.get_current_location().clone(),
-                    game_state.completed_locations.clone(),
-                ));
-                EventResponse::new(Some(next_event), None)
+                EventResponse::new(Some(VisitEvent::build(game_state)), None)
             }
             _ => panic!("Unhandled action when handling action."),
         }

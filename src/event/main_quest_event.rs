@@ -59,13 +59,7 @@ impl Event for MainQuestEvent {
                 },
                 None => panic!("Shouldn't be the end of encounters after accepting main quest..."),
             },
-            ActionType::Run => {
-                let next_event = Box::new(VisitEvent::new(
-                    game_state.get_current_location().clone(),
-                    game_state.completed_locations.clone(),
-                ));
-                EventResponse::new(Some(next_event), None)
-            }
+            ActionType::Run => EventResponse::new(Some(VisitEvent::build(game_state)), None),
             _ => panic!("Unhandled action when handling action."),
         }
     }
