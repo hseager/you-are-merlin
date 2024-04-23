@@ -40,6 +40,7 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 - Inventory
 - Multithreading attacks
 - Use items/potions during a battle loop
+- Display text rather than enemy stats
 
 #### later
 - Require key for main boss
