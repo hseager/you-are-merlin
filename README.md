@@ -23,26 +23,25 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 
 ## To do
 
-### Ideas 
+### v0.2
 
-#### v1.0
+- Better item stats (crit chance/multi/ lifegain on hit)
+- Split items into types like weapons, armor, utilities with unique stats
+- Inventory
+- Usable items
+    - Use items/potions during a battle loop
+- More types of encounters like puzzles and riddles etc
+    - Choice encounter with reward or damage
+- Display text rather than enemy stats
+
+### later
+
+- Rewards (gold) and trade
 - Boss quote
 - chatGPT API
 - Chance for Run to fail
-- Usable items
-- Better item stats (crit chance/multi/ lifegain on hit)
-- Rewards (gold) and trade
 - Mini bosses for dungeons
 - Dungeon difficulty, more battles = better reward
-- More types of encounters like puzzles and riddles etc
-    - Choice encounter with reward or damage
-- Split items into types like weapons, armor, utilities with unique stats
-- Inventory
-- Multithreading attacks
-- Use items/potions during a battle loop
-- Display text rather than enemy stats
-
-#### later
 - Require key for main boss
 - Better visuals for life/attack
 
