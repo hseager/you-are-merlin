@@ -45,12 +45,12 @@ pub const THEME_DATA: Theme = Theme {
                 ThemeEnemy {
                     name: "Goblin Scavenger",
                     description: "Scrawny and agile creatures, lurking in the shadows and scavenging for treasures.",
-                    difficulty: EnemyDifficulty::Normal
+                    difficulty: EnemyDifficulty::Easy
                 },
                 ThemeEnemy {
                     name: "Mountain Orc",
                     description: "Brutish and savage warriors, wielding crude weapons and driven by a lust for blood.",
-                    difficulty: EnemyDifficulty::Hard
+                    difficulty: EnemyDifficulty::Normal
                 },
                 ThemeEnemy {
                     name: "Snow Troll",
@@ -67,12 +67,12 @@ pub const THEME_DATA: Theme = Theme {
                 ThemeEnemy {
                     name: "Orc Grunt",
                     description: "Minions of Sauron, fierce and brutal in battle.",
-                    difficulty: EnemyDifficulty::Normal
+                    difficulty: EnemyDifficulty::Easy
                 },
                 ThemeEnemy {
                     name: "Uruk-hai Berserker",
                     description: "Warriors bred by Saruman, wielding great strength and ferocity.",
-                    difficulty: EnemyDifficulty::Hard
+                    difficulty: EnemyDifficulty::Normal
                 },
                 ThemeEnemy {
                     name: "Cave Troll",
@@ -89,7 +89,7 @@ pub const THEME_DATA: Theme = Theme {
                 ThemeEnemy {
                     name: "Haradrim Warrior",
                     description: "Warriors from the South, skilled in desert combat and wielding scimitars.",
-                    difficulty: EnemyDifficulty::Normal
+                    difficulty: EnemyDifficulty::Easy
                 },
                 ThemeEnemy {
                     name: "Orc Marauder",
