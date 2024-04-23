@@ -8,12 +8,12 @@ pub struct Player {
     pub max_life: i16,
     pub life: i16,
     pub attack: u16,
-    pub attack_speed: u64,
+    pub attack_speed: u16,
     pub inventory: Vec<String>, // TODO change to vec of items
 }
 
 impl Player {
-    pub fn new(name: String, life: i16, attack: u16, attack_speed: u64) -> Player {
+    pub fn new(name: String, life: i16, attack: u16, attack_speed: u16) -> Player {
         Player {
             name,
             max_life: life,

@@ -39,6 +39,7 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 - Split items into types like weapons, armor, utilities with unique stats
 - Inventory
 - Multithreading attacks
+- Use items/potions during a battle loop
 
 #### later
 - Require key for main boss

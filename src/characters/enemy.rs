@@ -9,7 +9,7 @@ pub struct Enemy {
     pub description: &'static str,
     pub life: i16,
     pub attack: u16,
-    pub attack_speed: u64,
+    pub attack_speed: u16,
 }
 
 impl Enemy {
@@ -18,7 +18,7 @@ impl Enemy {
         description: &'static str,
         life: i16,
         attack: u16,
-        attack_speed: u64,
+        attack_speed: u16,
     ) -> Enemy {
         Enemy {
             name,

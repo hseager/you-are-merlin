@@ -163,7 +163,7 @@ fn add_main_quest(
         .push(Encounter::BossFight(Battle { enemy: boss }));
 }
 
-fn map_theme_enemy_difficulty_to_stats(difficulty: EnemyDifficulty) -> (i16, u16, u64) {
+fn map_theme_enemy_difficulty_to_stats(difficulty: EnemyDifficulty) -> (i16, u16, u16) {
     match difficulty {
         EnemyDifficulty::Easy => ENEMY_EASY_STATS,
         EnemyDifficulty::Normal => ENEMY_MEDIUM_STATS,

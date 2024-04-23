@@ -1,5 +1,3 @@
-use std::time::{Duration, Instant};
-
 use crate::{
     characters::{enemy::Enemy, fighter::Fighter, player::Player},
     config::BATTLE_INTERVAL_MILLIS,
@@ -18,8 +16,8 @@ use super::{event_loop_response::EventLoopResponse, EventLoop};
 pub struct BattleEventLoop {
     pub is_active: bool,
     pub enemy: Enemy,
-    pub player_last_attack: Instant,
-    pub enemy_last_attack: Instant,
+    pub player_last_attack_time: i32,
+    pub enemy_last_attack_time: i32,
 }
 
 impl BattleEventLoop {
@@ -27,15 +25,13 @@ impl BattleEventLoop {
         BattleEventLoop {
             is_active: false,
             enemy,
-            player_last_attack: Instant::now(),
-            enemy_last_attack: Instant::now(),
+            player_last_attack_time: 0,
+            enemy_last_attack_time: 0,
         }
     }
 
     pub fn start(&mut self) {
         self.is_active = true;
-        self.player_last_attack = Instant::now();
-        self.enemy_last_attack = Instant::now();
     }
 
     pub fn handle_battle_success(
@@ -124,13 +120,18 @@ impl EventLoop for BattleEventLoop {
 
     fn progress_event_loop(
         &mut self,
+        current_epoch_milli: i32,
         player: &mut Player,
         game_state: &mut GameState,
     ) -> EventLoopResponse {
         let mut response_text: String;
         let enemy = &mut self.enemy;
 
-        if Instant::now() - self.player_last_attack >= Duration::from_millis(player.attack_speed) {
+        if player_can_attack(
+            current_epoch_milli,
+            self.player_last_attack_time,
+            player.attack_speed,
+        ) {
             response_text = player.attack(enemy);
 
             if !enemy.is_alive() {
@@ -138,23 +139,43 @@ impl EventLoop for BattleEventLoop {
                 return self.handle_battle_success(game_state, response_text);
             }
 
-            self.player_last_attack = Instant::now();
+            self.player_last_attack_time = current_epoch_milli;
 
             return EventLoopResponse::InProgress(Some(response_text));
         }
 
-        if Instant::now() - self.enemy_last_attack >= Duration::from_millis(enemy.attack_speed) {
+        if enemy_can_attack(
+            current_epoch_milli,
+            self.enemy_last_attack_time,
+            enemy.attack_speed,
+        ) {
             response_text = enemy.attack(player);
 
             if !player.is_alive() {
                 return self.handle_battle_fail(response_text, game_state, player);
             }
 
-            self.enemy_last_attack = Instant::now();
+            self.enemy_last_attack_time = current_epoch_milli;
 
             return EventLoopResponse::InProgress(Some(response_text));
         }
 
         EventLoopResponse::InProgress(None)
     }
+}
+
+fn player_can_attack(
+    current_epoch_milli: i32,
+    player_last_attack_time: i32,
+    player_attack_speed: u16,
+) -> bool {
+    current_epoch_milli - player_last_attack_time >= player_attack_speed as i32
+}
+
+fn enemy_can_attack(
+    current_epoch_milli: i32,
+    enemy_last_attack_time: i32,
+    enemy_attack_speed: u16,
+) -> bool {
+    current_epoch_milli - enemy_last_attack_time >= enemy_attack_speed as i32
 }

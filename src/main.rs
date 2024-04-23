@@ -1,7 +1,11 @@
 use std::{io, thread::sleep, time::Duration};
 
 use colored::{control, Colorize};
-use you_are_merlin::{get_theme_display_list, utilities::spacer, Game};
+use you_are_merlin::{
+    get_theme_display_list,
+    utilities::{get_current_time_as_epoch_milli, spacer},
+    Game,
+};
 
 fn main() {
     if cfg!(target_os = "windows") {
@@ -33,7 +37,7 @@ fn main() {
         }
 
         while game.has_event_loop() {
-            if let Some(response) = game.progress_event_loop() {
+            if let Some(response) = game.progress_event_loop(get_current_time_as_epoch_milli()) {
                 println!("{}", response);
             }
             sleep(Duration::from_millis(game.get_event_loop_interval().into()));
