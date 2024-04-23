@@ -135,7 +135,7 @@ impl EventLoop for BattleEventLoop {
             response_text = player.attack(enemy);
 
             if !enemy.is_alive() {
-                response_text = format!("You defeated {}!", enemy.name);
+                response_text = format!("{}\nYou defeated {}!", response_text, enemy.name);
                 return self.handle_battle_success(game_state, response_text);
             }
 
