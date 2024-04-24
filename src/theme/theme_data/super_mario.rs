@@ -138,15 +138,45 @@ pub const THEME_DATA: Theme = Theme {
         }
     ],
     items: [
-        "Super Mushroom",
-        "Fire Flower",
-        "Ice Flower",
-        "Super Star",
-        "1-Up Mushroom",
-        "Gold Coin",
-        "Power Moon",
-        "Bob-omb",
-        "Green Shell",
-        "Super Leaf",
+        ThemeItem {
+            name:  "Fire Flower",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Luigi's Overalls",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Starman",
+            item_type: ItemType::Accessory
+        },
+        ThemeItem {
+            name:  "Super Leaf",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Mega Mushroom",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Cape Feather",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Tanooki Suit",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Bob-omb",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "1-Up Mushroom",
+            item_type: ItemType::Accessory
+        },
+        ThemeItem {
+            name:  "Gold Coin",
+            item_type: ItemType::Accessory
+        },
     ]
 };

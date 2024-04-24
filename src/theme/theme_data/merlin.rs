@@ -141,15 +141,45 @@ pub const THEME_DATA: Theme = Theme {
         },
     ],
     items: [
-        "Merlin's Robes of the Old Religion",
-        "Mordred's Shadow Sword",
-        "Guinevere's Locket of Protection",
-        "Lancelot's Shield of Valor",
-        "Morgana's Veil of Illusion",
-        "The Cauldron of Arianrhod",
-        "The Staff of Avalon",
-        "The Crystal Cave's Whispering Gem",
-        "The Helm of Dragon's Breath",
-        "The Grail of Destiny",
-    ]
+        ThemeItem {
+            name:  "Excalibur",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Morgana's Staff",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Dragon Scale Armor",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Gaius's Amulet",
+            item_type: ItemType::Accessory
+        },
+        ThemeItem {
+            name:  "Mordred's Sword",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Nimueh's Potion",
+            item_type: ItemType::Accessory
+        },
+        ThemeItem {
+            name:  "Camelot Shield",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Merlin's Wand",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Kilgharrah's Scale",
+            item_type: ItemType::Accessory
+        },
+        ThemeItem {
+            name:  "Lancelot's Armor",
+            item_type: ItemType::Armour
+        },
+    ]    
 };

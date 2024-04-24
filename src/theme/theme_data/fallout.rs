@@ -122,15 +122,46 @@ pub const THEME_DATA: Theme = Theme {
         },
     ],
     items: [
-        "Courier's Duster",
-        "Lucky Shades",
-        "Arcade Gannon's Enclave Remnants Power Armor",
-        "Ranger Sequoia",
-        "Thorn's Thorn",
-        "Stealth Suit Mk II",
-        "Gannon Family Tesla Armor",
-        "Guns and Bullets Skill Magazine",
-        "La Longue Carabine",
-        "YCS/186"
+        ThemeItem {
+            name:  "10mm Pistol",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Combat Armor",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Frag Grenade",
+            item_type: ItemType::Accessory
+        },
+        ThemeItem {
+            name:  "Plasma Rifle",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Power Armor",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Stealth Boy",
+            item_type: ItemType::Accessory
+        },
+        ThemeItem {
+            name:  "Gatling Laser",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "NCR Ranger Combat Armor",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Plasma Grenade",
+            item_type: ItemType::Accessory
+        },
+        ThemeItem {
+            name:  "Super Sledge",
+            item_type: ItemType::Weapon
+        },
     ]
+    
 };

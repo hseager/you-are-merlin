@@ -1,4 +1,7 @@
-use crate::{characters::fighter::calculate_damage, config::REST_HEAL_AMOUNT, items::Item};
+use crate::{
+    characters::fighter::calculate_damage, config::REST_HEAL_AMOUNT,
+    game_data::entities::Equipment, item::Item,
+};
 
 use super::fighter::Fighter;
 use crate::text_format::TextFormatter;
@@ -10,6 +13,7 @@ pub struct Player {
     pub attack: u16,
     pub attack_speed: u16,
     pub inventory: Vec<String>, // TODO change to vec of items
+    pub equipment: Equipment,
 }
 
 impl Player {

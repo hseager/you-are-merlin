@@ -135,15 +135,46 @@ pub const THEME_DATA: Theme = Theme {
         },
     ],
     items: [
-        "Lightsaber",
-        "Blaster Pistol",
-        "DL-44 Heavy Blaster Pistol",
-        "Bowcaster",
-        "The Force",
-        "Holocron",
-        "Jetpack",
-        "Electrobinoculars",
-        "Thermal Detonator",
-        "Comlink",
-    ],
+        ThemeItem {
+            name:  "Lightsaber",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Stormtrooper Blaster Pistol",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "DL-44 Heavy Blaster Pistol",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Darth Maul's Cape",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Force Field Generator",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Holocron",
+            item_type: ItemType::Accessory
+        },
+        ThemeItem {
+            name:  "Boba Fett's Jetpack",
+            item_type: ItemType::Accessory
+        },
+        ThemeItem {
+            name:  "Mandalorian Beskar Armor",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Thermal Detonator",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Comlink",
+            item_type: ItemType::Accessory
+        },
+    ]
+    
 };

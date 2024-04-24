@@ -138,15 +138,45 @@ pub const THEME_DATA: Theme = Theme {
         },
     ],
     items: [
-        "The Master Sword",
-        "The Hylian Shield",
-        "The Ocarina of Time",
-        "The Fairy Bow",
-        "The Bomb Bag",
-        "The Hookshot",
-        "The Boomerang",
-        "The Lens of Truth",
-        "Some Magic Beans",
-        "The Megaton Hammer",
+        ThemeItem {
+            name:  "The Master Sword",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "The Hylian Shield",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "The Ocarina of Time",
+            item_type: ItemType::Accessory
+        },
+        ThemeItem {
+            name:  "The Fairy Bow",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "The Bomb Bag",
+            item_type: ItemType::Accessory
+        },
+        ThemeItem {
+            name:  "The Hookshot",
+            item_type: ItemType::Accessory
+        },
+        ThemeItem {
+            name:  "Zora's Tunic",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "The Megaton Hammer",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "The Boomerang",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "The Mirror Shield",
+            item_type: ItemType::Armour
+        },
     ]
 };

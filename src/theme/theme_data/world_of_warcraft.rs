@@ -139,15 +139,45 @@ pub const THEME_DATA: Theme = Theme {
         },        
     ],
     items: [
-        "The Ashbringer",
-        "Thunderfury, Blessed Blade of the Windseeker",
-        "Sulfuras, Hand of Ragnaros",
-        "Atiesh, Greatstaff of the Guardian",
-        "Shadowfang",
-        "Teebu's Blazing Longsword",
-        "Warden's Staff",
-        "Arugal's Fist",
-        "Quel'Serrar",
-        "Ironfoe",
-    ]
+        ThemeItem {
+            name:  "Ashkandi, Greatsword of the Brotherhood",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Judgement Armor",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Thunderfury, Blessed Blade of the Windseeker",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Nightslayer Armor",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Sulfuras, Hand of Ragnaros",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Arcanist Regalia",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Rhok'delar, Longbow of the Ancient Keepers",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Benediction",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Onyxia Scale Cloak",
+            item_type: ItemType::Accessory
+        },
+        ThemeItem {
+            name:  "Hand of Justice (Trinket)",
+            item_type: ItemType::Accessory
+        },
+    ]    
 };

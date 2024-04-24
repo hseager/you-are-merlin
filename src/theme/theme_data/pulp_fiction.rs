@@ -138,15 +138,44 @@ pub const THEME_DATA: Theme = Theme {
         },
     ],
     items: [
-        "Vincent's 1911 Pistol",
-        "Jules' 9mm Pistol",
-        "Butch's Katana",
-        "Marsellus' Briefcase",
-        "Mia's Hypodermic Syringe",
-        "Vincent's Wallet",
-        "Butch's Brass Knuckles",
-        "Marcellus' Gold Watch",
-        "Vincent's Leather Jacket",
-        "Zed's Chopper",
-    ]
+    ThemeItem {
+        name:  "Vincent's Revolver",
+        item_type: ItemType::Weapon
+    },
+    ThemeItem {
+        name:  "Butch's Katana",
+        item_type: ItemType::Weapon
+    },
+    ThemeItem {
+        name:  "Marvin's Boots",
+        item_type: ItemType::Armour
+    },
+    ThemeItem {
+        name:  "Marsellus' Briefcase",
+        item_type: ItemType::Accessory
+    },
+    ThemeItem {
+        name:  "Jules's Wallet",
+        item_type: ItemType::Accessory
+    },
+    ThemeItem {
+        name:  "Winston Wolf's Suit",
+        item_type: ItemType::Armour
+    },
+    ThemeItem {
+        name:  "Zed's Chopper",
+        item_type: ItemType::Weapon
+    },
+    ThemeItem {
+        name:  "The Gold Watch",
+        item_type: ItemType::Accessory
+    },
+    ThemeItem {
+        name:  "Butch's Brass Knuckles",
+        item_type: ItemType::Weapon
+    },
+    ThemeItem {
+        name:  "Pumpkin's Leather Jacket",
+        item_type: ItemType::Armour
+    }]
 };

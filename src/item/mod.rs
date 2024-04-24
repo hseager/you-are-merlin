@@ -3,10 +3,34 @@ use rand::{seq::SliceRandom, thread_rng, Rng};
 
 use crate::config::{ITEM_GEN_ATTACK, ITEM_GEN_LIFE};
 
+pub struct EquipableItem {
+    name: String,
+    item_type: ItemType,
+}
+
+#[derive(Clone, Debug)]
+pub enum ItemType {
+    Armour,
+    Weapon,
+    Accessory,
+}
+
 pub struct Item {
     pub name: String,
     pub max_life: i16,
     pub attack: u16,
+}
+
+// pub enum Equipment {
+//     Armour(Option<Armor>),
+//     Weapon,
+//     Accessory,
+// }
+
+pub struct Equipment {
+    pub armour: ItemType,
+    pub weapon: ItemType,
+    pub accessory: ItemType,
 }
 
 pub fn create_item(items: &mut Vec<&str>) -> Item {
