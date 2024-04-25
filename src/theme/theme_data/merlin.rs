@@ -155,7 +155,7 @@ pub const THEME_DATA: Theme = Theme {
         },
         ThemeItem {
             name:  "Gaius's Amulet",
-            item_type: ItemType::Accessory
+            item_type: ItemType::Artifact
         },
         ThemeItem {
             name:  "Mordred's Sword",
@@ -163,7 +163,7 @@ pub const THEME_DATA: Theme = Theme {
         },
         ThemeItem {
             name:  "Nimueh's Potion",
-            item_type: ItemType::Accessory
+            item_type: ItemType::Artifact
         },
         ThemeItem {
             name:  "Camelot Shield",
@@ -175,7 +175,7 @@ pub const THEME_DATA: Theme = Theme {
         },
         ThemeItem {
             name:  "Kilgharrah's Scale",
-            item_type: ItemType::Accessory
+            item_type: ItemType::Artifact
         },
         ThemeItem {
             name:  "Lancelot's Armor",

@@ -148,7 +148,7 @@ pub const THEME_DATA: Theme = Theme {
         },
         ThemeItem {
             name:  "The Ocarina of Time",
-            item_type: ItemType::Accessory
+            item_type: ItemType::Artifact
         },
         ThemeItem {
             name:  "The Fairy Bow",
@@ -156,11 +156,11 @@ pub const THEME_DATA: Theme = Theme {
         },
         ThemeItem {
             name:  "The Bomb Bag",
-            item_type: ItemType::Accessory
+            item_type: ItemType::Artifact
         },
         ThemeItem {
             name:  "The Hookshot",
-            item_type: ItemType::Accessory
+            item_type: ItemType::Artifact
         },
         ThemeItem {
             name:  "Zora's Tunic",

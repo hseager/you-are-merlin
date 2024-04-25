@@ -3,7 +3,7 @@ use crate::{
     characters::player::Player,
     game_data::entities::{Location, SideQuest},
     game_state::GameState,
-    items::create_item,
+    item::get_item,
     text_format::TextFormatter,
 };
 
@@ -68,7 +68,7 @@ impl Event for RewardEvent {
             ActionType::Open => {
                 let mut response_text: String;
 
-                let item = create_item(&mut game_state.items);
+                let item = get_item(&mut game_state.items);
                 player.equip_item(&item);
 
                 response_text = format!(

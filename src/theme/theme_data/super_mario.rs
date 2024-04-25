@@ -148,7 +148,7 @@ pub const THEME_DATA: Theme = Theme {
         },
         ThemeItem {
             name:  "Starman",
-            item_type: ItemType::Accessory
+            item_type: ItemType::Artifact
         },
         ThemeItem {
             name:  "Super Leaf",
@@ -172,11 +172,11 @@ pub const THEME_DATA: Theme = Theme {
         },
         ThemeItem {
             name:  "1-Up Mushroom",
-            item_type: ItemType::Accessory
+            item_type: ItemType::Artifact
         },
         ThemeItem {
             name:  "Gold Coin",
-            item_type: ItemType::Accessory
+            item_type: ItemType::Artifact
         },
     ]
 };

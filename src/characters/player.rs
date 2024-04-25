@@ -1,7 +1,4 @@
-use crate::{
-    characters::fighter::calculate_damage, config::REST_HEAL_AMOUNT,
-    game_data::entities::Equipment, item::Item,
-};
+use crate::{characters::fighter::calculate_damage, config::REST_HEAL_AMOUNT, item::Equipment};
 
 use super::fighter::Fighter;
 use crate::text_format::TextFormatter;
@@ -18,6 +15,12 @@ pub struct Player {
 
 impl Player {
     pub fn new(name: String, life: i16, attack: u16, attack_speed: u16) -> Player {
+        let equipment = Equipment {
+            armour: None,
+            weapon: None,
+            artifact: None,
+        };
+
         Player {
             name,
             max_life: life,
@@ -25,6 +28,7 @@ impl Player {
             attack,
             attack_speed,
             inventory: Vec::new(),
+            equipment,
         }
     }
 

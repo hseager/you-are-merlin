@@ -132,7 +132,7 @@ pub const THEME_DATA: Theme = Theme {
         },
         ThemeItem {
             name:  "Frag Grenade",
-            item_type: ItemType::Accessory
+            item_type: ItemType::Artifact
         },
         ThemeItem {
             name:  "Plasma Rifle",
@@ -144,7 +144,7 @@ pub const THEME_DATA: Theme = Theme {
         },
         ThemeItem {
             name:  "Stealth Boy",
-            item_type: ItemType::Accessory
+            item_type: ItemType::Artifact
         },
         ThemeItem {
             name:  "Gatling Laser",
@@ -156,7 +156,7 @@ pub const THEME_DATA: Theme = Theme {
         },
         ThemeItem {
             name:  "Plasma Grenade",
-            item_type: ItemType::Accessory
+            item_type: ItemType::Artifact
         },
         ThemeItem {
             name:  "Super Sledge",

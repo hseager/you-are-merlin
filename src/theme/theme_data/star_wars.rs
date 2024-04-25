@@ -157,11 +157,11 @@ pub const THEME_DATA: Theme = Theme {
         },
         ThemeItem {
             name:  "Holocron",
-            item_type: ItemType::Accessory
+            item_type: ItemType::Artifact
         },
         ThemeItem {
             name:  "Boba Fett's Jetpack",
-            item_type: ItemType::Accessory
+            item_type: ItemType::Artifact
         },
         ThemeItem {
             name:  "Mandalorian Beskar Armor",
@@ -173,7 +173,7 @@ pub const THEME_DATA: Theme = Theme {
         },
         ThemeItem {
             name:  "Comlink",
-            item_type: ItemType::Accessory
+            item_type: ItemType::Artifact
         },
     ]
     

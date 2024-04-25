@@ -1,4 +1,7 @@
-use crate::text_format::TextFormatter;
+use crate::{
+    item::{item_builder, EquipableItem},
+    text_format::TextFormatter,
+};
 
 use self::entities::Location;
 use crate::theme::Theme;
@@ -10,7 +13,7 @@ pub struct GameData {
     pub world_name: &'static str,
     pub main_character: String,
     pub locations: Vec<Location>,
-    pub items: Vec<&'static str>,
+    pub items: Vec<EquipableItem>,
 }
 
 impl GameData {
@@ -18,7 +21,7 @@ impl GameData {
         let theme = theme_data;
         let world_name = theme.world_name;
         let main_character = theme.main_character.text_bold();
-        let items = theme.items.to_vec();
+        let items = item_builder::build_items(theme.items.to_vec());
         let locations = world_builder::build_world(theme);
 
         GameData {

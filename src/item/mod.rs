@@ -1,39 +1,37 @@
-use crate::text_format::TextFormatter;
-use rand::{seq::SliceRandom, thread_rng, Rng};
+use rand::thread_rng;
 
-use crate::config::{ITEM_GEN_ATTACK, ITEM_GEN_LIFE};
+use self::{armour::Armour, artifact::Artifact, weapon::Weapon};
 
-pub struct EquipableItem {
-    name: String,
-    item_type: ItemType,
-}
+mod armour;
+mod artifact;
+pub mod item_builder;
+mod weapon;
 
 #[derive(Clone, Debug)]
 pub enum ItemType {
     Armour,
     Weapon,
-    Accessory,
+    Artifact,
 }
 
-pub struct Item {
-    pub name: String,
-    pub max_life: i16,
-    pub attack: u16,
+pub trait Item {
+    fn name(&self) -> String;
+    fn item_type(&self) -> ItemType;
 }
-
-// pub enum Equipment {
-//     Armour(Option<Armor>),
-//     Weapon,
-//     Accessory,
-// }
 
 pub struct Equipment {
-    pub armour: ItemType,
-    pub weapon: ItemType,
-    pub accessory: ItemType,
+    pub armour: Option<Armour>,
+    pub weapon: Option<Weapon>,
+    pub artifact: Option<Artifact>,
 }
 
-pub fn create_item(items: &mut Vec<&str>) -> Item {
+pub enum EquipableItem {
+    Armour(Armour),
+    Weapon(Weapon),
+    Artifact(Artifact),
+}
+
+pub fn get_item(items: &mut Vec<&str>) -> EquipableItem {
     let mut rng = thread_rng();
 
     let item_name = items.choose_mut(&mut rng).unwrap().to_owned();
@@ -48,12 +46,12 @@ pub fn create_item(items: &mut Vec<&str>) -> Item {
     }
 }
 
-pub fn create_item_stats() -> (i16, u16) {
-    let (min_life, max_life) = ITEM_GEN_LIFE;
-    let (min_attack, max_attack) = ITEM_GEN_ATTACK;
+// pub fn create_item_stats() -> (i16, u16) {
+//     let (min_life, max_life) = ITEM_GEN_LIFE;
+//     let (min_attack, max_attack) = ITEM_GEN_ATTACK;
 
-    let max_life = rand::thread_rng().gen_range(min_life..=max_life);
-    let attack: u16 = rand::thread_rng().gen_range(min_attack..=max_attack);
+//     let max_life = rand::thread_rng().gen_range(min_life..=max_life);
+//     let attack: u16 = rand::thread_rng().gen_range(min_attack..=max_attack);
 
-    (max_life, attack)
-}
+//     (max_life, attack)
+// }

@@ -173,11 +173,11 @@ pub const THEME_DATA: Theme = Theme {
         },
         ThemeItem {
             name:  "Onyxia Scale Cloak",
-            item_type: ItemType::Accessory
+            item_type: ItemType::Artifact
         },
         ThemeItem {
             name:  "Hand of Justice (Trinket)",
-            item_type: ItemType::Accessory
+            item_type: ItemType::Artifact
         },
     ]    
 };

@@ -1,13 +1,16 @@
-use crate::game_data::{
-    entities::{Encounter, Location, SideQuest},
-    GameData,
+use crate::{
+    game_data::{
+        entities::{Encounter, Location, SideQuest},
+        GameData,
+    },
+    item::EquipableItem,
 };
 
 pub struct GameState {
     current_location: usize,
     current_encounter: usize,
     pub game_data: GameData,
-    pub items: Vec<&'static str>,
+    pub items: Vec<EquipableItem>,
     pub accepted_quests: Vec<SideQuest>,
     pub completed_locations: Vec<Location>,
     pub is_running: bool,
@@ -18,7 +21,7 @@ impl GameState {
         GameState {
             current_location: 0,
             current_encounter: 0,
-            items: game_data.items.clone(),
+            items: game_data.items,
             game_data,
             accepted_quests: Vec::new(),
             completed_locations: Vec::new(),

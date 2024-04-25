@@ -152,11 +152,11 @@ pub const THEME_DATA: Theme = Theme {
     },
     ThemeItem {
         name:  "Marsellus' Briefcase",
-        item_type: ItemType::Accessory
+        item_type: ItemType::Artifact
     },
     ThemeItem {
         name:  "Jules's Wallet",
-        item_type: ItemType::Accessory
+        item_type: ItemType::Artifact
     },
     ThemeItem {
         name:  "Winston Wolf's Suit",
@@ -168,7 +168,7 @@ pub const THEME_DATA: Theme = Theme {
     },
     ThemeItem {
         name:  "The Gold Watch",
-        item_type: ItemType::Accessory
+        item_type: ItemType::Artifact
     },
     ThemeItem {
         name:  "Butch's Brass Knuckles",
