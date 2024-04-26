@@ -44,7 +44,7 @@ impl Item for Artifact {
         ItemType::Artifact
     }
 
-    fn display_stats(&self) -> String {
+    fn display_info(&self) -> String {
         let mut stats = String::new();
 
         stats.push_str(&format!("- Power: {}\n", self.power));

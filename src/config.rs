@@ -23,5 +23,6 @@ pub const ITEM_GEN_CRIT_MULTI: (u16, u16) = (10, 20);
 pub const ITEM_GEN_CRIT_CHANCE: (u16, u16) = (2, 6);
 
 pub const ITEM_GEN_MAX_LIFE: (u16, u16) = (10, 20);
-pub const ITEM_GEN_BLOCK: (u16, u16) = (2, 5);
+pub const ITEM_GEN_BLOCK: (u16, u16) = (2, 8);
+pub const ITEM_GEN_PARRY_CHANCE: (u16, u16) = (2, 8);
 pub const ITEM_GEN_DODGE_CHANCE: (u16, u16) = (1, 4);

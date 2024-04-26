@@ -94,7 +94,7 @@ impl Event for SideQuestEvent {
                     "{}\nYou recieve {}! {}",
                     response_text,
                     item.name(),
-                    item.display_stats()
+                    item.display_info()
                 );
 
                 EventResponse::new(Some(VisitEvent::build(game_state)), Some(response_text))

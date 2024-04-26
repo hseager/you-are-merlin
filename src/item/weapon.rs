@@ -43,7 +43,7 @@ impl Item for Weapon {
         ItemType::Weapon
     }
 
-    fn display_stats(&self) -> String {
+    fn display_info(&self) -> String {
         let mut stats = String::new();
 
         stats.push_str(&format!(
