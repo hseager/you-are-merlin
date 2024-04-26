@@ -40,10 +40,10 @@ impl Player {
         self.inventory.iter().any(|i| i == item)
     }
 
-    pub fn equip_item(&mut self, item: &Item) {
-        self.attack += item.attack;
-        self.max_life += item.max_life;
-    }
+    // pub fn equip_item(&mut self, item: &Item) {
+    //     self.attack += item.attack;
+    //     self.max_life += item.max_life;
+    // }
 
     pub fn rest(&mut self) -> String {
         let heal_amount = REST_HEAL_AMOUNT;

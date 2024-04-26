@@ -1,3 +1,4 @@
+use crate::text_format::TextFormatter;
 use rand::{thread_rng, Rng};
 
 use crate::config::{
@@ -35,10 +36,24 @@ impl Weapon {
 
 impl Item for Weapon {
     fn name(&self) -> String {
-        self.name
+        self.name.text_bold()
     }
 
     fn item_type(&self) -> ItemType {
         ItemType::Weapon
+    }
+
+    fn display_stats(&self) -> String {
+        let mut stats = String::new();
+
+        stats.push_str(&format!(
+            "- Power: {}\n",
+            self.power.to_string().text_bold()
+        ));
+        stats.push_str(&format!("- Attack Speed: {}\n", self.attack_speed));
+        stats.push_str(&format!("- Crit Multiplier: {}\n", self.crit_multiplier));
+        stats.push_str(&format!("- Crit Chance: {}\n", self.crit_chance));
+
+        format!("\n{}", stats.trim())
     }
 }

@@ -3,7 +3,6 @@ use crate::{
     characters::player::Player,
     game_data::entities::SideQuest,
     game_state::GameState,
-    items::create_item,
     text_format::TextFormatter,
 };
 
@@ -86,14 +85,16 @@ impl Event for SideQuestEvent {
                     .completed_locations
                     .push(game_state.get_current_location().clone());
 
-                let item = create_item(&mut game_state.items);
-                player.equip_item(&item);
+                let item = game_state.get_random_item();
+                // player.equip_item(&item);
 
                 let mut response_text = "\"Your assistance in retrieving this has been invaluable. Thank you for your help! Please take this.\"".to_string();
 
                 response_text = format!(
-                    "{}\nYou recieve {}! Your attack power increases by {}, and your maximum life grows by {} points.",
-                    response_text, item.name, item.attack, item.max_life
+                    "{}\nYou recieve {}! {}",
+                    response_text,
+                    item.name(),
+                    item.display_stats()
                 );
 
                 EventResponse::new(Some(VisitEvent::build(game_state)), Some(response_text))

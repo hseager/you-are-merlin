@@ -1,16 +1,18 @@
+use rand::Rng;
+
 use crate::{
     game_data::{
         entities::{Encounter, Location, SideQuest},
         GameData,
     },
-    item::EquipableItem,
+    item::{item_builder, Item},
 };
 
 pub struct GameState {
     current_location: usize,
     current_encounter: usize,
     pub game_data: GameData,
-    pub items: Vec<EquipableItem>,
+    pub items: Vec<Box<dyn Item>>,
     pub accepted_quests: Vec<SideQuest>,
     pub completed_locations: Vec<Location>,
     pub is_running: bool,
@@ -18,10 +20,12 @@ pub struct GameState {
 
 impl GameState {
     pub fn new(game_data: GameData) -> GameState {
+        let items = item_builder::build_items(&game_data.items);
+
         GameState {
             current_location: 0,
             current_encounter: 0,
-            items: game_data.items,
+            items,
             game_data,
             accepted_quests: Vec::new(),
             completed_locations: Vec::new(),
@@ -76,5 +80,17 @@ impl GameState {
         } else {
             None
         }
+    }
+
+    pub fn get_random_item(&mut self) -> Box<dyn Item> {
+        assert!(self.items.len() > 0, "Out of items..");
+
+        let mut rng = rand::thread_rng();
+        let index = rng.gen_range(0..self.items.len());
+
+        // Remove the item from the list so that it's unique
+        let random_item = self.items.remove(index);
+
+        random_item
     }
 }

@@ -3,7 +3,6 @@ use crate::{
     characters::player::Player,
     game_data::entities::{Location, SideQuest},
     game_state::GameState,
-    item::get_item,
     text_format::TextFormatter,
 };
 
@@ -68,13 +67,10 @@ impl Event for RewardEvent {
             ActionType::Open => {
                 let mut response_text: String;
 
-                let item = get_item(&mut game_state.items);
-                player.equip_item(&item);
+                let item = game_state.get_random_item();
+                // player.equip_item(&item);
 
-                response_text = format!(
-                    "You find {}! Your attack power increases by {}, and your maximum life grows by {} points.",
-                    item.name, item.attack, item.max_life
-                );
+                response_text = format!("You find {}! {}", item.name(), item.display_stats());
 
                 if self.is_on_side_quest(&game_state.accepted_quests, player) {
                     response_text =

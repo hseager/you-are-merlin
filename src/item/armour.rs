@@ -1,3 +1,4 @@
+use crate::text_format::TextFormatter;
 use rand::{thread_rng, Rng};
 
 use crate::config::{ITEM_GEN_BLOCK, ITEM_GEN_DODGE_CHANCE, ITEM_GEN_MAX_LIFE};
@@ -30,10 +31,20 @@ impl Armour {
 
 impl Item for Armour {
     fn name(&self) -> String {
-        self.name
+        self.name.text_bold()
     }
 
     fn item_type(&self) -> ItemType {
         ItemType::Armour
+    }
+
+    fn display_stats(&self) -> String {
+        let mut stats = String::new();
+
+        stats.push_str(&format!("- Max Life: {}\n", self.max_life));
+        stats.push_str(&format!("- Block Chance: {}\n", self.block));
+        stats.push_str(&format!("- Dodge Chance: {}\n", self.dodge_chance));
+
+        format!("\n{}", stats.trim())
     }
 }

@@ -1,3 +1,4 @@
+use crate::text_format::TextFormatter;
 use rand::{thread_rng, Rng};
 
 use crate::config::{
@@ -36,10 +37,21 @@ impl Artifact {
 
 impl Item for Artifact {
     fn name(&self) -> String {
-        self.name
+        self.name.text_bold()
     }
 
     fn item_type(&self) -> ItemType {
         ItemType::Artifact
+    }
+
+    fn display_stats(&self) -> String {
+        let mut stats = String::new();
+
+        stats.push_str(&format!("- Power: {}\n", self.power));
+        stats.push_str(&format!("- Attack Speed: {}\n", self.attack_speed));
+        stats.push_str(&format!("- Max Life: {}\n", self.max_life));
+        stats.push_str(&format!("- Dodge Chance: {}\n", self.dodge_chance));
+
+        format!("\n{}", stats.trim())
     }
 }
