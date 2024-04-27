@@ -83,14 +83,12 @@ impl GameState {
     }
 
     pub fn get_random_item(&mut self) -> Box<dyn Item> {
-        assert!(self.items.len() > 0, "Out of items..");
+        assert!(!self.items.is_empty(), "Out of items..");
 
         let mut rng = rand::thread_rng();
         let index = rng.gen_range(0..self.items.len());
 
         // Remove the item from the list so that it's unique
-        let random_item = self.items.remove(index);
-
-        random_item
+        self.items.remove(index)
     }
 }

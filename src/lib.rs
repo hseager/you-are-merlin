@@ -18,8 +18,8 @@ pub mod config;
 mod event;
 mod game_data;
 mod game_state;
-mod item;
-mod text_format;
+pub mod item;
+pub mod text_format;
 pub mod theme;
 pub mod utilities;
 

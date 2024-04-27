@@ -1,18 +1,21 @@
-use crate::{config::ITEM_GEN_PARRY_CHANCE, text_format::TextFormatter};
+use crate::config::ITEM_GEN_PARRY_CHANCE;
 use rand::prelude::SliceRandom;
 use rand::{thread_rng, Rng};
 
 use crate::config::{ITEM_GEN_BLOCK, ITEM_GEN_DODGE_CHANCE, ITEM_GEN_MAX_LIFE};
 
-use super::{get_rarity_property_count, get_reward_item_rarity, Item, ItemRarity, ItemType};
+use super::{
+    get_rarity_property_count, get_rarity_text_color, get_reward_item_rarity, Item, ItemRarity,
+    ItemType,
+};
 
 pub struct Armour {
-    name: String,
-    rarity: ItemRarity,
-    max_life: u16,
-    block: u16,
-    parry_chance: u16,
-    dodge_chance: u16,
+    pub name: String,
+    pub rarity: ItemRarity,
+    pub max_life: u16,
+    pub block: u16,
+    pub parry_chance: u16,
+    pub dodge_chance: u16,
 }
 
 impl Armour {
@@ -58,7 +61,7 @@ impl Armour {
                 "block" => armour.block = value,
                 "parry_chance" => armour.parry_chance = value,
                 "dodge_chance" => armour.dodge_chance = value,
-                _ => unreachable!(), // Error if unexpected property is encountered
+                _ => unreachable!(),
             }
         }
 
@@ -68,7 +71,7 @@ impl Armour {
 
 impl Item for Armour {
     fn name(&self) -> String {
-        self.name.text_bold()
+        get_rarity_text_color(&self.rarity, &self.name)
     }
 
     fn item_type(&self) -> ItemType {

@@ -1,11 +1,12 @@
 use rand::{thread_rng, Rng};
 
 use self::{armour::Armour, artifact::Artifact, weapon::Weapon};
+use crate::text_format::TextFormatter;
 
-mod armour;
-mod artifact;
+pub mod armour;
+pub mod artifact;
 pub mod item_builder;
-mod weapon;
+pub mod weapon;
 
 pub trait Item {
     fn name(&self) -> String;
@@ -64,5 +65,14 @@ pub fn get_rarity_property_count(rarity: &ItemRarity) -> usize {
         ItemRarity::Rare => 2,
         ItemRarity::Epic => 3,
         ItemRarity::Legendary => 4,
+    }
+}
+
+pub fn get_rarity_text_color(rarity: &ItemRarity, name: &String) -> String {
+    match rarity {
+        ItemRarity::Common => name.text_bold(),
+        ItemRarity::Rare => name.text_blue_bold(),
+        ItemRarity::Epic => name.text_purple_bold(),
+        ItemRarity::Legendary => name.text_orange_bold(),
     }
 }
