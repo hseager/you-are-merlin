@@ -21,6 +21,17 @@ pub enum ItemType {
     Artifact,
 }
 
+pub enum ItemStat {
+    Power,
+    AttackSpeed,
+    CritMultiplier,
+    CritChance,
+    MaxLife,
+    Block,
+    ParryChance,
+    DodgeChance,
+}
+
 pub struct Equipment {
     pub armour: Option<Armour>,
     pub weapon: Option<Weapon>,

@@ -1,15 +1,19 @@
-use crate::text_format::TextFormatter;
+use rand::prelude::SliceRandom;
 use rand::{thread_rng, Rng};
 
 use crate::config::{
     ITEM_GEN_ATTACK_SPEED, ITEM_GEN_DODGE_CHANCE, ITEM_GEN_MAX_LIFE, ITEM_GEN_POWER,
 };
 
-use super::{Item, ItemType};
+use super::{
+    get_rarity_property_count, get_rarity_text_color, get_reward_item_rarity, Item, ItemRarity,
+    ItemStat, ItemType,
+};
 
 // TODO Change these to more interesting stats
 pub struct Artifact {
     name: String,
+    rarity: ItemRarity,
     power: u16,
     attack_speed: u16,
     max_life: u16,
@@ -18,26 +22,59 @@ pub struct Artifact {
 
 impl Artifact {
     pub fn new(name: String) -> Artifact {
-        let (min_power, max_power) = ITEM_GEN_POWER;
-        let (min_attack_speed, max_attack_speed) = ITEM_GEN_ATTACK_SPEED;
-        let (min_life, max_life) = ITEM_GEN_MAX_LIFE;
-        let (min_dodge_chance, max_dodge_chance) = ITEM_GEN_DODGE_CHANCE;
-
         let mut rng = thread_rng();
 
-        Artifact {
+        let mut properties = [
+            (
+                ItemStat::Power,
+                rng.gen_range(ITEM_GEN_POWER.0..=ITEM_GEN_POWER.1),
+            ),
+            (
+                ItemStat::AttackSpeed,
+                rng.gen_range(ITEM_GEN_ATTACK_SPEED.0..=ITEM_GEN_ATTACK_SPEED.1),
+            ),
+            (
+                ItemStat::MaxLife,
+                rng.gen_range(ITEM_GEN_MAX_LIFE.0..=ITEM_GEN_MAX_LIFE.1),
+            ),
+            (
+                ItemStat::DodgeChance,
+                rng.gen_range(ITEM_GEN_DODGE_CHANCE.0..=ITEM_GEN_DODGE_CHANCE.1),
+            ),
+        ];
+
+        properties.shuffle(&mut rng);
+
+        let rarity = get_reward_item_rarity();
+
+        let selected_properties = properties.iter().take(get_rarity_property_count(&rarity));
+
+        let mut artifact = Artifact {
             name,
-            power: rng.gen_range(min_power..=max_power),
-            attack_speed: rng.gen_range(min_attack_speed..=max_attack_speed),
-            max_life: rng.gen_range(min_life..=max_life),
-            dodge_chance: rng.gen_range(min_dodge_chance..=max_dodge_chance),
+            rarity,
+            power: 0,
+            attack_speed: 0,
+            max_life: 0,
+            dodge_chance: 0,
+        };
+
+        for (property, value) in selected_properties {
+            match property {
+                ItemStat::Power => artifact.power = *value,
+                ItemStat::AttackSpeed => artifact.attack_speed = *value,
+                ItemStat::MaxLife => artifact.max_life = *value,
+                ItemStat::DodgeChance => artifact.dodge_chance = *value,
+                _ => unreachable!(),
+            }
         }
+
+        artifact
     }
 }
 
 impl Item for Artifact {
     fn name(&self) -> String {
-        self.name.text_bold()
+        get_rarity_text_color(&self.rarity, &self.name)
     }
 
     fn item_type(&self) -> ItemType {
@@ -47,10 +84,24 @@ impl Item for Artifact {
     fn display_info(&self) -> String {
         let mut stats = String::new();
 
-        stats.push_str(&format!("- Power: {}\n", self.power));
-        stats.push_str(&format!("- Attack Speed: {}\n", self.attack_speed));
-        stats.push_str(&format!("- Max Life: {}\n", self.max_life));
-        stats.push_str(&format!("- Dodge Chance: {}\n", self.dodge_chance));
+        stats.push_str(&format!(
+            "{} - ({})\n",
+            self.name(),
+            &self.rarity.to_string()
+        ));
+
+        if self.power > 0 {
+            stats.push_str(&format!("- Power: {}\n", self.power));
+        }
+        if self.attack_speed > 0 {
+            stats.push_str(&format!("- Attack Speed: {}\n", self.attack_speed));
+        }
+        if self.max_life > 0 {
+            stats.push_str(&format!("- Max Life: {}\n", self.max_life));
+        }
+        if self.dodge_chance > 0 {
+            stats.push_str(&format!("- Dodge Chance: {}\n", self.dodge_chance));
+        }
 
         format!("\n{}", stats.trim())
     }

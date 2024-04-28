@@ -1,14 +1,18 @@
-use crate::text_format::TextFormatter;
+use rand::prelude::SliceRandom;
 use rand::{thread_rng, Rng};
 
 use crate::config::{
     ITEM_GEN_ATTACK_SPEED, ITEM_GEN_CRIT_CHANCE, ITEM_GEN_CRIT_MULTI, ITEM_GEN_POWER,
 };
 
-use super::{Item, ItemType};
+use super::{
+    get_rarity_property_count, get_rarity_text_color, get_reward_item_rarity, Item, ItemRarity,
+    ItemStat, ItemType,
+};
 
 pub struct Weapon {
     name: String,
+    rarity: ItemRarity,
     power: u16,
     attack_speed: u16,
     crit_multiplier: u16,
@@ -17,26 +21,59 @@ pub struct Weapon {
 
 impl Weapon {
     pub fn new(name: String) -> Weapon {
-        let (min_power, max_power) = ITEM_GEN_POWER;
-        let (min_attack_speed, max_attack_speed) = ITEM_GEN_ATTACK_SPEED;
-        let (min_crit_multi, max_crit_multi) = ITEM_GEN_CRIT_MULTI;
-        let (min_crit_chance, max_crit_chance) = ITEM_GEN_CRIT_CHANCE;
-
         let mut rng = thread_rng();
 
-        Weapon {
+        let mut properties = [
+            (
+                ItemStat::Power,
+                rng.gen_range(ITEM_GEN_POWER.0..=ITEM_GEN_POWER.1),
+            ),
+            (
+                ItemStat::AttackSpeed,
+                rng.gen_range(ITEM_GEN_ATTACK_SPEED.0..=ITEM_GEN_ATTACK_SPEED.1),
+            ),
+            (
+                ItemStat::CritMultiplier,
+                rng.gen_range(ITEM_GEN_CRIT_MULTI.0..=ITEM_GEN_CRIT_MULTI.1),
+            ),
+            (
+                ItemStat::CritChance,
+                rng.gen_range(ITEM_GEN_CRIT_CHANCE.0..=ITEM_GEN_CRIT_CHANCE.1),
+            ),
+        ];
+
+        properties.shuffle(&mut rng);
+
+        let rarity = get_reward_item_rarity();
+
+        let selected_properties = properties.iter().take(get_rarity_property_count(&rarity));
+
+        let mut weapon = Weapon {
             name,
-            power: rng.gen_range(min_power..=max_power),
-            attack_speed: rng.gen_range(min_attack_speed..=max_attack_speed),
-            crit_multiplier: rng.gen_range(min_crit_multi..=max_crit_multi),
-            crit_chance: rng.gen_range(min_crit_chance..=max_crit_chance),
+            rarity,
+            power: 0,
+            attack_speed: 0,
+            crit_multiplier: 0,
+            crit_chance: 0,
+        };
+
+        for (property, value) in selected_properties {
+            match property {
+                ItemStat::Power => weapon.power = *value,
+                ItemStat::AttackSpeed => weapon.attack_speed = *value,
+                ItemStat::CritMultiplier => weapon.crit_multiplier = *value,
+                ItemStat::CritChance => weapon.crit_chance = *value,
+                _ => unreachable!(),
+            }
         }
+
+        weapon
     }
 }
 
 impl Item for Weapon {
     fn name(&self) -> String {
-        self.name.text_bold()
+        get_rarity_text_color(&self.rarity, &self.name)
     }
 
     fn item_type(&self) -> ItemType {
@@ -47,12 +84,23 @@ impl Item for Weapon {
         let mut stats = String::new();
 
         stats.push_str(&format!(
-            "- Power: {}\n",
-            self.power.to_string().text_bold()
+            "{} - ({})\n",
+            self.name(),
+            &self.rarity.to_string()
         ));
-        stats.push_str(&format!("- Attack Speed: {}\n", self.attack_speed));
-        stats.push_str(&format!("- Crit Multiplier: {}\n", self.crit_multiplier));
-        stats.push_str(&format!("- Crit Chance: {}\n", self.crit_chance));
+
+        if self.power > 0 {
+            stats.push_str(&format!("- Power: {}\n", self.power));
+        }
+        if self.attack_speed > 0 {
+            stats.push_str(&format!("- Attack Speed: {}\n", self.attack_speed));
+        }
+        if self.crit_multiplier > 0 {
+            stats.push_str(&format!("- Crit Multiplier: {}\n", self.crit_multiplier));
+        }
+        if self.crit_chance > 0 {
+            stats.push_str(&format!("- Crit Chance: {}\n", self.crit_chance));
+        }
 
         format!("\n{}", stats.trim())
     }

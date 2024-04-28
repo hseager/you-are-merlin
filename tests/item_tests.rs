@@ -1,11 +1,13 @@
 #[cfg(test)]
 mod tests {
     use you_are_merlin::item::armour::Armour;
+    use you_are_merlin::item::artifact::Artifact;
+    use you_are_merlin::item::weapon::Weapon;
     use you_are_merlin::item::{Item, ItemRarity};
     use you_are_merlin::text_format::TextFormatter;
 
     #[test]
-    fn test_run_display_info() {
+    fn test_rarity_display_info() {
         let armour = Armour {
             name: "Test Armour".to_string(),
             rarity: ItemRarity::Rare,
@@ -16,6 +18,27 @@ mod tests {
         };
 
         print!("{}", armour.display_info());
+    }
+
+    #[test]
+    fn test_armour_generation_display_info() {
+        let item = Armour::new("Judgement Armor".to_string());
+
+        print!("{}", item.display_info());
+    }
+
+    #[test]
+    fn test_weapon_generation_display_info() {
+        let item = Weapon::new("Thunderfury, Blessed Blade of the Windseeker".to_string());
+
+        print!("{}", item.display_info());
+    }
+
+    #[test]
+    fn test_artifact_generation_display_info() {
+        let item = Artifact::new("Onyxia Scale Cloak".to_string());
+
+        print!("{}", item.display_info());
     }
 
     #[test]

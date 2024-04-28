@@ -6,7 +6,7 @@ use crate::config::{ITEM_GEN_BLOCK, ITEM_GEN_DODGE_CHANCE, ITEM_GEN_MAX_LIFE};
 
 use super::{
     get_rarity_property_count, get_rarity_text_color, get_reward_item_rarity, Item, ItemRarity,
-    ItemType,
+    ItemStat, ItemType,
 };
 
 pub struct Armour {
@@ -20,23 +20,24 @@ pub struct Armour {
 
 impl Armour {
     pub fn new(name: String) -> Armour {
-        let (min_life, max_life) = ITEM_GEN_MAX_LIFE;
-        let (min_block, max_block) = ITEM_GEN_BLOCK;
-        let (min_parry_chance, max_parry_chance) = ITEM_GEN_PARRY_CHANCE;
-        let (min_dodge_chance, max_dodge_chance) = ITEM_GEN_DODGE_CHANCE;
-
         let mut rng = thread_rng();
 
         let mut properties = [
-            ("max_life", rng.gen_range(min_life..=max_life)),
-            ("block", rng.gen_range(min_block..=max_block)),
             (
-                "parry_chance",
-                rng.gen_range(min_parry_chance..=max_parry_chance),
+                ItemStat::MaxLife,
+                rng.gen_range(ITEM_GEN_MAX_LIFE.0..=ITEM_GEN_MAX_LIFE.1),
             ),
             (
-                "dodge_chance",
-                rng.gen_range(min_dodge_chance..=max_dodge_chance),
+                ItemStat::Block,
+                rng.gen_range(ITEM_GEN_BLOCK.0..=ITEM_GEN_BLOCK.1),
+            ),
+            (
+                ItemStat::ParryChance,
+                rng.gen_range(ITEM_GEN_PARRY_CHANCE.0..=ITEM_GEN_PARRY_CHANCE.1),
+            ),
+            (
+                ItemStat::DodgeChance,
+                rng.gen_range(ITEM_GEN_DODGE_CHANCE.0..=ITEM_GEN_DODGE_CHANCE.1),
             ),
         ];
 
@@ -55,12 +56,12 @@ impl Armour {
             dodge_chance: 0,
         };
 
-        for &(property, value) in selected_properties {
+        for (property, value) in selected_properties {
             match property {
-                "max_life" => armour.max_life = value,
-                "block" => armour.block = value,
-                "parry_chance" => armour.parry_chance = value,
-                "dodge_chance" => armour.dodge_chance = value,
+                ItemStat::MaxLife => armour.max_life = *value,
+                ItemStat::Block => armour.block = *value,
+                ItemStat::ParryChance => armour.parry_chance = *value,
+                ItemStat::DodgeChance => armour.dodge_chance = *value,
                 _ => unreachable!(),
             }
         }
@@ -90,15 +91,12 @@ impl Item for Armour {
         if self.max_life > 0 {
             stats.push_str(&format!("- Max Life: {}\n", self.max_life));
         }
-
         if self.block > 0 {
             stats.push_str(&format!("- Block: {}\n", self.block));
         }
-
         if self.parry_chance > 0 {
             stats.push_str(&format!("- Parry: {}\n", self.parry_chance));
         }
-
         if self.dodge_chance > 0 {
             stats.push_str(&format!("- Dodge Chance: {}\n", self.dodge_chance));
         }
