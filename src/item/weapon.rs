@@ -84,9 +84,10 @@ impl Item for Weapon {
         let mut stats = String::new();
 
         stats.push_str(&format!(
-            "{} - ({})\n",
+            "{} - ({} {})\n",
             self.name(),
-            &self.rarity.to_string()
+            &self.rarity.to_string(),
+            &self.item_type().to_string(),
         ));
 
         if self.power > 0 {

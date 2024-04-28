@@ -21,6 +21,17 @@ pub enum ItemType {
     Artifact,
 }
 
+impl ItemType {
+    #![allow(clippy::inherent_to_string)]
+    pub fn to_string(&self) -> String {
+        match self {
+            ItemType::Armour => "Armour".to_string(),
+            ItemType::Weapon => "Weapon".to_string(),
+            ItemType::Artifact => "Artifact".to_string(),
+        }
+    }
+}
+
 pub enum ItemStat {
     Power,
     AttackSpeed,
