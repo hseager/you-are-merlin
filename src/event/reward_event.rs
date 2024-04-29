@@ -79,9 +79,10 @@ impl Event for RewardEvent {
 
                 if self.is_on_side_quest(&game_state.accepted_quests, player) {
                     response_text = format!(
-                        "{}\nYou also find {}!",
+                        "{}\n\
+                        You also find: {}",
                         response_text,
-                        self.quest_item.display_name()
+                        self.quest_item.display_info()
                     );
                     player.add_item_to_inventory(Box::new(self.quest_item.clone()));
                 }

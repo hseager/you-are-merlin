@@ -35,6 +35,6 @@ impl Item for QuestItem {
             &self.item_type().to_string(),
         ));
 
-        format!("\n{}", info.trim())
+        format!("{}", info.trim())
     }
 }

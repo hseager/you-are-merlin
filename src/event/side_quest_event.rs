@@ -94,9 +94,9 @@ impl Event for SideQuestEvent {
                 let mut response_text = "\"Your assistance in retrieving this has been invaluable. Thank you for your help! Please take this.\"".to_string();
 
                 response_text = format!(
-                    "{}\nYou recieve {}! {}",
+                    "{}\n\
+                    You recieve: {}",
                     response_text,
-                    item.display_name(),
                     item.display_info()
                 );
 
