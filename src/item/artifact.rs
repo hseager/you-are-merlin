@@ -73,7 +73,11 @@ impl Artifact {
 }
 
 impl Item for Artifact {
-    fn name(&self) -> String {
+    fn name(&self) -> &String {
+        &self.name
+    }
+
+    fn display_name(&self) -> String {
         get_rarity_text_color(&self.rarity, &self.name)
     }
 
@@ -86,7 +90,7 @@ impl Item for Artifact {
 
         stats.push_str(&format!(
             "{} - ({} {})\n",
-            self.name(),
+            self.display_name(),
             &self.rarity.to_string(),
             &self.item_type().to_string(),
         ));

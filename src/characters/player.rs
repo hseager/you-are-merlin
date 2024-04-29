@@ -1,4 +1,8 @@
-use crate::{characters::fighter::calculate_damage, config::REST_HEAL_AMOUNT, item::Equipment};
+use crate::{
+    characters::fighter::calculate_damage,
+    config::REST_HEAL_AMOUNT,
+    item::{Equipment, Item},
+};
 
 use super::fighter::Fighter;
 use crate::text_format::TextFormatter;
@@ -9,7 +13,7 @@ pub struct Player {
     pub life: i16,
     pub attack: u16,
     pub attack_speed: u16,
-    pub inventory: Vec<String>, // TODO change to vec of items
+    pub inventory: Vec<Box<dyn Item>>,
     pub equipment: Equipment,
 }
 
@@ -32,12 +36,12 @@ impl Player {
         }
     }
 
-    pub fn add_item_to_inventory(&mut self, item: String) {
+    pub fn add_item_to_inventory(&mut self, item: Box<dyn Item>) {
         self.inventory.push(item);
     }
 
-    pub fn has_item_in_inventory(&self, item: &String) -> bool {
-        self.inventory.iter().any(|i| i == item)
+    pub fn has_item_in_inventory(&self, item: Box<dyn Item>) -> bool {
+        self.inventory.iter().any(|i| i.name() == item.name())
     }
 
     // pub fn equip_item(&mut self, item: &Item) {

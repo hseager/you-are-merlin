@@ -12,6 +12,7 @@ pub fn build_items(items: &[ThemeItem]) -> Vec<Box<dyn Item>> {
             ItemType::Artifact => {
                 created_items.push(Box::new(Artifact::new(item.name.to_string())))
             }
+            _ => unreachable!(),
         }
     }
 

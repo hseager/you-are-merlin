@@ -84,7 +84,7 @@ impl Event for VisitEvent {
                         let next_event = Box::new(SideQuestEvent::new(
                             quest.clone(),
                             game_state.accepted_quests.clone(),
-                            player.has_item_in_inventory(&quest.item),
+                            player.has_item_in_inventory(Box::new(quest.item.clone())),
                         ));
                         EventResponse::new(Some(next_event), None)
                     }

@@ -7,6 +7,7 @@ use crate::{
 };
 
 use super::{event_loop::EventLoop, event_response::EventResponse, visit_event::VisitEvent, Event};
+use crate::item::Item;
 
 pub struct SideQuestEvent {
     side_quest: SideQuest,
@@ -40,13 +41,15 @@ impl Event for SideQuestEvent {
             Some(format!(
                 "You find a calm area. {} wants to ask you something.\n\
                 \"Do you have it? Please, bring me {} back from {}.\"",
-                self.side_quest.character, self.side_quest.item, self.side_quest.location_name
+                self.side_quest.character,
+                self.side_quest.item.display_name(),
+                self.side_quest.location_name
             ))
         } else {
             Some(format!(
                 "You find a calm area. {} wants to ask you something.\n\
                 \"Will you find {} from {} and bring it back to me? I will make it worth your while!\"",
-                self.side_quest.character, self.side_quest.item, self.side_quest.location_name
+                self.side_quest.character, self.side_quest.item.display_name(), self.side_quest.location_name
             ))
         }
     }
@@ -93,9 +96,11 @@ impl Event for SideQuestEvent {
                 response_text = format!(
                     "{}\nYou recieve {}! {}",
                     response_text,
-                    item.name(),
+                    item.display_name(),
                     item.display_info()
                 );
+
+                player.add_item_to_inventory(item);
 
                 EventResponse::new(Some(VisitEvent::build(game_state)), Some(response_text))
             }

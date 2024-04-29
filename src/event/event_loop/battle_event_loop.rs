@@ -7,7 +7,7 @@ use crate::{
     },
     game_data::entities::{Encounter, LocationType},
     game_state::GameState,
-    text_format::TextFormatter,
+    item::quest_item::QuestItem,
 };
 
 use super::{event_loop_response::EventLoopResponse, EventLoop};
@@ -68,11 +68,11 @@ impl BattleEventLoop {
                 let current_location = game_state.get_current_location();
 
                 match current_location.class {
-                    LocationType::Dungeon(quest_item) => EventLoopResponse::Complete(
+                    LocationType::Dungeon(quest_item_name) => EventLoopResponse::Complete(
                         message,
                         Box::new(RewardEvent::new(
                             game_state.get_current_location().clone(),
-                            quest_item.text_bold(),
+                            QuestItem::new(String::from(quest_item_name)),
                         )),
                     ),
                     _ => panic!("Shouldn't be anything apart from a Dungeon at the end of a battle.. For now..."),

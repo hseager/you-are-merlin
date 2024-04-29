@@ -6,10 +6,12 @@ use crate::text_format::TextFormatter;
 pub mod armour;
 pub mod artifact;
 pub mod item_builder;
+pub mod quest_item;
 pub mod weapon;
 
 pub trait Item {
-    fn name(&self) -> String;
+    fn name(&self) -> &String;
+    fn display_name(&self) -> String;
     fn item_type(&self) -> ItemType;
     fn display_info(&self) -> String;
 }
@@ -19,15 +21,17 @@ pub enum ItemType {
     Armour,
     Weapon,
     Artifact,
+    QuestItem,
 }
 
 impl ItemType {
     #![allow(clippy::inherent_to_string)]
     pub fn to_string(&self) -> String {
         match self {
-            ItemType::Armour => "Armour".to_string(),
-            ItemType::Weapon => "Weapon".to_string(),
-            ItemType::Artifact => "Artifact".to_string(),
+            ItemType::Armour => String::from("Armour"),
+            ItemType::Weapon => String::from("Weapon"),
+            ItemType::Artifact => String::from("Artifact"),
+            ItemType::QuestItem => String::from("Quest item"),
         }
     }
 }
@@ -60,10 +64,10 @@ impl ItemRarity {
     #![allow(clippy::inherent_to_string)]
     pub fn to_string(&self) -> String {
         match self {
-            ItemRarity::Common => "Common".to_string(),
-            ItemRarity::Rare => "Rare".to_string(),
-            ItemRarity::Epic => "Epic".to_string(),
-            ItemRarity::Legendary => "Legendary".to_string(),
+            ItemRarity::Common => String::from("Common"),
+            ItemRarity::Rare => String::from("Rare"),
+            ItemRarity::Epic => String::from("Epic"),
+            ItemRarity::Legendary => String::from("Legendary"),
         }
     }
 }

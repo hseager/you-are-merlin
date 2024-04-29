@@ -3,6 +3,7 @@ use rand::{seq::SliceRandom, thread_rng};
 use crate::{
     characters::enemy::Enemy,
     config::{ENEMY_BOSS_STATS, ENEMY_EASY_STATS, ENEMY_HARD_STATS, ENEMY_MEDIUM_STATS},
+    item::quest_item::QuestItem,
     text_format::TextFormatter,
     theme::{Theme, ThemeLocation},
 };
@@ -85,11 +86,11 @@ fn build_side_quest(theme: &Theme, characters: &mut Vec<&str>) -> Vec<Encounter>
         .position(|l| l.name == dungeon.name)
         .expect("Unable to get dungeon index when building side quest");
 
-    if let LocationType::Dungeon(item) = &dungeon.class {
+    if let LocationType::Dungeon(item) = dungeon.class {
         vec![Encounter::Quest(Quest::SideQuest(SideQuest {
             character: character.text_bold(),
             location_name: dungeon.name.text_color(dungeon_index),
-            item: item.text_bold(),
+            item: QuestItem::new(String::from(item)),
         }))]
     } else {
         panic!("Unexpected class when creating a sidequest. Should be a dungeon");

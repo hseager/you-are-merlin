@@ -2,6 +2,7 @@
 mod tests {
     use you_are_merlin::item::armour::Armour;
     use you_are_merlin::item::artifact::Artifact;
+    use you_are_merlin::item::quest_item::Weapon;
     use you_are_merlin::item::weapon::Weapon;
     use you_are_merlin::item::{Item, ItemRarity};
     use you_are_merlin::text_format::TextFormatter;
@@ -37,6 +38,13 @@ mod tests {
     #[test]
     fn test_artifact_generation_display_info() {
         let item = Artifact::new("Onyxia Scale Cloak".to_string());
+
+        print!("{}", item.display_info());
+    }
+
+    #[test]
+    fn test_quest_item_display_info() {
+        let item = QuestItem::new("Orb of Mayhem".to_string());
 
         print!("{}", item.display_info());
     }

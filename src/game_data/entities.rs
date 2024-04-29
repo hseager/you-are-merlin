@@ -1,4 +1,4 @@
-use crate::characters::enemy::Enemy;
+use crate::{characters::enemy::Enemy, item::quest_item::QuestItem};
 
 #[derive(Clone, Debug)]
 pub struct Location {
@@ -37,7 +37,7 @@ pub enum Quest {
 pub struct SideQuest {
     pub character: String,
     pub location_name: String,
-    pub item: String,
+    pub item: QuestItem,
 }
 
 #[derive(Clone, Debug)]
