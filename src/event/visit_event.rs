@@ -8,8 +8,8 @@ use crate::{
 
 use super::{
     battle_event::BattleEvent, event_loop::EventLoop, main_quest_event::MainQuestEvent,
-    rest_event::RestEvent, side_quest_event::SideQuestEvent, travel_event::TravelEvent, Event,
-    EventResponse,
+    manage_event::ManageEvent, rest_event::RestEvent, side_quest_event::SideQuestEvent,
+    travel_event::TravelEvent, Event, EventResponse,
 };
 
 pub struct VisitEvent {
@@ -36,13 +36,18 @@ impl VisitEvent {
 impl Event for VisitEvent {
     fn prompt(&self) -> Option<String> {
         Some(format!(
-            "You are currently visiting {}. {}\nWhat would you like to do?",
+            "You are currently visiting {}.\n\
+            {}\n\
+            What would you like to do?",
             &self.current_location.name, &self.current_location.description
         ))
     }
 
     fn actions(&self) -> Vec<Action> {
-        let mut actions = vec![Action::new(ActionType::Travel, "Travel".text_yellow())];
+        let mut actions = vec![
+            Action::new(ActionType::Travel, "Travel".text_yellow()),
+            Action::new(ActionType::Manage, "Manage".text_cyan()),
+        ];
 
         if !self
             .completed_locations
@@ -72,6 +77,10 @@ impl Event for VisitEvent {
             }
             ActionType::Rest => {
                 let next_event = Box::new(RestEvent::new());
+                EventResponse::new(Some(next_event), None)
+            }
+            ActionType::Manage => {
+                let next_event = Box::new(ManageEvent::new(player));
                 EventResponse::new(Some(next_event), None)
             }
             ActionType::Explore => match game_state.get_current_encounter() {
