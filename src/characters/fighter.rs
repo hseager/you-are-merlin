@@ -8,6 +8,10 @@ pub trait Fighter {
     }
     fn attack(&self, target: &mut dyn Fighter) -> String;
     fn take_damage(&mut self, damage: u16);
+    fn attack_speed(&self) -> u16;
+    fn can_attack(&self, current_time: i32, last_attack_time: i32) -> bool {
+        current_time - last_attack_time >= self.attack_speed() as i32
+    }
 }
 
 // Select random damage from -2 to +2 of current attack stat

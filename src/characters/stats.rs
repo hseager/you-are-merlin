@@ -2,7 +2,7 @@ pub trait DisplayStats {
     fn display_attacks_per_second(&self) -> u16;
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Stats {
     pub max_life: i16,
     pub life: i16,

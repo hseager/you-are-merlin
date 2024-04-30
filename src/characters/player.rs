@@ -99,4 +99,8 @@ impl Fighter for Player {
     fn take_damage(&mut self, damage: u16) {
         self.stats.life -= damage as i16;
     }
+
+    fn attack_speed(&self) -> u16 {
+        self.stats.attack_speed
+    }
 }

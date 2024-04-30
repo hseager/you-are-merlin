@@ -44,10 +44,7 @@ impl Event for VisitEvent {
     }
 
     fn actions(&self) -> Vec<Action> {
-        let mut actions = vec![
-            Action::new(ActionType::Travel, "Travel".text_yellow()),
-            Action::new(ActionType::Manage, "Manage".text_cyan()),
-        ];
+        let mut actions = vec![];
 
         if !self
             .completed_locations
@@ -60,6 +57,9 @@ impl Event for VisitEvent {
         if let LocationType::SafeZone = &self.current_location.class {
             actions.push(Action::new(ActionType::Rest, "Rest".text_green()));
         }
+
+        actions.push(Action::new(ActionType::Manage, "Manage".text_cyan()));
+        actions.push(Action::new(ActionType::Travel, "Travel".text_yellow()));
 
         actions
     }

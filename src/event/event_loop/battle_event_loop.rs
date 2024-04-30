@@ -127,11 +127,7 @@ impl EventLoop for BattleEventLoop {
         let mut response_text: String;
         let enemy = &mut self.enemy;
 
-        if player_can_attack(
-            current_epoch_milli,
-            self.player_last_attack_time,
-            player.stats.attack_speed,
-        ) {
+        if player.can_attack(current_epoch_milli, self.player_last_attack_time) {
             response_text = player.attack(enemy);
 
             if !enemy.is_alive() {
@@ -144,11 +140,7 @@ impl EventLoop for BattleEventLoop {
             return EventLoopResponse::InProgress(Some(response_text));
         }
 
-        if enemy_can_attack(
-            current_epoch_milli,
-            self.enemy_last_attack_time,
-            enemy.attack_speed,
-        ) {
+        if enemy.can_attack(current_epoch_milli, self.enemy_last_attack_time) {
             response_text = enemy.attack(player);
 
             if !player.is_alive() {
@@ -162,20 +154,4 @@ impl EventLoop for BattleEventLoop {
 
         EventLoopResponse::InProgress(None)
     }
-}
-
-fn player_can_attack(
-    current_epoch_milli: i32,
-    player_last_attack_time: i32,
-    player_attack_speed: u16,
-) -> bool {
-    current_epoch_milli - player_last_attack_time >= player_attack_speed as i32
-}
-
-fn enemy_can_attack(
-    current_epoch_milli: i32,
-    enemy_last_attack_time: i32,
-    enemy_attack_speed: u16,
-) -> bool {
-    current_epoch_milli - enemy_last_attack_time >= enemy_attack_speed as i32
 }
