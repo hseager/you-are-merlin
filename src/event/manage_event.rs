@@ -1,6 +1,9 @@
 use crate::{
     actions::{Action, ActionType},
-    characters::player::Player,
+    characters::{
+        player::Player,
+        stats::{DisplayStats, Stats},
+    },
     game_state::GameState,
     text_format::TextFormatter,
 };
@@ -8,18 +11,25 @@ use crate::{
 use super::{event_loop::EventLoop, event_response::EventResponse, visit_event::VisitEvent, Event};
 
 pub struct ManageEvent {
-    player: Player,
+    stats: Stats,
 }
 
 impl ManageEvent {
-    pub fn new(player: Player) -> ManageEvent {
-        ManageEvent { player }
+    pub fn new(stats: Stats) -> ManageEvent {
+        ManageEvent { stats }
     }
 }
 
 impl Event for ManageEvent {
     fn prompt(&self) -> Option<String> {
-        Some(String::from("You have 10 life"))
+        let stats = format!(
+            "You have {} life, {} power and {} attacks per second.",
+            self.stats.life,
+            self.stats.power,
+            self.stats.display_attacks_per_second()
+        );
+
+        Some(stats)
     }
     fn actions(&self) -> Vec<Action> {
         vec![Action::new(ActionType::Continue, "Continue".text_green())]

@@ -1,24 +1,28 @@
 use crate::{
     characters::fighter::calculate_damage,
-    config::REST_HEAL_AMOUNT,
+    config::{PLAYER_ATTACK, PLAYER_ATTACK_SPEED, PLAYER_LIFE, REST_HEAL_AMOUNT},
     item::{Equipment, Item},
 };
 
-use super::fighter::Fighter;
+use super::{fighter::Fighter, stats::Stats};
 use crate::text_format::TextFormatter;
 
 pub struct Player {
     pub name: String,
-    pub max_life: i16,
-    pub life: i16,
-    pub attack: u16,
-    pub attack_speed: u16,
+    pub stats: Stats,
     pub inventory: Vec<Box<dyn Item>>,
     pub equipment: Equipment,
 }
 
 impl Player {
-    pub fn new(name: String, life: i16, attack: u16, attack_speed: u16) -> Player {
+    pub fn new(name: String) -> Player {
+        let stats = Stats {
+            max_life: PLAYER_LIFE,
+            life: PLAYER_LIFE,
+            power: PLAYER_ATTACK,
+            attack_speed: PLAYER_ATTACK_SPEED,
+        };
+
         let equipment = Equipment {
             armour: None,
             weapon: None,
@@ -27,10 +31,7 @@ impl Player {
 
         Player {
             name,
-            max_life: life,
-            life,
-            attack,
-            attack_speed,
+            stats,
             inventory: Vec::new(),
             equipment,
         }
@@ -51,20 +52,25 @@ impl Player {
 
     pub fn rest(&mut self) -> String {
         let heal_amount = REST_HEAL_AMOUNT;
-        let mut new_life = self.life + heal_amount;
 
-        if new_life > self.max_life {
-            new_life = self.max_life;
+        let Stats {
+            mut life, max_life, ..
+        } = self.stats;
+
+        let mut new_life = life + heal_amount;
+
+        if new_life > max_life {
+            new_life = max_life;
         }
 
-        let heal_amount = new_life - self.life;
+        let heal_amount = new_life - life;
 
-        self.life = new_life;
+        life = new_life;
 
         format!(
             "Your restore {} life (life: {})",
             heal_amount.to_string().text_bold(),
-            self.life.to_string().text_green()
+            life.to_string().text_green()
         )
     }
 }
@@ -75,11 +81,11 @@ impl Fighter for Player {
     }
 
     fn life(&self) -> &i16 {
-        &self.life
+        &self.stats.life
     }
 
     fn attack(&self, target: &mut dyn Fighter) -> String {
-        let damage = calculate_damage(self.attack);
+        let damage = calculate_damage(self.stats.power);
         target.take_damage(damage);
 
         format!(
@@ -91,6 +97,6 @@ impl Fighter for Player {
     }
 
     fn take_damage(&mut self, damage: u16) {
-        self.life -= damage as i16;
+        self.stats.life -= damage as i16;
     }
 }

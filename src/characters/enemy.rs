@@ -3,12 +3,14 @@ use crate::characters::fighter::calculate_damage;
 use super::fighter::Fighter;
 use crate::text_format::TextFormatter;
 
+// TODO change to stats
+
 #[derive(Clone, Debug)]
 pub struct Enemy {
     pub name: String,
     pub description: &'static str,
     pub life: i16,
-    pub attack: u16,
+    pub power: u16,
     pub attack_speed: u16,
 }
 
@@ -17,14 +19,14 @@ impl Enemy {
         name: String,
         description: &'static str,
         life: i16,
-        attack: u16,
+        power: u16,
         attack_speed: u16,
     ) -> Enemy {
         Enemy {
             name,
             description,
             life,
-            attack,
+            power,
             attack_speed,
         }
     }
@@ -40,7 +42,7 @@ impl Fighter for Enemy {
     }
 
     fn attack(&self, target: &mut dyn Fighter) -> String {
-        let damage = calculate_damage(self.attack);
+        let damage = calculate_damage(self.power);
         target.take_damage(damage);
 
         format!(

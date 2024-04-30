@@ -11,7 +11,7 @@ pub trait Fighter {
 }
 
 // Select random damage from -2 to +2 of current attack stat
-pub fn calculate_damage(attack: u16) -> u16 {
+pub fn calculate_damage(power: u16) -> u16 {
     let damage_range = 2;
-    rand::thread_rng().gen_range(attack - damage_range..=attack + damage_range)
+    rand::thread_rng().gen_range(power - damage_range..=power + damage_range)
 }

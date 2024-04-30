@@ -80,7 +80,7 @@ impl Event for VisitEvent {
                 EventResponse::new(Some(next_event), None)
             }
             ActionType::Manage => {
-                let next_event = Box::new(ManageEvent::new(player));
+                let next_event = Box::new(ManageEvent::new(player.stats.clone()));
                 EventResponse::new(Some(next_event), None)
             }
             ActionType::Explore => match game_state.get_current_encounter() {

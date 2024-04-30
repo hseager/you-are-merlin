@@ -30,7 +30,7 @@ impl EventLoop for RestEventLoop {
         player: &mut Player,
         game_state: &mut GameState,
     ) -> EventLoopResponse {
-        if player.life < player.max_life {
+        if player.stats.life < player.stats.max_life {
             EventLoopResponse::InProgress(Some(player.rest()))
         } else {
             EventLoopResponse::Complete(

@@ -33,7 +33,7 @@ impl Event for BossFightEvent {
             "A great danger approaches...\n\
         {} (life: {}, attack: {})\n\
         {}",
-            self.enemy.name, self.enemy.life, self.enemy.attack, self.enemy.description
+            self.enemy.name, self.enemy.life, self.enemy.power, self.enemy.description
         ))
     }
 

@@ -130,7 +130,7 @@ impl EventLoop for BattleEventLoop {
         if player_can_attack(
             current_epoch_milli,
             self.player_last_attack_time,
-            player.attack_speed,
+            player.stats.attack_speed,
         ) {
             response_text = player.attack(enemy);
 
