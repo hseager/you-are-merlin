@@ -19,7 +19,7 @@ impl RestEvent {
 
 impl Event for RestEvent {
     fn prompt(&self) -> Option<String> {
-        Some("You stay and rest a while...".to_string())
+        Some(String::from("You stay and rest a while..."))
     }
 
     fn actions(&self) -> Vec<Action> {

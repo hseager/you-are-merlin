@@ -34,7 +34,7 @@ impl EventLoop for RestEventLoop {
             EventLoopResponse::InProgress(Some(player.rest()))
         } else {
             EventLoopResponse::Complete(
-                "You fully recover your health.".to_string(),
+                String::from("You fully recover your health."),
                 VisitEvent::build(game_state),
             )
         }

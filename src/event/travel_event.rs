@@ -19,7 +19,7 @@ impl TravelEvent {
 
 impl Event for TravelEvent {
     fn prompt(&self) -> Option<String> {
-        Some("Where would you like to go?".to_string())
+        Some(String::from("Where would you like to go?"))
     }
 
     fn actions(&self) -> Vec<Action> {

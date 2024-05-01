@@ -80,7 +80,7 @@ impl Event for SideQuestEvent {
 
                 EventResponse::new(
                     Some(VisitEvent::build(game_state)),
-                    Some("You accept their request.".to_string()),
+                    Some(String::from("You accept their request.")),
                 )
             }
             ActionType::GiveItem => {
@@ -91,7 +91,10 @@ impl Event for SideQuestEvent {
                 let item = game_state.get_random_item();
                 // player.equip_item(&item);
 
-                let mut response_text = "\"Your assistance in retrieving this has been invaluable. Thank you for your help! Please take this.\"".to_string();
+                let mut response_text = String::from(
+                    "\"Your assistance in retrieving this has been invaluable.\
+                 Thank you for your help! Please take this.\"",
+                );
 
                 response_text = format!(
                     "{}\n\

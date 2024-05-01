@@ -2,6 +2,7 @@ use crate::{
     actions::{Action, ActionType},
     characters::{player::Player, stats::Stats},
     game_state::GameState,
+    item::Item,
     text_format::TextFormatter,
 };
 
@@ -9,11 +10,12 @@ use super::{event_loop::EventLoop, event_response::EventResponse, visit_event::V
 
 pub struct ManageEvent {
     stats: Stats,
+    inventory: Vec<Box<dyn Item>>,
 }
 
 impl ManageEvent {
-    pub fn new(stats: Stats) -> ManageEvent {
-        ManageEvent { stats }
+    pub fn new(stats: Stats, inventory: Vec<Box<dyn Item>>) -> ManageEvent {
+        ManageEvent { stats, inventory }
     }
 }
 
