@@ -1,9 +1,7 @@
-use crate::characters::fighter::calculate_damage;
+use crate::{characters::fighter::calculate_damage, config::FIGHTER_BASE_ATTACK_SPEED};
 
 use super::{fighter::Fighter, stats::Stats};
 use crate::text_format::TextFormatter;
-
-// TODO change to stats
 
 #[derive(Clone, Debug)]
 pub struct Enemy {
@@ -60,7 +58,7 @@ impl Fighter for Enemy {
         self.stats.life -= damage as i16;
     }
 
-    fn attack_speed(&self) -> u16 {
-        self.stats.attack_speed
+    fn attack_speed_as_milliseconds(&self) -> u16 {
+        FIGHTER_BASE_ATTACK_SPEED - (self.stats.attack_speed * 10)
     }
 }

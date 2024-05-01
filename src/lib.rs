@@ -12,7 +12,7 @@ use crate::{
 };
 
 mod actions;
-mod characters;
+pub mod characters;
 pub mod config;
 mod event;
 mod game_data;

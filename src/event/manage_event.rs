@@ -1,9 +1,6 @@
 use crate::{
     actions::{Action, ActionType},
-    characters::{
-        player::Player,
-        stats::{DisplayStats, Stats},
-    },
+    characters::{player::Player, stats::Stats},
     game_state::GameState,
     text_format::TextFormatter,
 };
@@ -23,10 +20,8 @@ impl ManageEvent {
 impl Event for ManageEvent {
     fn prompt(&self) -> Option<String> {
         let stats = format!(
-            "You have {} life, {} power and {} attacks per second.",
-            self.stats.life,
-            self.stats.power,
-            self.stats.display_attacks_per_second()
+            "You have {} life, {} power and {} attack speed.",
+            self.stats.life, self.stats.power, self.stats.attack_speed
         );
 
         Some(stats)

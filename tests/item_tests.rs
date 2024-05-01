@@ -1,10 +1,9 @@
 #[cfg(test)]
 mod tests {
-    use you_are_merlin::item::armour::Armour;
-    use you_are_merlin::item::artifact::Artifact;
-    use you_are_merlin::item::quest_item::QuestItem;
-    use you_are_merlin::item::weapon::Weapon;
-    use you_are_merlin::item::{Item, ItemRarity};
+    use you_are_merlin::item::*;
+    use you_are_merlin::item::{
+        armour::Armour, artifact::Artifact, quest_item::QuestItem, weapon::Weapon,
+    };
     use you_are_merlin::text_format::TextFormatter;
 
     #[test]
@@ -61,10 +60,10 @@ mod tests {
         };
 
         let expected_output = format!(
-            "\n{} - (Rare)\n\
+            "\n{} - (Rare Armour)\n\
             - Max Life: 100\n\
             - Block: 50",
-            "Test Armour".text_bold()
+            "Test Armour".text_blue_bold()
         );
 
         assert_eq!(armour.display_info(), expected_output);

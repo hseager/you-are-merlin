@@ -1,6 +1,9 @@
 use crate::{
     characters::fighter::calculate_damage,
-    config::{PLAYER_ATTACK, PLAYER_ATTACK_SPEED, PLAYER_LIFE, REST_HEAL_AMOUNT},
+    config::{
+        FIGHTER_BASE_ATTACK_SPEED, PLAYER_ATTACK, PLAYER_ATTACK_SPEED, PLAYER_LIFE,
+        REST_HEAL_AMOUNT,
+    },
     item::{Equipment, Item},
 };
 
@@ -100,7 +103,7 @@ impl Fighter for Player {
         self.stats.life -= damage as i16;
     }
 
-    fn attack_speed(&self) -> u16 {
-        self.stats.attack_speed
+    fn attack_speed_as_milliseconds(&self) -> u16 {
+        FIGHTER_BASE_ATTACK_SPEED - (self.stats.attack_speed * 10)
     }
 }
