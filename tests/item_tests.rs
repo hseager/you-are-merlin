@@ -7,6 +7,20 @@ mod tests {
     use you_are_merlin::text_format::TextFormatter;
 
     #[test]
+    fn test_common_item_display_info() {
+        let item = Armour {
+            name: "Nightingale Amour".to_string(),
+            rarity: ItemRarity::Common,
+            max_life: 10,
+            block: 0,
+            parry_chance: 0,
+            dodge_chance: 0,
+        };
+
+        print!("{}", item.display_info());
+    }
+
+    #[test]
     fn test_rarity_display_info() {
         let armour = Armour {
             name: "Test Armour".to_string(),
