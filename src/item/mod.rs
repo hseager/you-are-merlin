@@ -24,7 +24,7 @@ impl Clone for Box<dyn Item> {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum ItemType {
     Armour,
     Weapon,
@@ -55,6 +55,7 @@ pub enum ItemStat {
     DodgeChance,
 }
 
+#[derive(Clone)]
 pub struct Equipment {
     pub armour: Option<Armour>,
     pub weapon: Option<Weapon>,
