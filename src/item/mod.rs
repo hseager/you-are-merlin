@@ -14,6 +14,14 @@ pub trait Item {
     fn display_name(&self) -> String;
     fn item_type(&self) -> ItemType;
     fn display_info(&self) -> String;
+
+    fn clone_box(&self) -> Box<dyn Item>;
+}
+
+impl Clone for Box<dyn Item> {
+    fn clone(&self) -> Box<dyn Item> {
+        self.clone_box()
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -53,6 +61,7 @@ pub struct Equipment {
     pub artifact: Option<Artifact>,
 }
 
+#[derive(Clone)]
 pub enum ItemRarity {
     Common,
     Rare,

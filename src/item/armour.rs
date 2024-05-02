@@ -9,6 +9,7 @@ use super::{
     ItemStat, ItemType,
 };
 
+#[derive(Clone)]
 pub struct Armour {
     pub name: String,
     pub rarity: ItemRarity,
@@ -87,25 +88,29 @@ impl Item for Armour {
         let mut stats = String::new();
 
         stats.push_str(&format!(
-            "{} - ({} {})\n",
+            "{} - ({} {}) ",
             self.display_name(),
             &self.rarity.to_string(),
             &self.item_type().to_string(),
         ));
 
         if self.max_life > 0 {
-            stats.push_str(&format!("- Max Life: {}\n", self.max_life));
+            stats.push_str(&format!("/ {} Max Life ", self.max_life));
         }
         if self.block > 0 {
-            stats.push_str(&format!("- Block: {}\n", self.block));
+            stats.push_str(&format!("/ {} Block ", self.block));
         }
         if self.parry_chance > 0 {
-            stats.push_str(&format!("- Parry: {}\n", self.parry_chance));
+            stats.push_str(&format!("/ {} Parry ", self.parry_chance));
         }
         if self.dodge_chance > 0 {
-            stats.push_str(&format!("- Dodge Chance: {}\n", self.dodge_chance));
+            stats.push_str(&format!("/ {} Dodge Chance ", self.dodge_chance));
         }
 
-        format!("\n{}", stats.trim())
+        stats.trim().to_string()
+    }
+
+    fn clone_box(&self) -> Box<dyn Item> {
+        Box::new(self.clone())
     }
 }

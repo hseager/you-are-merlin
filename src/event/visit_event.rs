@@ -82,7 +82,7 @@ impl Event for VisitEvent {
             ActionType::Manage => {
                 let next_event = Box::new(ManageEvent::new(
                     player.stats.clone(),
-                    player.inventory.clone(),
+                    player.get_cloned_inventory(),
                 ));
                 EventResponse::new(Some(next_event), None)
             }

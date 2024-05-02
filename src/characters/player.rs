@@ -4,7 +4,9 @@ use crate::{
         FIGHTER_BASE_ATTACK_SPEED, PLAYER_ATTACK, PLAYER_ATTACK_SPEED, PLAYER_LIFE,
         REST_HEAL_AMOUNT,
     },
-    item::{Equipment, Item},
+    item::{
+        armour::Armour, artifact::Artifact, quest_item::QuestItem, weapon::Weapon, Equipment, Item,
+    },
 };
 
 use super::{fighter::Fighter, stats::Stats};
@@ -32,12 +34,30 @@ impl Player {
             artifact: None,
         };
 
+        let weapon = Weapon::new(String::from("Needle"));
+        let armour = Armour::new(String::from("Wolf Armour"));
+        let artifact = Artifact::new(String::from("Onyxia Cape"));
+        let quest_item = QuestItem::new(String::from("Orb of Shiver"));
+
+        let test_inventory: Vec<Box<dyn Item>> = vec![
+            Box::new(weapon),
+            Box::new(armour),
+            Box::new(artifact),
+            Box::new(quest_item),
+        ];
+
         Player {
             name,
             stats,
-            inventory: Vec::new(),
+            inventory: test_inventory,
             equipment,
         }
+    }
+
+    // TODO this is pretty horrible, stuck on lifetime errors with references to inventory in ManageEvent
+    // Maybe I'll fix this properly on a rainy day :)
+    pub fn get_cloned_inventory(&self) -> Vec<Box<dyn Item>> {
+        self.inventory.to_vec()
     }
 
     pub fn add_item_to_inventory(&mut self, item: Box<dyn Item>) {

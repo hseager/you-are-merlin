@@ -26,7 +26,19 @@ impl Event for ManageEvent {
             self.stats.life, self.stats.power, self.stats.attack_speed
         );
 
-        Some(stats)
+        let mut inventory = String::new();
+        if self.inventory.is_empty() {
+            inventory.push_str("You have no items in your inventory.")
+        } else {
+            inventory.push_str("You have these items in your inventory:");
+            for item in &self.inventory {
+                inventory = format!("{}\n{}", inventory, item.display_info());
+            }
+        }
+
+        let response = format!("{}\n{}", stats, inventory);
+
+        Some(response)
     }
     fn actions(&self) -> Vec<Action> {
         vec![Action::new(ActionType::Continue, "Continue".text_green())]

@@ -30,11 +30,15 @@ impl Item for QuestItem {
         let mut info = String::new();
 
         info.push_str(&format!(
-            "{} - ({})\n",
+            "{} - ({})",
             self.display_name(),
             &self.item_type().to_string(),
         ));
 
         info.trim().to_string()
+    }
+
+    fn clone_box(&self) -> Box<dyn Item> {
+        Box::new(self.clone())
     }
 }
