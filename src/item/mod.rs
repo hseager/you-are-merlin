@@ -1,6 +1,5 @@
 use rand::{thread_rng, Rng};
 
-use self::{armour::Armour, artifact::Artifact, weapon::Weapon};
 use crate::text_format::TextFormatter;
 
 pub mod armour;
@@ -57,9 +56,9 @@ pub enum ItemStat {
 
 #[derive(Clone)]
 pub struct Equipment {
-    pub armour: Option<Armour>,
-    pub weapon: Option<Weapon>,
-    pub artifact: Option<Artifact>,
+    pub armour: Option<Box<dyn Item>>,
+    pub weapon: Option<Box<dyn Item>>,
+    pub artifact: Option<Box<dyn Item>>,
 }
 
 #[derive(Clone)]

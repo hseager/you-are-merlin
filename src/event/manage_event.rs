@@ -102,7 +102,7 @@ impl Event for ManageEvent {
         &mut self,
         action: Action,
         game_state: &mut GameState,
-        _player: &mut Player,
+        player: &mut Player,
     ) -> EventResponse {
         match action.class {
             ActionType::Equip => {
@@ -110,6 +110,8 @@ impl Event for ManageEvent {
                 EventResponse::new(None, None)
             }
             ActionType::EquipItem => {
+                player.equip_item_by_name(action.name);
+
                 self.state = ManageState::Status;
                 EventResponse::new(None, None)
             }

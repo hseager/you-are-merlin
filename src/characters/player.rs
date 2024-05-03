@@ -6,6 +6,7 @@ use crate::{
     },
     item::{
         armour::Armour, artifact::Artifact, quest_item::QuestItem, weapon::Weapon, Equipment, Item,
+        ItemType,
     },
 };
 
@@ -68,10 +69,37 @@ impl Player {
         self.inventory.iter().any(|i| i.name() == item.name())
     }
 
-    // pub fn equip_item(&mut self, item: &Item) {
-    //     self.attack += item.attack;
-    //     self.max_life += item.max_life;
-    // }
+    pub fn equip_item(&mut self, item: Box<dyn Item>) {
+        match item.item_type() {
+            ItemType::Weapon => {
+                self.equipment.weapon = Some(item);
+            }
+            ItemType::Armour => {
+                self.equipment.armour = Some(item);
+            }
+            ItemType::Artifact => {
+                self.equipment.artifact = Some(item);
+            }
+            ItemType::QuestItem => (),
+        }
+    }
+
+    pub fn equip_item_by_name(&mut self, item_name: String) {
+        println!("{:?}", self.inventory);
+        println!("{}", &item_name.trim().to_lowercase());
+
+        let item = self
+            .inventory
+            .iter()
+            .find(|i| {
+                i.name()
+                    .to_lowercase()
+                    .contains(&item_name.trim().to_lowercase())
+            })
+            .expect("Unable to get equip item by name");
+
+        self.equip_item(item.clone_box())
+    }
 
     pub fn rest(&mut self) -> String {
         let heal_amount = REST_HEAL_AMOUNT;
