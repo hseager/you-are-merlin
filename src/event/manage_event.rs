@@ -112,6 +112,11 @@ impl Event for ManageEvent {
             ActionType::EquipItem => {
                 player.equip_item_by_name(action.name);
 
+                // TODO pretty bad having to clone these after updating the player
+                // because I'm not using references here
+                self.equipment = player.equipment.clone();
+                self.inventory = player.inventory.clone();
+
                 self.state = ManageState::Status;
                 EventResponse::new(None, None)
             }

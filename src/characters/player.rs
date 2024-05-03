@@ -65,6 +65,13 @@ impl Player {
         self.inventory.push(item);
     }
 
+    pub fn remove_item_to_inventory(&mut self, name: String) {
+        let index = self.inventory.iter().position(|i| i.name().eq(&name));
+        if let Some(index) = index {
+            self.inventory.remove(index);
+        }
+    }
+
     pub fn has_item_in_inventory(&self, item: Box<dyn Item>) -> bool {
         self.inventory.iter().any(|i| i.name() == item.name())
     }
@@ -80,25 +87,26 @@ impl Player {
             ItemType::Artifact => {
                 self.equipment.artifact = Some(item);
             }
-            ItemType::QuestItem => (),
+            ItemType::QuestItem => panic!("Can't equip quest items!"),
         }
     }
 
     pub fn equip_item_by_name(&mut self, item_name: String) {
-        println!("{:?}", self.inventory);
-        println!("{}", &item_name.trim().to_lowercase());
-
         let item = self
             .inventory
             .iter()
             .find(|i| {
-                i.name()
+                println!("{}", i.display_name());
+                i.display_name()
                     .to_lowercase()
-                    .contains(&item_name.trim().to_lowercase())
+                    .contains(&item_name.to_lowercase())
             })
             .expect("Unable to get equip item by name");
 
-        self.equip_item(item.clone_box())
+        let item_name = item.name().clone();
+
+        self.equip_item(item.clone_box());
+        self.remove_item_to_inventory(item_name);
     }
 
     pub fn rest(&mut self) -> String {
