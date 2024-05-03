@@ -85,9 +85,9 @@ pub fn get_reward_item_rarity() -> ItemRarity {
     let mut rng = thread_rng();
     let chance: u8 = rng.gen_range(1..=100);
 
-    if chance <= 20 {
+    if chance <= 10 {
         ItemRarity::Legendary
-    } else if chance <= 50 {
+    } else if chance <= 40 {
         ItemRarity::Epic
     } else {
         ItemRarity::Rare

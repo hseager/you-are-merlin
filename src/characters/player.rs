@@ -29,10 +29,14 @@ impl Player {
             attack_speed: PLAYER_ATTACK_SPEED,
         };
 
+        let first_weapon = Weapon::new(String::from("Basic Weapon"));
+        let first_armour = Armour::new(String::from("Basic Armour"));
+        let first_artifact = Artifact::new(String::from("Basic Artifact"));
+
         let equipment = Equipment {
-            armour: None,
-            weapon: None,
-            artifact: None,
+            armour: Some(Box::new(first_armour)),
+            weapon: Some(Box::new(first_weapon)),
+            artifact: Some(Box::new(first_artifact)),
         };
 
         let weapon = Weapon::new(String::from("Needle"));
@@ -79,12 +83,21 @@ impl Player {
     pub fn equip_item(&mut self, item: Box<dyn Item>) {
         match item.item_type() {
             ItemType::Weapon => {
+                if let Some(weapon) = &self.equipment.weapon {
+                    self.add_item_to_inventory(weapon.clone_box())
+                }
                 self.equipment.weapon = Some(item);
             }
             ItemType::Armour => {
+                if let Some(armour) = &self.equipment.armour {
+                    self.add_item_to_inventory(armour.clone_box())
+                }
                 self.equipment.armour = Some(item);
             }
             ItemType::Artifact => {
+                if let Some(artifact) = &self.equipment.artifact {
+                    self.add_item_to_inventory(artifact.clone_box())
+                }
                 self.equipment.artifact = Some(item);
             }
             ItemType::QuestItem => panic!("Can't equip quest items!"),
