@@ -12,6 +12,9 @@ pub trait Fighter {
     fn can_attack(&self, current_time: i32, last_attack_time: i32) -> bool {
         current_time - last_attack_time >= self.attack_speed_as_milliseconds() as i32
     }
+
+    fn power(&self) -> u16;
+    fn attack_speed(&self) -> u16;
 }
 
 // Select random damage from -2 to +2 of current attack stat

@@ -114,4 +114,11 @@ impl Item for Weapon {
     fn clone_box(&self) -> Box<dyn Item> {
         Box::new(self.clone())
     }
+
+    fn power(&self) -> u16 {
+        self.power
+    }
+    fn attack_speed(&self) -> u16 {
+        self.attack_speed
+    }
 }

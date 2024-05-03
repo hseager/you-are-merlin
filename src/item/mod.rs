@@ -15,6 +15,13 @@ pub trait Item {
     fn display_info(&self) -> String;
 
     fn clone_box(&self) -> Box<dyn Item>;
+
+    fn power(&self) -> u16 {
+        0
+    }
+    fn attack_speed(&self) -> u16 {
+        0
+    }
 }
 
 impl Clone for Box<dyn Item> {

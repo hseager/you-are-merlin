@@ -59,6 +59,13 @@ impl Fighter for Enemy {
     }
 
     fn attack_speed_as_milliseconds(&self) -> u16 {
-        FIGHTER_BASE_ATTACK_SPEED - (self.stats.attack_speed * 10)
+        FIGHTER_BASE_ATTACK_SPEED - (self.attack_speed() * 10)
+    }
+
+    fn power(&self) -> u16 {
+        self.stats.power
+    }
+    fn attack_speed(&self) -> u16 {
+        self.stats.attack_speed
     }
 }

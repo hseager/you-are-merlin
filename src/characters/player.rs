@@ -125,9 +125,7 @@ impl Player {
     pub fn rest(&mut self) -> String {
         let heal_amount = REST_HEAL_AMOUNT;
 
-        let Stats {
-            mut life, max_life, ..
-        } = self.stats;
+        let Stats { life, max_life, .. } = self.stats;
 
         let mut new_life = life + heal_amount;
 
@@ -137,12 +135,12 @@ impl Player {
 
         let heal_amount = new_life - life;
 
-        life = new_life;
+        self.stats.life = new_life;
 
         format!(
             "Your restore {} life (life: {})",
             heal_amount.to_string().text_bold(),
-            life.to_string().text_green()
+            new_life.to_string().text_green()
         )
     }
 }
@@ -157,7 +155,7 @@ impl Fighter for Player {
     }
 
     fn attack(&self, target: &mut dyn Fighter) -> String {
-        let damage = calculate_damage(self.stats.power);
+        let damage = calculate_damage(self.power());
         target.take_damage(damage);
 
         format!(
@@ -173,6 +171,34 @@ impl Fighter for Player {
     }
 
     fn attack_speed_as_milliseconds(&self) -> u16 {
-        FIGHTER_BASE_ATTACK_SPEED - (self.stats.attack_speed * 10)
+        FIGHTER_BASE_ATTACK_SPEED - (self.attack_speed() * 10)
+    }
+
+    fn power(&self) -> u16 {
+        let mut power = self.stats.power;
+
+        if let Some(weapon) = &self.equipment.weapon {
+            power += weapon.power();
+        }
+
+        if let Some(artifact) = &self.equipment.artifact {
+            power += artifact.power();
+        }
+
+        power
+    }
+
+    fn attack_speed(&self) -> u16 {
+        let mut attack_speed = self.stats.attack_speed;
+
+        if let Some(weapon) = &self.equipment.weapon {
+            attack_speed += weapon.attack_speed();
+        }
+
+        if let Some(artifact) = &self.equipment.artifact {
+            attack_speed += artifact.attack_speed();
+        }
+
+        attack_speed
     }
 }
