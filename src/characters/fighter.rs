@@ -15,6 +15,9 @@ pub trait Fighter {
 
     fn power(&self) -> u16;
     fn attack_speed(&self) -> u16;
+    fn max_life(&self) -> i16;
+    fn block(&self) -> u16;
+    fn crit_multiplier(&self) -> f32;
 }
 
 // Select random damage from -2 to +2 of current attack stat

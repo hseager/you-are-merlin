@@ -1,8 +1,8 @@
 use crate::{
     characters::fighter::calculate_damage,
     config::{
-        FIGHTER_BASE_ATTACK_SPEED, PLAYER_ATTACK, PLAYER_ATTACK_SPEED, PLAYER_LIFE,
-        REST_HEAL_AMOUNT,
+        FIGHTER_BASE_ATTACK_SPEED, PLAYER_ATTACK, PLAYER_ATTACK_SPEED, PLAYER_BLOCK,
+        PLAYER_CRIT_MULTI, PLAYER_LIFE, REST_HEAL_AMOUNT,
     },
     item::{
         armour::Armour, artifact::Artifact, quest_item::QuestItem, weapon::Weapon, Equipment, Item,
@@ -27,6 +27,8 @@ impl Player {
             life: PLAYER_LIFE,
             power: PLAYER_ATTACK,
             attack_speed: PLAYER_ATTACK_SPEED,
+            block: PLAYER_BLOCK,
+            crit_multiplier: PLAYER_CRIT_MULTI,
         };
 
         let first_weapon = Weapon::new(String::from("Basic Weapon"));
@@ -200,5 +202,39 @@ impl Fighter for Player {
         }
 
         attack_speed
+    }
+
+    fn crit_multiplier(&self) -> f32 {
+        let mut crit_multiplier = self.stats.crit_multiplier;
+
+        if let Some(weapon) = &self.equipment.weapon {
+            crit_multiplier += weapon.crit_multiplier();
+        }
+
+        crit_multiplier
+    }
+
+    fn max_life(&self) -> i16 {
+        let mut max_life = self.stats.max_life;
+
+        if let Some(armour) = &self.equipment.armour {
+            max_life += armour.max_life();
+        }
+
+        if let Some(artifact) = &self.equipment.artifact {
+            max_life += artifact.max_life();
+        }
+
+        max_life
+    }
+
+    fn block(&self) -> u16 {
+        let mut block = self.stats.block;
+
+        if let Some(armour) = &self.equipment.armour {
+            block += armour.block();
+        }
+
+        block
     }
 }

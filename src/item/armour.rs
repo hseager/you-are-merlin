@@ -13,10 +13,10 @@ use super::{
 pub struct Armour {
     pub name: String,
     pub rarity: ItemRarity,
-    pub max_life: u16,
+    pub max_life: i16,
     pub block: u16,
-    pub parry_chance: u16,
-    pub dodge_chance: u16,
+    pub parry_chance: f32,
+    pub dodge_chance: f32,
 }
 
 impl Armour {
@@ -24,22 +24,10 @@ impl Armour {
         let mut rng = thread_rng();
 
         let mut properties = [
-            (
-                ItemStat::MaxLife,
-                rng.gen_range(ITEM_GEN_MAX_LIFE.0..=ITEM_GEN_MAX_LIFE.1),
-            ),
-            (
-                ItemStat::Block,
-                rng.gen_range(ITEM_GEN_BLOCK.0..=ITEM_GEN_BLOCK.1),
-            ),
-            (
-                ItemStat::ParryChance,
-                rng.gen_range(ITEM_GEN_PARRY_CHANCE.0..=ITEM_GEN_PARRY_CHANCE.1),
-            ),
-            (
-                ItemStat::DodgeChance,
-                rng.gen_range(ITEM_GEN_DODGE_CHANCE.0..=ITEM_GEN_DODGE_CHANCE.1),
-            ),
+            ItemStat::MaxLife,
+            ItemStat::Block,
+            ItemStat::ParryChance,
+            ItemStat::DodgeChance,
         ];
 
         properties.shuffle(&mut rng);
@@ -53,16 +41,26 @@ impl Armour {
             rarity,
             max_life: 0,
             block: 0,
-            parry_chance: 0,
-            dodge_chance: 0,
+            parry_chance: 0.0,
+            dodge_chance: 0.0,
         };
 
-        for (property, value) in selected_properties {
+        for property in selected_properties {
             match property {
-                ItemStat::MaxLife => armour.max_life = *value,
-                ItemStat::Block => armour.block = *value,
-                ItemStat::ParryChance => armour.parry_chance = *value,
-                ItemStat::DodgeChance => armour.dodge_chance = *value,
+                ItemStat::MaxLife => {
+                    armour.max_life = rng.gen_range(ITEM_GEN_MAX_LIFE.0..=ITEM_GEN_MAX_LIFE.1)
+                }
+                ItemStat::Block => {
+                    armour.block = rng.gen_range(ITEM_GEN_BLOCK.0..=ITEM_GEN_BLOCK.1)
+                }
+                ItemStat::ParryChance => {
+                    armour.parry_chance =
+                        rng.gen_range(ITEM_GEN_PARRY_CHANCE.0..=ITEM_GEN_PARRY_CHANCE.1)
+                }
+                ItemStat::DodgeChance => {
+                    armour.dodge_chance =
+                        rng.gen_range(ITEM_GEN_DODGE_CHANCE.0..=ITEM_GEN_DODGE_CHANCE.1)
+                }
                 _ => unreachable!(),
             }
         }
@@ -100,11 +98,11 @@ impl Item for Armour {
         if self.block > 0 {
             stats.push_str(&format!("/ {} Block ", self.block));
         }
-        if self.parry_chance > 0 {
-            stats.push_str(&format!("/ {} Parry ", self.parry_chance));
+        if self.parry_chance > 0.0 {
+            stats.push_str(&format!("/ {}% Parry Chance ", self.parry_chance));
         }
-        if self.dodge_chance > 0 {
-            stats.push_str(&format!("/ {} Dodge Chance ", self.dodge_chance));
+        if self.dodge_chance > 0.0 {
+            stats.push_str(&format!("/ {}% Dodge Chance ", self.dodge_chance));
         }
 
         stats.trim().to_string()
@@ -112,5 +110,13 @@ impl Item for Armour {
 
     fn clone_box(&self) -> Box<dyn Item> {
         Box::new(self.clone())
+    }
+
+    fn max_life(&self) -> i16 {
+        self.max_life
+    }
+
+    fn block(&self) -> u16 {
+        self.block
     }
 }

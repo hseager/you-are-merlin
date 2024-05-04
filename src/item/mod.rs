@@ -22,6 +22,15 @@ pub trait Item {
     fn attack_speed(&self) -> u16 {
         0
     }
+    fn crit_multiplier(&self) -> f32 {
+        0.0
+    }
+    fn max_life(&self) -> i16 {
+        0
+    }
+    fn block(&self) -> u16 {
+        0
+    }
 }
 
 impl Clone for Box<dyn Item> {

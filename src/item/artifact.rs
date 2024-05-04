@@ -13,12 +13,12 @@ use super::{
 // TODO Change these to more interesting stats
 #[derive(Clone)]
 pub struct Artifact {
-    name: String,
-    rarity: ItemRarity,
-    power: u16,
-    attack_speed: u16,
-    max_life: u16,
-    dodge_chance: u16,
+    pub name: String,
+    pub rarity: ItemRarity,
+    pub power: u16,
+    pub attack_speed: u16,
+    pub max_life: i16,
+    pub dodge_chance: f32,
 }
 
 impl Artifact {
@@ -26,22 +26,10 @@ impl Artifact {
         let mut rng = thread_rng();
 
         let mut properties = [
-            (
-                ItemStat::Power,
-                rng.gen_range(ITEM_GEN_POWER.0..=ITEM_GEN_POWER.1),
-            ),
-            (
-                ItemStat::AttackSpeed,
-                rng.gen_range(ITEM_GEN_ATTACK_SPEED.0..=ITEM_GEN_ATTACK_SPEED.1),
-            ),
-            (
-                ItemStat::MaxLife,
-                rng.gen_range(ITEM_GEN_MAX_LIFE.0..=ITEM_GEN_MAX_LIFE.1),
-            ),
-            (
-                ItemStat::DodgeChance,
-                rng.gen_range(ITEM_GEN_DODGE_CHANCE.0..=ITEM_GEN_DODGE_CHANCE.1),
-            ),
+            ItemStat::Power,
+            ItemStat::AttackSpeed,
+            ItemStat::MaxLife,
+            ItemStat::DodgeChance,
         ];
 
         properties.shuffle(&mut rng);
@@ -56,15 +44,25 @@ impl Artifact {
             power: 0,
             attack_speed: 0,
             max_life: 0,
-            dodge_chance: 0,
+            dodge_chance: 0.0,
         };
 
-        for (property, value) in selected_properties {
+        for property in selected_properties {
             match property {
-                ItemStat::Power => artifact.power = *value,
-                ItemStat::AttackSpeed => artifact.attack_speed = *value,
-                ItemStat::MaxLife => artifact.max_life = *value,
-                ItemStat::DodgeChance => artifact.dodge_chance = *value,
+                ItemStat::Power => {
+                    artifact.power = rng.gen_range(ITEM_GEN_POWER.0..=ITEM_GEN_POWER.1)
+                }
+                ItemStat::AttackSpeed => {
+                    artifact.attack_speed =
+                        rng.gen_range(ITEM_GEN_ATTACK_SPEED.0..=ITEM_GEN_ATTACK_SPEED.1)
+                }
+                ItemStat::MaxLife => {
+                    artifact.max_life = rng.gen_range(ITEM_GEN_MAX_LIFE.0..=ITEM_GEN_MAX_LIFE.1)
+                }
+                ItemStat::DodgeChance => {
+                    artifact.dodge_chance =
+                        rng.gen_range(ITEM_GEN_DODGE_CHANCE.0..=ITEM_GEN_DODGE_CHANCE.1)
+                }
                 _ => unreachable!(),
             }
         }
@@ -105,8 +103,8 @@ impl Item for Artifact {
         if self.max_life > 0 {
             stats.push_str(&format!("/ {} Max Life ", self.max_life));
         }
-        if self.dodge_chance > 0 {
-            stats.push_str(&format!("/ {} Dodge Chance ", self.dodge_chance));
+        if self.dodge_chance > 0.0 {
+            stats.push_str(&format!("/ {}% Dodge Chance ", self.dodge_chance));
         }
 
         stats.trim().to_string()
@@ -121,5 +119,8 @@ impl Item for Artifact {
     }
     fn attack_speed(&self) -> u16 {
         self.attack_speed
+    }
+    fn max_life(&self) -> i16 {
+        self.max_life
     }
 }

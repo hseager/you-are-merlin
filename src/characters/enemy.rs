@@ -23,6 +23,8 @@ impl Enemy {
             max_life: 0,
             power,
             attack_speed,
+            block: 0,
+            crit_multiplier: 0.0,
         };
 
         Enemy {
@@ -67,5 +69,14 @@ impl Fighter for Enemy {
     }
     fn attack_speed(&self) -> u16 {
         self.stats.attack_speed
+    }
+    fn max_life(&self) -> i16 {
+        self.stats.max_life
+    }
+    fn block(&self) -> u16 {
+        self.stats.block
+    }
+    fn crit_multiplier(&self) -> f32 {
+        self.stats.crit_multiplier
     }
 }

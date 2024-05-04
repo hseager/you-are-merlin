@@ -12,12 +12,12 @@ use super::{
 
 #[derive(Clone)]
 pub struct Weapon {
-    name: String,
-    rarity: ItemRarity,
-    power: u16,
-    attack_speed: u16,
-    crit_multiplier: u16,
-    crit_chance: u16,
+    pub name: String,
+    pub rarity: ItemRarity,
+    pub power: u16,
+    pub attack_speed: u16,
+    pub crit_multiplier: f32,
+    pub crit_chance: f32,
 }
 
 impl Weapon {
@@ -25,22 +25,10 @@ impl Weapon {
         let mut rng = thread_rng();
 
         let mut properties = [
-            (
-                ItemStat::Power,
-                rng.gen_range(ITEM_GEN_POWER.0..=ITEM_GEN_POWER.1),
-            ),
-            (
-                ItemStat::AttackSpeed,
-                rng.gen_range(ITEM_GEN_ATTACK_SPEED.0..=ITEM_GEN_ATTACK_SPEED.1),
-            ),
-            (
-                ItemStat::CritMultiplier,
-                rng.gen_range(ITEM_GEN_CRIT_MULTI.0..=ITEM_GEN_CRIT_MULTI.1),
-            ),
-            (
-                ItemStat::CritChance,
-                rng.gen_range(ITEM_GEN_CRIT_CHANCE.0..=ITEM_GEN_CRIT_CHANCE.1),
-            ),
+            ItemStat::Power,
+            ItemStat::AttackSpeed,
+            ItemStat::CritMultiplier,
+            ItemStat::CritChance,
         ];
 
         properties.shuffle(&mut rng);
@@ -54,16 +42,27 @@ impl Weapon {
             rarity,
             power: 0,
             attack_speed: 0,
-            crit_multiplier: 0,
-            crit_chance: 0,
+            crit_multiplier: 0.0,
+            crit_chance: 0.0,
         };
 
-        for (property, value) in selected_properties {
+        for property in selected_properties {
             match property {
-                ItemStat::Power => weapon.power = *value,
-                ItemStat::AttackSpeed => weapon.attack_speed = *value,
-                ItemStat::CritMultiplier => weapon.crit_multiplier = *value,
-                ItemStat::CritChance => weapon.crit_chance = *value,
+                ItemStat::Power => {
+                    weapon.power = rng.gen_range(ITEM_GEN_POWER.0..=ITEM_GEN_POWER.1)
+                }
+                ItemStat::AttackSpeed => {
+                    weapon.attack_speed =
+                        rng.gen_range(ITEM_GEN_ATTACK_SPEED.0..=ITEM_GEN_ATTACK_SPEED.1)
+                }
+                ItemStat::CritMultiplier => {
+                    weapon.crit_multiplier =
+                        rng.gen_range(ITEM_GEN_CRIT_MULTI.0..=ITEM_GEN_CRIT_MULTI.1)
+                }
+                ItemStat::CritChance => {
+                    weapon.crit_chance =
+                        rng.gen_range(ITEM_GEN_CRIT_CHANCE.0..=ITEM_GEN_CRIT_CHANCE.1)
+                }
                 _ => unreachable!(),
             }
         }
@@ -101,11 +100,11 @@ impl Item for Weapon {
         if self.attack_speed > 0 {
             stats.push_str(&format!("/ {} Attack Speed ", self.attack_speed));
         }
-        if self.crit_multiplier > 0 {
+        if self.crit_multiplier > 0.0 {
             stats.push_str(&format!("/ {} Crit Multiplier ", self.crit_multiplier));
         }
-        if self.crit_chance > 0 {
-            stats.push_str(&format!("/ {} Crit Chance ", self.crit_chance));
+        if self.crit_chance > 0.0 {
+            stats.push_str(&format!("/ {}% Crit Chance ", self.crit_chance));
         }
 
         stats.trim().to_string()
@@ -120,5 +119,8 @@ impl Item for Weapon {
     }
     fn attack_speed(&self) -> u16 {
         self.attack_speed
+    }
+    fn crit_multiplier(&self) -> f32 {
+        self.crit_multiplier
     }
 }

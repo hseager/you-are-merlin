@@ -22,20 +22,26 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 - You don't have to type out the full action, a partial match will do
 
 ## To do
+- Finish adding weapon stats
+- Test in WASM
 
 ### v0.2
 
 - Better item stats (crit chance/multi/ lifegain on hit)
 - Split items into types like weapons, armor, utilities with unique stats
 - Inventory
-- Usable items
-    - Use items/potions during a battle loop
 - More types of encounters like puzzles and riddles etc
     - Choice encounter with reward or damage
-- Display text rather than enemy stats
 
 ### later
 
+- Change rest to only partially heal
+    - Gain life/potions from some encounters
+- Display text rather than enemy stats
+- Usable items
+    - Use items/potions during a battle loop
+- Change battle loop to be interactive
+    - Parry just in time of enemies attack to get bonus damage etc
 - Rewards (gold) and trade
 - Boss quote
 - chatGPT API
