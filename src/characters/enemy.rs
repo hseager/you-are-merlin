@@ -1,4 +1,7 @@
-use crate::{characters::fighter::calculate_damage, config::FIGHTER_BASE_ATTACK_SPEED};
+use crate::{
+    characters::fighter::{calculate_damage, is_critical},
+    config::FIGHTER_BASE_ATTACK_SPEED,
+};
 
 use super::{fighter::Fighter, stats::Stats};
 use crate::text_format::TextFormatter;
@@ -48,11 +51,21 @@ impl Fighter for Enemy {
     }
 
     fn attack(&self, target: &mut dyn Fighter) -> String {
-        let damage = calculate_damage(self.stats.power);
-        target.take_damage(damage);
+        let mut damage = calculate_damage(self.stats.power);
+        let is_crit = is_critical(self.crit_chance());
+        let mut action_message = String::from("attacks");
+
+        if is_crit {
+            action_message = "CRITS".text_red_bold();
+            damage = (damage as f32 * self.crit_multiplier()).round() as u16;
+            target.take_damage(damage);
+        } else {
+            target.take_damage(damage);
+        }
 
         format!(
-            "{} attacks you for {} damage. (Your life: {})",
+            "{} {} you for {} damage. (Your life: {})",
+            action_message,
             &self.name(),
             damage.to_string().text_bold(),
             &target.life().to_string().text_red()
