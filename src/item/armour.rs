@@ -1,4 +1,5 @@
 use crate::config::ITEM_GEN_PARRY_CHANCE;
+use crate::utilities::round_to_single_decimal;
 use rand::prelude::SliceRandom;
 use rand::{thread_rng, Rng};
 
@@ -54,10 +55,14 @@ impl Armour {
                     armour.block = rng.gen_range(ITEM_GEN_BLOCK.0..=ITEM_GEN_BLOCK.1)
                 }
                 ItemStat::ParryChance => {
-                    armour.parry = rng.gen_range(ITEM_GEN_PARRY_CHANCE.0..=ITEM_GEN_PARRY_CHANCE.1)
+                    armour.parry = round_to_single_decimal(
+                        rng.gen_range(ITEM_GEN_PARRY_CHANCE.0..=ITEM_GEN_PARRY_CHANCE.1),
+                    )
                 }
                 ItemStat::DodgeChance => {
-                    armour.dodge = rng.gen_range(ITEM_GEN_DODGE_CHANCE.0..=ITEM_GEN_DODGE_CHANCE.1)
+                    armour.dodge = round_to_single_decimal(
+                        rng.gen_range(ITEM_GEN_DODGE_CHANCE.0..=ITEM_GEN_DODGE_CHANCE.1),
+                    )
                 }
                 _ => unreachable!(),
             }
@@ -97,10 +102,10 @@ impl Item for Armour {
             stats.push_str(&format!("/ {} Block ", self.block));
         }
         if self.parry > 0.0 {
-            stats.push_str(&format!("/ {}% Parry Chance ", self.parry));
+            stats.push_str(&format!("/ {}% Parry ", self.parry));
         }
         if self.dodge > 0.0 {
-            stats.push_str(&format!("/ {}% Dodge Chance ", self.dodge));
+            stats.push_str(&format!("/ {}% Dodge ", self.dodge));
         }
 
         stats.trim().to_string()

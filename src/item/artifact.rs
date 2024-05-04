@@ -4,6 +4,7 @@ use rand::{thread_rng, Rng};
 use crate::config::{
     ITEM_GEN_ATTACK_SPEED, ITEM_GEN_DODGE_CHANCE, ITEM_GEN_MAX_LIFE, ITEM_GEN_POWER,
 };
+use crate::utilities::round_to_single_decimal;
 
 use super::{
     get_rarity_property_count, get_rarity_text_color, get_reward_item_rarity, Item, ItemRarity,
@@ -60,8 +61,9 @@ impl Artifact {
                     artifact.max_life = rng.gen_range(ITEM_GEN_MAX_LIFE.0..=ITEM_GEN_MAX_LIFE.1)
                 }
                 ItemStat::DodgeChance => {
-                    artifact.dodge =
-                        rng.gen_range(ITEM_GEN_DODGE_CHANCE.0..=ITEM_GEN_DODGE_CHANCE.1)
+                    artifact.dodge = round_to_single_decimal(
+                        rng.gen_range(ITEM_GEN_DODGE_CHANCE.0..=ITEM_GEN_DODGE_CHANCE.1),
+                    )
                 }
                 _ => unreachable!(),
             }
@@ -104,7 +106,7 @@ impl Item for Artifact {
             stats.push_str(&format!("/ {} Max Life ", self.max_life));
         }
         if self.dodge > 0.0 {
-            stats.push_str(&format!("/ {}% Dodge Chance ", self.dodge));
+            stats.push_str(&format!("/ {}% Dodge ", self.dodge));
         }
 
         stats.trim().to_string()

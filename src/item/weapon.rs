@@ -4,6 +4,7 @@ use rand::{thread_rng, Rng};
 use crate::config::{
     ITEM_GEN_ATTACK_SPEED, ITEM_GEN_CRIT_CHANCE, ITEM_GEN_CRIT_MULTI, ITEM_GEN_POWER,
 };
+use crate::utilities::round_to_single_decimal;
 
 use super::{
     get_rarity_property_count, get_rarity_text_color, get_reward_item_rarity, Item, ItemRarity,
@@ -56,12 +57,14 @@ impl Weapon {
                         rng.gen_range(ITEM_GEN_ATTACK_SPEED.0..=ITEM_GEN_ATTACK_SPEED.1)
                 }
                 ItemStat::CritMultiplier => {
-                    weapon.crit_multiplier =
-                        rng.gen_range(ITEM_GEN_CRIT_MULTI.0..=ITEM_GEN_CRIT_MULTI.1)
+                    weapon.crit_multiplier = round_to_single_decimal(
+                        rng.gen_range(ITEM_GEN_CRIT_MULTI.0..=ITEM_GEN_CRIT_MULTI.1),
+                    )
                 }
                 ItemStat::CritChance => {
-                    weapon.crit_chance =
-                        rng.gen_range(ITEM_GEN_CRIT_CHANCE.0..=ITEM_GEN_CRIT_CHANCE.1)
+                    weapon.crit_chance = round_to_single_decimal(
+                        rng.gen_range(ITEM_GEN_CRIT_CHANCE.0..=ITEM_GEN_CRIT_CHANCE.1),
+                    )
                 }
                 _ => unreachable!(),
             }

@@ -19,3 +19,7 @@ pub fn get_current_time_as_epoch_milli() -> i32 {
 
     milliseconds_since_epoch as i32
 }
+
+pub fn round_to_single_decimal(number: f32) -> f32 {
+    (number * 10.0).round() / 10.0
+}
