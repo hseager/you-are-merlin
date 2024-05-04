@@ -25,6 +25,9 @@ impl Enemy {
             attack_speed,
             block: 0,
             crit_multiplier: 0.0,
+            crit_chance: 0.0,
+            parry: 0.0,
+            dodge: 0.0,
         };
 
         Enemy {
@@ -78,5 +81,14 @@ impl Fighter for Enemy {
     }
     fn crit_multiplier(&self) -> f32 {
         self.stats.crit_multiplier
+    }
+    fn crit_chance(&self) -> f32 {
+        self.stats.crit_chance
+    }
+    fn parry(&self) -> f32 {
+        self.stats.parry
+    }
+    fn dodge(&self) -> f32 {
+        self.stats.dodge
     }
 }

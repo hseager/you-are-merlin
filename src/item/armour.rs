@@ -15,8 +15,8 @@ pub struct Armour {
     pub rarity: ItemRarity,
     pub max_life: i16,
     pub block: u16,
-    pub parry_chance: f32,
-    pub dodge_chance: f32,
+    pub parry: f32,
+    pub dodge: f32,
 }
 
 impl Armour {
@@ -41,8 +41,8 @@ impl Armour {
             rarity,
             max_life: 0,
             block: 0,
-            parry_chance: 0.0,
-            dodge_chance: 0.0,
+            parry: 0.0,
+            dodge: 0.0,
         };
 
         for property in selected_properties {
@@ -54,12 +54,10 @@ impl Armour {
                     armour.block = rng.gen_range(ITEM_GEN_BLOCK.0..=ITEM_GEN_BLOCK.1)
                 }
                 ItemStat::ParryChance => {
-                    armour.parry_chance =
-                        rng.gen_range(ITEM_GEN_PARRY_CHANCE.0..=ITEM_GEN_PARRY_CHANCE.1)
+                    armour.parry = rng.gen_range(ITEM_GEN_PARRY_CHANCE.0..=ITEM_GEN_PARRY_CHANCE.1)
                 }
                 ItemStat::DodgeChance => {
-                    armour.dodge_chance =
-                        rng.gen_range(ITEM_GEN_DODGE_CHANCE.0..=ITEM_GEN_DODGE_CHANCE.1)
+                    armour.dodge = rng.gen_range(ITEM_GEN_DODGE_CHANCE.0..=ITEM_GEN_DODGE_CHANCE.1)
                 }
                 _ => unreachable!(),
             }
@@ -98,11 +96,11 @@ impl Item for Armour {
         if self.block > 0 {
             stats.push_str(&format!("/ {} Block ", self.block));
         }
-        if self.parry_chance > 0.0 {
-            stats.push_str(&format!("/ {}% Parry Chance ", self.parry_chance));
+        if self.parry > 0.0 {
+            stats.push_str(&format!("/ {}% Parry Chance ", self.parry));
         }
-        if self.dodge_chance > 0.0 {
-            stats.push_str(&format!("/ {}% Dodge Chance ", self.dodge_chance));
+        if self.dodge > 0.0 {
+            stats.push_str(&format!("/ {}% Dodge Chance ", self.dodge));
         }
 
         stats.trim().to_string()
@@ -118,5 +116,13 @@ impl Item for Armour {
 
     fn block(&self) -> u16 {
         self.block
+    }
+
+    fn parry(&self) -> f32 {
+        self.parry
+    }
+
+    fn dodge(&self) -> f32 {
+        self.dodge
     }
 }

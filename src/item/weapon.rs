@@ -123,4 +123,7 @@ impl Item for Weapon {
     fn crit_multiplier(&self) -> f32 {
         self.crit_multiplier
     }
+    fn crit_chance(&self) -> f32 {
+        self.crit_chance
+    }
 }

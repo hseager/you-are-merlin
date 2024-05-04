@@ -4,8 +4,8 @@ pub const PLAYER_ATTACK_SPEED: u16 = 20;
 pub const PLAYER_BLOCK: u16 = 0;
 pub const PLAYER_CRIT_CHANCE: f32 = 1.0;
 pub const PLAYER_CRIT_MULTI: f32 = 1.2;
-pub const PLAYER_CRIT_PARRY_CHANCE: f32 = 0.0;
-pub const PLAYER_CRIT_DODGE_CHANCE: f32 = 0.0;
+pub const PLAYER_PARRY_CHANCE: f32 = 0.0;
+pub const PLAYER_DODGE_CHANCE: f32 = 0.0;
 
 // We set a base attack time in milliseconds so that we can have the attack speed
 // stat as a number. Attack speed is calculated by (base_attack - (x * 10)). So

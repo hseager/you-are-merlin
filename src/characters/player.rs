@@ -2,7 +2,8 @@ use crate::{
     characters::fighter::calculate_damage,
     config::{
         FIGHTER_BASE_ATTACK_SPEED, PLAYER_ATTACK, PLAYER_ATTACK_SPEED, PLAYER_BLOCK,
-        PLAYER_CRIT_MULTI, PLAYER_LIFE, REST_HEAL_AMOUNT,
+        PLAYER_CRIT_CHANCE, PLAYER_CRIT_MULTI, PLAYER_DODGE_CHANCE, PLAYER_LIFE,
+        PLAYER_PARRY_CHANCE, REST_HEAL_AMOUNT,
     },
     item::{
         armour::Armour, artifact::Artifact, quest_item::QuestItem, weapon::Weapon, Equipment, Item,
@@ -29,6 +30,9 @@ impl Player {
             attack_speed: PLAYER_ATTACK_SPEED,
             block: PLAYER_BLOCK,
             crit_multiplier: PLAYER_CRIT_MULTI,
+            crit_chance: PLAYER_CRIT_CHANCE,
+            parry: PLAYER_PARRY_CHANCE,
+            dodge: PLAYER_DODGE_CHANCE,
         };
 
         let first_weapon = Weapon::new(String::from("Basic Weapon"));
@@ -214,6 +218,16 @@ impl Fighter for Player {
         crit_multiplier
     }
 
+    fn crit_chance(&self) -> f32 {
+        let mut crit_chance = self.stats.crit_chance;
+
+        if let Some(weapon) = &self.equipment.weapon {
+            crit_chance += weapon.crit_chance();
+        }
+
+        crit_chance
+    }
+
     fn max_life(&self) -> i16 {
         let mut max_life = self.stats.max_life;
 
@@ -236,5 +250,29 @@ impl Fighter for Player {
         }
 
         block
+    }
+
+    fn parry(&self) -> f32 {
+        let mut parry = self.stats.parry;
+
+        if let Some(armour) = &self.equipment.armour {
+            parry += armour.parry();
+        }
+
+        parry
+    }
+
+    fn dodge(&self) -> f32 {
+        let mut dodge = self.stats.dodge;
+
+        if let Some(armour) = &self.equipment.armour {
+            dodge += armour.dodge();
+        }
+
+        if let Some(artifact) = &self.equipment.artifact {
+            dodge += artifact.dodge();
+        }
+
+        dodge
     }
 }

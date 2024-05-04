@@ -25,11 +25,20 @@ pub trait Item {
     fn crit_multiplier(&self) -> f32 {
         0.0
     }
+    fn crit_chance(&self) -> f32 {
+        0.0
+    }
     fn max_life(&self) -> i16 {
         0
     }
     fn block(&self) -> u16 {
         0
+    }
+    fn parry(&self) -> f32 {
+        0.0
+    }
+    fn dodge(&self) -> f32 {
+        0.0
     }
 }
 

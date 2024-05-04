@@ -12,6 +12,9 @@ mod tests {
     const MAX_LIFE_VALUE: i16 = 20;
     const BLOCK_VALUE: u16 = 2;
     const CRIT_MULTI_VALUE: f32 = 2.0;
+    const CRIT_CHANCE_VALUE: f32 = 3.0;
+    const PARRY_VALUE: f32 = 4.0;
+    const DODGE_VALUE: f32 = 5.0;
 
     fn setup_player() -> Player {
         let stats = Stats {
@@ -21,6 +24,9 @@ mod tests {
             attack_speed: PLAYER_ATTACK_SPEED,
             block: PLAYER_BLOCK,
             crit_multiplier: PLAYER_CRIT_MULTI,
+            crit_chance: PLAYER_CRIT_CHANCE,
+            parry: PLAYER_PARRY_CHANCE,
+            dodge: PLAYER_DODGE_CHANCE,
         };
 
         let weapon = Weapon {
@@ -29,15 +35,15 @@ mod tests {
             power: POWER_VALUE,
             attack_speed: ATTACK_SPEED_VALUE,
             crit_multiplier: CRIT_MULTI_VALUE,
-            crit_chance: 2.0,
+            crit_chance: CRIT_CHANCE_VALUE,
         };
         let armour = Armour {
             name: String::from("Armour"),
             rarity: ItemRarity::Rare,
             max_life: MAX_LIFE_VALUE,
             block: BLOCK_VALUE,
-            parry_chance: 2.0,
-            dodge_chance: 2.0,
+            parry: PARRY_VALUE,
+            dodge: DODGE_VALUE,
         };
         let artifact = Artifact {
             name: String::from("Artifact"),
@@ -45,7 +51,7 @@ mod tests {
             power: POWER_VALUE,
             attack_speed: ATTACK_SPEED_VALUE,
             max_life: MAX_LIFE_VALUE,
-            dodge_chance: 2.0,
+            dodge: DODGE_VALUE,
         };
 
         let equipment = Equipment {
@@ -92,6 +98,13 @@ mod tests {
     }
 
     #[test]
+    fn test_player_crit_chance() {
+        let player = setup_player();
+
+        assert_eq!(player.crit_chance(), PLAYER_CRIT_CHANCE + CRIT_CHANCE_VALUE)
+    }
+
+    #[test]
     fn test_player_max_life() {
         let player = setup_player();
 
@@ -103,5 +116,19 @@ mod tests {
         let player = setup_player();
 
         assert_eq!(player.block(), PLAYER_BLOCK + BLOCK_VALUE)
+    }
+
+    #[test]
+    fn test_player_parry() {
+        let player = setup_player();
+
+        assert_eq!(player.parry(), PLAYER_PARRY_CHANCE + PARRY_VALUE)
+    }
+
+    #[test]
+    fn test_player_dodge() {
+        let player = setup_player();
+
+        assert_eq!(player.dodge(), PLAYER_DODGE_CHANCE + (DODGE_VALUE * 2.0))
     }
 }

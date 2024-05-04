@@ -18,7 +18,7 @@ pub struct Artifact {
     pub power: u16,
     pub attack_speed: u16,
     pub max_life: i16,
-    pub dodge_chance: f32,
+    pub dodge: f32,
 }
 
 impl Artifact {
@@ -44,7 +44,7 @@ impl Artifact {
             power: 0,
             attack_speed: 0,
             max_life: 0,
-            dodge_chance: 0.0,
+            dodge: 0.0,
         };
 
         for property in selected_properties {
@@ -60,7 +60,7 @@ impl Artifact {
                     artifact.max_life = rng.gen_range(ITEM_GEN_MAX_LIFE.0..=ITEM_GEN_MAX_LIFE.1)
                 }
                 ItemStat::DodgeChance => {
-                    artifact.dodge_chance =
+                    artifact.dodge =
                         rng.gen_range(ITEM_GEN_DODGE_CHANCE.0..=ITEM_GEN_DODGE_CHANCE.1)
                 }
                 _ => unreachable!(),
@@ -103,8 +103,8 @@ impl Item for Artifact {
         if self.max_life > 0 {
             stats.push_str(&format!("/ {} Max Life ", self.max_life));
         }
-        if self.dodge_chance > 0.0 {
-            stats.push_str(&format!("/ {}% Dodge Chance ", self.dodge_chance));
+        if self.dodge > 0.0 {
+            stats.push_str(&format!("/ {}% Dodge Chance ", self.dodge));
         }
 
         stats.trim().to_string()
@@ -122,5 +122,8 @@ impl Item for Artifact {
     }
     fn max_life(&self) -> i16 {
         self.max_life
+    }
+    fn dodge(&self) -> f32 {
+        self.dodge
     }
 }

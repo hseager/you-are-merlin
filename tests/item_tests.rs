@@ -13,8 +13,8 @@ mod tests {
             rarity: ItemRarity::Common,
             max_life: 10,
             block: 0,
-            parry_chance: 0.0,
-            dodge_chance: 0.0,
+            parry: 0.0,
+            dodge: 0.0,
         };
 
         print!("{}", item.display_info());
@@ -27,8 +27,8 @@ mod tests {
             rarity: ItemRarity::Legendary,
             max_life: 100,
             block: 50,
-            parry_chance: 2.4,
-            dodge_chance: 3.6,
+            parry: 2.4,
+            dodge: 3.6,
         };
 
         print!("{}", armour.display_info());
