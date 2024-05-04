@@ -4,6 +4,7 @@ pub trait TextFormatter {
     fn text_red(self) -> String;
     fn text_cyan(self) -> String;
     fn text_green(self) -> String;
+    fn text_green_bold(self) -> String;
     fn text_yellow(self) -> String;
     fn text_blue(self) -> String;
     fn text_blue_bold(self) -> String;
@@ -97,6 +98,21 @@ impl TextFormatter for &str {
         use colored::Colorize;
 
         self.green().to_string()
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    fn text_green_bold(self) -> String {
+        format!(
+            "<span style='color: {}; font-weight: bold;'>{}</span>",
+            GREEN, self
+        )
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    fn text_green_bold(self) -> String {
+        use colored::Colorize;
+
+        self.green().bold().to_string()
     }
 
     #[cfg(target_arch = "wasm32")]

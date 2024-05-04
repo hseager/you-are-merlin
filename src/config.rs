@@ -1,5 +1,5 @@
 pub const PLAYER_LIFE: i16 = 100;
-pub const PLAYER_ATTACK: u16 = 10;
+pub const PLAYER_ATTACK: u16 = 5;
 pub const PLAYER_ATTACK_SPEED: u16 = 20;
 pub const PLAYER_BLOCK: u16 = 0;
 pub const PLAYER_CRIT_CHANCE: f32 = 1.0;

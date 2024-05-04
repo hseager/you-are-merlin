@@ -1,5 +1,5 @@
 use crate::{
-    characters::fighter::calculate_damage,
+    characters::fighter::{calculate_damage, is_critical},
     config::{
         FIGHTER_BASE_ATTACK_SPEED, PLAYER_ATTACK, PLAYER_ATTACK_SPEED, PLAYER_BLOCK,
         PLAYER_CRIT_CHANCE, PLAYER_CRIT_MULTI, PLAYER_DODGE_CHANCE, PLAYER_LIFE,
@@ -35,7 +35,14 @@ impl Player {
             dodge: PLAYER_DODGE_CHANCE,
         };
 
-        let first_weapon = Weapon::new(String::from("Basic Weapon"));
+        let first_weapon = Weapon {
+            name: String::from("Fists"),
+            rarity: crate::item::ItemRarity::Common,
+            power: 1,
+            attack_speed: 300,
+            crit_chance: 0.0,
+            crit_multiplier: 0.0,
+        };
         let first_armour = Armour::new(String::from("Basic Armour"));
         let first_artifact = Artifact::new(String::from("Basic Artifact"));
 
@@ -131,12 +138,12 @@ impl Player {
     pub fn rest(&mut self) -> String {
         let heal_amount = REST_HEAL_AMOUNT;
 
-        let Stats { life, max_life, .. } = self.stats;
+        let Stats { life, .. } = self.stats;
 
         let mut new_life = life + heal_amount;
 
-        if new_life > max_life {
-            new_life = max_life;
+        if new_life > self.max_life() {
+            new_life = self.max_life();
         }
 
         let heal_amount = new_life - life;
@@ -161,11 +168,21 @@ impl Fighter for Player {
     }
 
     fn attack(&self, target: &mut dyn Fighter) -> String {
-        let damage = calculate_damage(self.power());
-        target.take_damage(damage);
+        let mut damage = calculate_damage(self.power());
+        let is_crit = is_critical(self.crit_chance());
+        let mut action_message = String::from("attack");
+
+        if is_crit {
+            action_message = "CRIT".text_green_bold();
+            damage = (damage as f32 * self.crit_multiplier()).round() as u16;
+            target.take_damage(damage);
+        } else {
+            target.take_damage(damage);
+        }
 
         format!(
-            "You attack {} for {} damage. (Enemy life: {})",
+            "You {} {} for {} damage. (Enemy life: {})",
+            action_message,
             &target.name(),
             damage.to_string().text_bold(),
             target.life().to_string().text_blue()
