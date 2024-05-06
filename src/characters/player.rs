@@ -1,10 +1,7 @@
 use crate::{
     characters::fighter::{calculate_damage, handle_block, is_critical, is_dodge, is_parry},
     config::*,
-    item::{
-        armour::Armour, artifact::Artifact, quest_item::QuestItem, weapon::Weapon, Equipment, Item,
-        ItemRarity, ItemType,
-    },
+    item::{weapon::Weapon, Equipment, Item, ItemType},
 };
 
 use super::{fighter::Fighter, stats::Stats};
@@ -31,46 +28,25 @@ impl Player {
             dodge: PLAYER_DODGE_CHANCE,
         };
 
-        let first_weapon = Weapon {
+        let fists = Weapon {
             name: String::from("Fists"),
             rarity: crate::item::ItemRarity::Common,
-            power: 2,
-            attack_speed: 30,
+            power: 0,
+            attack_speed: 0,
             crit_chance: 0.0,
             crit_multiplier: 0.0,
         };
-        let first_armour = Armour {
-            name: String::from("Basic Armour"),
-            rarity: ItemRarity::Common,
-            block: 2,
-            max_life: 0,
-            dodge: 0.0,
-            parry: 80.0,
-        };
-        let first_artifact = Artifact::new(String::from("Basic Artifact"));
 
         let equipment = Equipment {
-            armour: Some(Box::new(first_armour)),
-            weapon: Some(Box::new(first_weapon)),
-            artifact: Some(Box::new(first_artifact)),
+            armour: None,
+            weapon: Some(Box::new(fists)),
+            artifact: None,
         };
-
-        let weapon = Weapon::new(String::from("Needle"));
-        let armour = Armour::new(String::from("Wolf Armour"));
-        let artifact = Artifact::new(String::from("Onyxia Cape"));
-        let quest_item = QuestItem::new(String::from("Orb of Shiver"));
-
-        let test_inventory: Vec<Box<dyn Item>> = vec![
-            Box::new(weapon),
-            Box::new(armour),
-            Box::new(artifact),
-            Box::new(quest_item),
-        ];
 
         Player {
             name,
             stats,
-            inventory: test_inventory,
+            inventory: Vec::new(),
             equipment,
         }
     }

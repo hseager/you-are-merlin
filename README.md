@@ -11,9 +11,10 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 - Main quest with a final world boss, try to beat them!
 - Different Themes
 - Side quests
-- Items
+- Randomly generated loot and rewards
 - Battles
 - Recovery
+- Inventory
 
 ### Tips
 
@@ -27,9 +28,8 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 
 ### v0.2
 
-- Better item stats (crit chance/multi/ lifegain on hit)
-- Split items into types like weapons, armor, utilities with unique stats
-- Inventory
+- 40% chance to get random loot on battle encounters
+- Balance changes
 - More types of encounters like puzzles and riddles etc
     - Choice encounter with reward or damage
 
@@ -54,7 +54,6 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 ### Refactor
 
 - Stop cloning everything... try to reference locations etc
-- Unit tests
 
 ## Building
 
