@@ -1,13 +1,9 @@
 use crate::{
     characters::fighter::{calculate_damage, is_critical},
-    config::{
-        FIGHTER_BASE_ATTACK_SPEED, PLAYER_ATTACK, PLAYER_ATTACK_SPEED, PLAYER_BLOCK,
-        PLAYER_CRIT_CHANCE, PLAYER_CRIT_MULTI, PLAYER_DODGE_CHANCE, PLAYER_LIFE,
-        PLAYER_PARRY_CHANCE, REST_HEAL_AMOUNT,
-    },
+    config::*,
     item::{
         armour::Armour, artifact::Artifact, quest_item::QuestItem, weapon::Weapon, Equipment, Item,
-        ItemType,
+        ItemRarity, ItemType,
     },
 };
 
@@ -38,12 +34,19 @@ impl Player {
         let first_weapon = Weapon {
             name: String::from("Fists"),
             rarity: crate::item::ItemRarity::Common,
-            power: 1,
-            attack_speed: 300,
+            power: 2,
+            attack_speed: 30,
             crit_chance: 0.0,
             crit_multiplier: 0.0,
         };
-        let first_armour = Armour::new(String::from("Basic Armour"));
+        let first_armour = Armour {
+            name: String::from("Basic Armour"),
+            rarity: ItemRarity::Common,
+            block: 2,
+            max_life: 0,
+            dodge: 0.0,
+            parry: 0.0,
+        };
         let first_artifact = Artifact::new(String::from("Basic Artifact"));
 
         let equipment = Equipment {
@@ -163,8 +166,8 @@ impl Fighter for Player {
         self.name.clone()
     }
 
-    fn life(&self) -> &i16 {
-        &self.stats.life
+    fn life(&self) -> i16 {
+        self.stats.life
     }
 
     fn attack(&self, target: &mut dyn Fighter) -> String {
@@ -175,16 +178,29 @@ impl Fighter for Player {
         if is_crit {
             action_message = "CRIT".text_green_bold();
             damage = (damage as f32 * self.crit_multiplier()).round() as u16;
-            target.take_damage(damage);
-        } else {
-            target.take_damage(damage);
         }
 
+        // Handle block
+        let mut blocked_damage = 0;
+        let mut block_text = String::new();
+
+        if target.block() > 0 {
+            if target.block() >= damage {
+                blocked_damage = damage
+            } else {
+                blocked_damage = target.block();
+            }
+            block_text = format!("They block {} damage. ", blocked_damage);
+        }
+
+        target.take_damage(damage - blocked_damage);
+
         format!(
-            "You {} {} for {} damage. (Enemy life: {})",
+            "You {} {} for {} damage. {}(Enemy life: {})",
             action_message,
             &target.name(),
             damage.to_string().text_bold(),
+            block_text,
             target.life().to_string().text_blue()
         )
     }

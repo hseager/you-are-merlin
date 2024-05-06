@@ -25,11 +25,11 @@ pub const ENEMY_BOSS_STATS: (i16, u16, u16) = (100, 20, 100);
 
 // min, max
 pub const ITEM_GEN_POWER: (u16, u16) = (4, 10);
-pub const ITEM_GEN_ATTACK_SPEED: (u16, u16) = (12, 30);
-pub const ITEM_GEN_CRIT_MULTI: (f32, f32) = (0.4, 2.0);
-pub const ITEM_GEN_CRIT_CHANCE: (f32, f32) = (4.0, 6.0);
+pub const ITEM_GEN_ATTACK_SPEED: (u16, u16) = (15, 100);
+pub const ITEM_GEN_CRIT_MULTI: (f32, f32) = (0.2, 2.0);
+pub const ITEM_GEN_CRIT_CHANCE: (f32, f32) = (2.0, 8.0);
 
-pub const ITEM_GEN_MAX_LIFE: (i16, i16) = (10, 20);
-pub const ITEM_GEN_BLOCK: (u16, u16) = (1, 10);
+pub const ITEM_GEN_MAX_LIFE: (i16, i16) = (10, 60);
+pub const ITEM_GEN_BLOCK: (u16, u16) = (2, 10);
 pub const ITEM_GEN_PARRY_CHANCE: (f32, f32) = (2.0, 8.0);
 pub const ITEM_GEN_DODGE_CHANCE: (f32, f32) = (2.0, 6.0);

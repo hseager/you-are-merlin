@@ -46,8 +46,8 @@ impl Fighter for Enemy {
         self.name.clone()
     }
 
-    fn life(&self) -> &i16 {
-        &self.stats.life
+    fn life(&self) -> i16 {
+        self.stats.life
     }
 
     fn attack(&self, target: &mut dyn Fighter) -> String {
@@ -58,16 +58,29 @@ impl Fighter for Enemy {
         if is_crit {
             action_message = "CRITS".text_red_bold();
             damage = (damage as f32 * self.crit_multiplier()).round() as u16;
-            target.take_damage(damage);
-        } else {
-            target.take_damage(damage);
         }
 
+        // Handle block
+        let mut blocked_damage = 0;
+        let mut block_text = String::new();
+
+        if target.block() > 0 {
+            if target.block() >= damage {
+                blocked_damage = damage
+            } else {
+                blocked_damage = target.block();
+            }
+            block_text = format!("You block {} damage. ", blocked_damage);
+        }
+
+        target.take_damage(damage - blocked_damage);
+
         format!(
-            "{} {} you for {} damage. (Your life: {})",
-            action_message,
+            "{} {} you for {} damage. {}(Your life: {})",
             &self.name(),
+            action_message,
             damage.to_string().text_bold(),
+            block_text,
             &target.life().to_string().text_red()
         )
     }
