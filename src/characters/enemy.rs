@@ -74,11 +74,10 @@ impl Fighter for Enemy {
             let blocked_damage = handle_block(damage, target.block());
 
             if blocked_damage > 0 {
-                damage -= blocked_damage;
                 block_text = format!("You block {} damage. ", blocked_damage);
             }
 
-            target.take_damage(damage);
+            target.take_damage(damage - blocked_damage);
         }
 
         format!(
