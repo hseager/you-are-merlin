@@ -1,5 +1,5 @@
 use crate::{
-    characters::fighter::{calculate_damage, handle_block, is_critical},
+    characters::fighter::{calculate_damage, handle_block, is_critical, is_dodge},
     config::*,
     item::{
         armour::Armour, artifact::Artifact, quest_item::QuestItem, weapon::Weapon, Equipment, Item,
@@ -180,23 +180,34 @@ impl Fighter for Player {
             damage = (damage as f32 * self.crit_multiplier()).round() as u16;
         }
 
-        // Handle block
-        let mut block_text = String::new();
-        let blocked_damage = handle_block(damage, target.block());
-
-        if blocked_damage > 0 {
-            damage -= blocked_damage;
-            block_text = format!("They block {} damage. ", blocked_damage);
+        // Handle dodge
+        let mut dodge_text = String::new();
+        let is_dodge = is_dodge(target.dodge());
+        if is_dodge {
+            dodge_text = String::from("But they dodged! ");
         }
 
-        target.take_damage(damage);
+        // Handle block
+        let mut block_text = String::new();
+
+        if !is_dodge {
+            let blocked_damage = handle_block(damage, target.block());
+
+            if blocked_damage > 0 {
+                damage -= blocked_damage;
+                block_text = format!("They block {} damage. ", blocked_damage);
+            }
+
+            target.take_damage(damage);
+        }
 
         format!(
-            "You {} {} for {} damage. {}(Enemy life: {})",
+            "You {} {} for {} damage. {}{}(Enemy life: {})",
             action_message,
             &target.name(),
             damage.to_string().text_bold(),
             block_text,
+            dodge_text,
             target.life().to_string().text_blue()
         )
     }

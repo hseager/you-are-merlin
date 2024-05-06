@@ -30,7 +30,7 @@ pub fn calculate_damage(power: u16) -> u16 {
 }
 
 pub fn is_critical(crit_chance: f32) -> bool {
-    let roll = rand::thread_rng().gen_range(1.0..=100.0);
+    let roll = rand::thread_rng().gen_range(0.0..=100.0);
 
     roll <= crit_chance
 }
@@ -47,4 +47,10 @@ pub fn handle_block(damage: u16, block: u16) -> u16 {
     }
 
     blocked_damage
+}
+
+pub fn is_dodge(dodge_chance: f32) -> bool {
+    let roll = rand::thread_rng().gen_range(0.0..=100.0);
+
+    roll <= dodge_chance
 }

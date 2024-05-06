@@ -1,5 +1,5 @@
 use crate::{
-    characters::fighter::{calculate_damage, handle_block, is_critical},
+    characters::fighter::{calculate_damage, handle_block, is_critical, is_dodge},
     config::FIGHTER_BASE_ATTACK_SPEED,
 };
 
@@ -60,23 +60,34 @@ impl Fighter for Enemy {
             damage = (damage as f32 * self.crit_multiplier()).round() as u16;
         }
 
-        // Handle block
-        let mut block_text = String::new();
-        let blocked_damage = handle_block(damage, target.block());
-
-        if blocked_damage > 0 {
-            damage -= blocked_damage;
-            block_text = format!("You block {} damage. ", blocked_damage);
+        // Handle dodge
+        let mut dodge_text = String::new();
+        let is_dodge = is_dodge(target.dodge());
+        if is_dodge {
+            dodge_text = String::from("But you dodged! ");
         }
 
-        target.take_damage(damage);
+        // Handle block
+        let mut block_text = String::new();
+
+        if !is_dodge {
+            let blocked_damage = handle_block(damage, target.block());
+
+            if blocked_damage > 0 {
+                damage -= blocked_damage;
+                block_text = format!("You block {} damage. ", blocked_damage);
+            }
+
+            target.take_damage(damage);
+        }
 
         format!(
-            "{} {} you for {} damage. {}(Your life: {})",
+            "{} {} you for {} damage. {}{}(Your life: {})",
             &self.name(),
             action_message,
             damage.to_string().text_bold(),
             block_text,
+            dodge_text,
             &target.life().to_string().text_red()
         )
     }
