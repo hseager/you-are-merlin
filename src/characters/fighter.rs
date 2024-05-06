@@ -34,3 +34,17 @@ pub fn is_critical(crit_chance: f32) -> bool {
 
     roll <= crit_chance
 }
+
+pub fn handle_block(damage: u16, block: u16) -> u16 {
+    let mut blocked_damage = 0;
+
+    if block > 0 {
+        if block >= damage {
+            blocked_damage = damage
+        } else {
+            blocked_damage = block;
+        }
+    }
+
+    blocked_damage
+}

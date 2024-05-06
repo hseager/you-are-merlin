@@ -1,5 +1,5 @@
 use crate::{
-    characters::fighter::{calculate_damage, is_critical},
+    characters::fighter::{calculate_damage, handle_block, is_critical},
     config::FIGHTER_BASE_ATTACK_SPEED,
 };
 
@@ -61,19 +61,15 @@ impl Fighter for Enemy {
         }
 
         // Handle block
-        let mut blocked_damage = 0;
         let mut block_text = String::new();
+        let blocked_damage = handle_block(damage, target.block());
 
-        if target.block() > 0 {
-            if target.block() >= damage {
-                blocked_damage = damage
-            } else {
-                blocked_damage = target.block();
-            }
+        if blocked_damage > 0 {
+            damage -= blocked_damage;
             block_text = format!("You block {} damage. ", blocked_damage);
         }
 
-        target.take_damage(damage - blocked_damage);
+        target.take_damage(damage);
 
         format!(
             "{} {} you for {} damage. {}(Your life: {})",
