@@ -6,7 +6,7 @@ pub trait Fighter {
     fn is_alive(&self) -> bool {
         self.life() > 0
     }
-    fn attack(&self, target: &mut dyn Fighter) -> String;
+    fn attack(&mut self, target: &mut dyn Fighter) -> String;
     fn take_damage(&mut self, damage: u16);
     fn attack_speed_as_milliseconds(&self) -> u16;
     fn can_attack(&self, current_time: i32, last_attack_time: i32) -> bool {
@@ -53,4 +53,10 @@ pub fn is_dodge(dodge_chance: f32) -> bool {
     let roll = rand::thread_rng().gen_range(0.0..=100.0);
 
     roll <= dodge_chance
+}
+
+pub fn is_parry(parry_chance: f32) -> bool {
+    let roll = rand::thread_rng().gen_range(0.0..=100.0);
+
+    roll <= parry_chance
 }

@@ -81,7 +81,7 @@ mod tests {
     #[test]
     fn test_block_prevents_damage() {
         let mut player = setup_player();
-        let enemy = setup_enemy();
+        let mut enemy = setup_enemy();
 
         enemy.attack(&mut player);
 
@@ -101,7 +101,7 @@ mod tests {
     #[test]
     fn test_block_more_than_damage_prevents_all_damage() {
         let mut player = setup_player();
-        let enemy = setup_enemy();
+        let mut enemy = setup_enemy();
 
         player.stats.block = 100;
 

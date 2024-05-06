@@ -1,5 +1,5 @@
 use crate::{
-    characters::fighter::{calculate_damage, handle_block, is_critical, is_dodge},
+    characters::fighter::{calculate_damage, handle_block, is_critical, is_dodge, is_parry},
     config::*,
     item::{
         armour::Armour, artifact::Artifact, quest_item::QuestItem, weapon::Weapon, Equipment, Item,
@@ -45,7 +45,7 @@ impl Player {
             block: 2,
             max_life: 0,
             dodge: 0.0,
-            parry: 0.0,
+            parry: 80.0,
         };
         let first_artifact = Artifact::new(String::from("Basic Artifact"));
 
@@ -170,7 +170,7 @@ impl Fighter for Player {
         self.stats.life
     }
 
-    fn attack(&self, target: &mut dyn Fighter) -> String {
+    fn attack(&mut self, target: &mut dyn Fighter) -> String {
         let mut damage = calculate_damage(self.power());
         let is_crit = is_critical(self.crit_chance());
         let mut action_message = String::from("attack");
@@ -181,32 +181,54 @@ impl Fighter for Player {
         }
 
         // Handle dodge
-        let mut dodge_text = String::new();
+        let mut status_text = String::new();
         let is_dodge = is_dodge(target.dodge());
         if is_dodge {
-            dodge_text = String::from("But they dodged! ");
+            status_text = String::from("But they dodged! ");
+        }
+
+        // Handle parry
+        let mut parry_damage = 0;
+        let is_parry: bool = is_parry(target.parry());
+        if is_parry {
+            parry_damage = damage / 2;
+            self.take_damage(parry_damage);
         }
 
         // Handle block
-        let mut block_text = String::new();
+        let mut blocked_damage = 0;
+        if !is_dodge {
+            blocked_damage = handle_block(damage, target.block());
+
+            target.take_damage(damage - parry_damage - blocked_damage);
+        }
 
         if !is_dodge {
-            let blocked_damage = handle_block(damage, target.block());
-
-            if blocked_damage > 0 {
-                block_text = format!("They block {} damage. ", blocked_damage);
+            if is_parry && blocked_damage > 0 {
+                status_text = format!(
+                    "They parry and reflect {} damage and block {} damage. ",
+                    parry_damage.to_string().text_bold(),
+                    blocked_damage.to_string().text_bold()
+                );
+            } else if is_parry && blocked_damage == 0 {
+                status_text = format!(
+                    "They parry and reflect {} damage. ",
+                    parry_damage.to_string().text_bold(),
+                );
+            } else if blocked_damage > 0 {
+                status_text = format!(
+                    "They block {} damage. ",
+                    blocked_damage.to_string().text_bold()
+                );
             }
-
-            target.take_damage(damage - blocked_damage);
         }
 
         format!(
-            "You {} {} for {} damage. {}{}(Enemy life: {})",
+            "You {} {} for {} damage. {}(Enemy life: {})",
             action_message,
             &target.name(),
             damage.to_string().text_bold(),
-            block_text,
-            dodge_text,
+            status_text,
             target.life().to_string().text_blue()
         )
     }
