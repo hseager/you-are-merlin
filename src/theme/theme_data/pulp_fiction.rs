@@ -1,7 +1,4 @@
-use crate::{
-    game_data::entities::{EnemyDifficulty, LocationType},
-    theme::*,
-};
+use crate::{game_data::entities::LocationType, theme::*};
 
 pub const THEME_DATA: Theme = Theme {
     main_character: "Vincent",

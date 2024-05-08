@@ -1,5 +1,5 @@
 use crate::{
-    game_data::entities::{EnemyDifficulty, LocationType},
+    game_data::entities::LocationType,
     theme::*,
 };
 

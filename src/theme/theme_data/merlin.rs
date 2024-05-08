@@ -1,4 +1,4 @@
-use crate::{game_data::entities::{EnemyDifficulty, LocationType}, theme::*};
+use crate::{game_data::entities::LocationType, theme::*};
 
 // Please ChatGPT, fill in the below Rust struct values with the lore from
 // "Merlin"

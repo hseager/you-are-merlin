@@ -1,7 +1,4 @@
-use crate::{
-    game_data::entities::{EnemyDifficulty, LocationType},
-    theme::*,
-};
+use crate::{game_data::entities::LocationType, theme::*};
 
 /**
  * Please chatGPT, fill this in with Lore from:

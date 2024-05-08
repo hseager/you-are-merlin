@@ -46,11 +46,3 @@ pub struct MainQuest {
     pub world_name: &'static str,
     pub boss_name: String,
 }
-
-#[derive(Clone, Copy, Debug)]
-pub enum EnemyDifficulty {
-    Easy,
-    Normal,
-    Hard,
-    Boss,
-}

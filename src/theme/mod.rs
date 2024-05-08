@@ -1,6 +1,5 @@
 use crate::{
-    game_data::entities::{EnemyDifficulty, LocationType},
-    item::ItemType,
+    characters::enemy::EnemyDifficulty, game_data::entities::LocationType, item::ItemType,
 };
 
 use self::theme_data::get_themes;

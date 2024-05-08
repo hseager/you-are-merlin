@@ -10,13 +10,23 @@ use crate::text_format::TextFormatter;
 pub struct Enemy {
     pub name: String,
     pub description: &'static str,
+    pub difficulty: EnemyDifficulty,
     pub stats: Stats,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum EnemyDifficulty {
+    Easy,
+    Normal,
+    Hard,
+    Boss,
 }
 
 impl Enemy {
     pub fn new(
         name: String,
         description: &'static str,
+        difficulty: EnemyDifficulty,
         life: i16,
         power: u16,
         attack_speed: u16,
@@ -36,6 +46,7 @@ impl Enemy {
         Enemy {
             name,
             description,
+            difficulty,
             stats,
         }
     }

@@ -1,7 +1,7 @@
 use rand::{seq::SliceRandom, thread_rng};
 
 use crate::{
-    characters::enemy::Enemy,
+    characters::enemy::{Enemy, EnemyDifficulty},
     config::{ENEMY_BOSS_STATS, ENEMY_EASY_STATS, ENEMY_HARD_STATS, ENEMY_MEDIUM_STATS},
     item::quest_item::QuestItem,
     text_format::TextFormatter,
@@ -20,6 +20,7 @@ pub fn build_world(theme: Theme) -> Vec<Location> {
     let boss = Enemy::new(
         theme.boss.name.text_red_bold(),
         theme.boss.description,
+        theme.boss.difficulty,
         boss_life,
         boss_attack,
         boss_attack_speed,
@@ -112,6 +113,7 @@ fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
             enemy: Enemy::new(
                 enemy.name.text_bold(),
                 enemy.description,
+                enemy.difficulty,
                 life,
                 attack,
                 attack_speed,

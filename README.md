@@ -27,7 +27,6 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 ### v0.2
 - Adjust items gen
     - Can't get common items at the moment
-- Test in WASM
 - Add more weapon data for each theme so we don't run out
 - Balance changes
     - Add stats to enemies

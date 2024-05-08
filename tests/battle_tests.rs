@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use you_are_merlin::characters::enemy::Enemy;
+    use you_are_merlin::characters::enemy::{Enemy, EnemyDifficulty};
     use you_are_merlin::characters::fighter::Fighter;
     use you_are_merlin::characters::player::Player;
     use you_are_merlin::characters::stats::Stats;
@@ -74,6 +74,7 @@ mod tests {
         Enemy {
             name: String::from("Enemy"),
             description: "Description",
+            difficulty: EnemyDifficulty::Easy,
             stats,
         }
     }
