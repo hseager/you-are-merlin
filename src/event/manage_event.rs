@@ -106,8 +106,17 @@ impl Event for ManageEvent {
     ) -> EventResponse {
         match action.class {
             ActionType::Equip => {
-                self.state = ManageState::Equip;
-                EventResponse::new(None, None)
+                if !player.inventory.is_empty() {
+                    self.state = ManageState::Equip;
+                    EventResponse::new(None, None)
+                } else {
+                    EventResponse::new(
+                        None,
+                        Some(String::from(
+                            "You have no items in your inventory to equip.",
+                        )),
+                    )
+                }
             }
             ActionType::EquipItem => {
                 player.equip_item_by_name(action.name);

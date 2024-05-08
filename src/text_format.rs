@@ -102,10 +102,7 @@ impl TextFormatter for &str {
 
     #[cfg(target_arch = "wasm32")]
     fn text_green_bold(self) -> String {
-        format!(
-            "<span style='color: {}; font-weight: bold;'>{}</span>",
-            GREEN, self
-        )
+        format!("<strong style='color: {};'>{}</strong>", GREEN, self)
     }
 
     #[cfg(not(target_arch = "wasm32"))]
@@ -141,10 +138,7 @@ impl TextFormatter for &str {
 
     #[cfg(target_arch = "wasm32")]
     fn text_blue_bold(self) -> String {
-        format!(
-            "<span style='color: {}; font-weight: bold;'>{}</span>",
-            BLUE, self
-        )
+        format!("<strong style='color: {};'>{}</strong>", BLUE, self)
     }
 
     #[cfg(not(target_arch = "wasm32"))]
@@ -157,7 +151,7 @@ impl TextFormatter for &str {
     #[cfg(target_arch = "wasm32")]
     fn text_color(self, index: usize) -> String {
         let colors = [
-            RED, BLUE, GREEN, YELLOW, INDIGO, CYAN, MAGENTA, EMERALD, AMBER, SKY, PINK,
+            RED, BLUE, GREEN, YELLOW, INDIGO, CYAN, MAGENTA, AMBER, SKY, PINK, PURPLE, ORANGE,
         ];
 
         let color = colors
@@ -194,10 +188,7 @@ impl TextFormatter for &str {
 
     #[cfg(target_arch = "wasm32")]
     fn text_purple_bold(self) -> String {
-        format!(
-            "<span style='color: {}; font-weight: bold;'>{}</span>",
-            PURPLE, self
-        )
+        format!("<strong style='color: {};'>{}</strong>", PURPLE, self)
     }
 
     #[cfg(not(target_arch = "wasm32"))]
@@ -209,10 +200,7 @@ impl TextFormatter for &str {
 
     #[cfg(target_arch = "wasm32")]
     fn text_orange_bold(self) -> String {
-        format!(
-            "<span style='color: {}; font-weight: bold;'>{}</span>",
-            ORANGE, self
-        )
+        format!("<strong style='color: {};'>{}</strong>", ORANGE, self)
     }
 
     #[cfg(not(target_arch = "wasm32"))]
