@@ -83,6 +83,7 @@ impl GameState {
     }
 
     pub fn get_random_item(&mut self) -> Box<dyn Item> {
+        // TODO create generic items after running out
         assert!(!self.items.is_empty(), "Out of items..");
 
         let mut rng = rand::thread_rng();

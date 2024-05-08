@@ -1,6 +1,4 @@
-use rand::{thread_rng, Rng};
-
-use crate::text_format::TextFormatter;
+use crate::{text_format::TextFormatter, utilities::roll};
 
 pub mod armour;
 pub mod artifact;
@@ -107,12 +105,11 @@ impl ItemRarity {
 }
 
 pub fn get_reward_item_rarity() -> ItemRarity {
-    let mut rng = thread_rng();
-    let chance: u8 = rng.gen_range(1..=100);
+    let chance = roll();
 
-    if chance <= 10 {
+    if chance <= 10.0 {
         ItemRarity::Legendary
-    } else if chance <= 40 {
+    } else if chance <= 40.0 {
         ItemRarity::Epic
     } else {
         ItemRarity::Rare

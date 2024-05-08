@@ -73,7 +73,6 @@ impl Event for RewardEvent {
                 let mut response_text: String;
 
                 let item = game_state.get_random_item();
-                // player.equip_item(&item);
 
                 response_text = format!("You find: {}", item.display_info());
 

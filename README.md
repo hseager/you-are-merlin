@@ -9,9 +9,9 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 ## Game Features
 
 - Main quest with a final world boss, try to beat them!
-- Different Themes
+- Themes like Zelda, Star Wars and Fallout
 - Side quests
-- Randomly generated loot and rewards
+- Random loot generation and rewards
 - Battles
 - Recovery
 - Inventory
@@ -23,21 +23,23 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 - You don't have to type out the full action, a partial match will do
 
 ## To do
-- Finish adding weapon stats
-- Test in WASM
 
 ### v0.2
-
-- 40% chance to get random loot on battle encounters
+- Adjust items gen
+    - Can't get common items at the moment
+- Test in WASM
+- Add more weapon data for each theme so we don't run out
 - Balance changes
+    - Add stats to enemies
+- Display text rather than enemy stats
+
 - More types of encounters like puzzles and riddles etc
     - Choice encounter with reward or damage
 
 ### later
-
+- Manage during battles
 - Change rest to only partially heal
     - Gain life/potions from some encounters
-- Display text rather than enemy stats
 - Usable items
     - Use items/potions during a battle loop
 - Change battle loop to be interactive

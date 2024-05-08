@@ -31,7 +31,7 @@ impl Player {
         let fists = Weapon {
             name: String::from("Fists"),
             rarity: crate::item::ItemRarity::Common,
-            power: 0,
+            power: 2,
             attack_speed: 0,
             crit_chance: 0.0,
             crit_multiplier: 0.0,

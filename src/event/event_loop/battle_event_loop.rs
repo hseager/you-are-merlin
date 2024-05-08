@@ -1,6 +1,8 @@
 use crate::{
     characters::{enemy::Enemy, fighter::Fighter, player::Player},
-    config::BATTLE_INTERVAL_MILLIS,
+    config::{
+        BATTLE_BASE_CHANCE_TO_FIND_ITEM, BATTLE_CHANCE_TO_FIND_ITEM_DECAY, BATTLE_INTERVAL_MILLIS,
+    },
     event::{
         battle_event::BattleEvent, boss_fight_event::BossFightEvent,
         game_over_event::GameOverEvent, reward_event::RewardEvent,
@@ -8,6 +10,7 @@ use crate::{
     game_data::entities::{Encounter, LocationType},
     game_state::GameState,
     item::quest_item::QuestItem,
+    utilities::roll,
 };
 
 use super::{event_loop_response::EventLoopResponse, EventLoop};
@@ -36,13 +39,14 @@ impl BattleEventLoop {
 
     pub fn handle_battle_success(
         &mut self,
+        player: &mut Player,
         game_state: &mut GameState,
         message: String,
     ) -> EventLoopResponse {
         self.is_active = false;
 
         match game_state.get_current_encounter() {
-            Encounter::Battle(_) => self.handle_normal_battle_success(game_state, message),
+            Encounter::Battle(_) => self.handle_normal_battle_success(player, game_state, message),
             Encounter::BossFight(_) => self.handle_boss_battle_success(game_state),
             _ => panic!("Unhandled encounter at the end of a battle loop."),
         }
@@ -50,13 +54,20 @@ impl BattleEventLoop {
 
     fn handle_normal_battle_success(
         &self,
+        player: &mut Player,
         game_state: &mut GameState,
-        message: String,
+        mut message: String,
     ) -> EventLoopResponse {
         match game_state.go_to_next_encounter() {
             Some(encounter) => match encounter {
                 Encounter::Battle(battle) => {
-                    EventLoopResponse::Complete(message, Box::new(BattleEvent::new(battle.clone())))
+                    let next_battle = battle.clone();
+
+                    if roll() <= self.get_item_find_chance(player) {
+                        message = self.handle_find_item(player, game_state, message);
+                    }
+
+                    EventLoopResponse::Complete(message, Box::new(BattleEvent::new(next_battle)))
                 }
                 Encounter::BossFight(battle) => EventLoopResponse::Complete(
                     message,
@@ -107,6 +118,30 @@ impl BattleEventLoop {
             Box::new(GameOverEvent {}),
         )
     }
+
+    pub fn handle_find_item(
+        &self,
+        player: &mut Player,
+        game_state: &mut GameState,
+        message: String,
+    ) -> String {
+        let item = game_state.get_random_item();
+        let message = format!(
+            "{}\nYour keen eye catches sight of something amidst the debris of the battle:\n{}",
+            message,
+            item.display_info()
+        );
+        player.add_item_to_inventory(item);
+
+        message
+    }
+
+    pub fn get_item_find_chance(&self, player: &mut Player) -> f32 {
+        // Decrease battle item find chance for each item in the inventory
+        let decay = (player.inventory.len() as u16 * BATTLE_CHANCE_TO_FIND_ITEM_DECAY) as f32;
+
+        BATTLE_BASE_CHANCE_TO_FIND_ITEM as f32 - decay
+    }
 }
 
 impl EventLoop for BattleEventLoop {
@@ -132,7 +167,7 @@ impl EventLoop for BattleEventLoop {
 
             if !enemy.is_alive() {
                 response_text = format!("{}\nYou defeated {}!", response_text, enemy.name);
-                return self.handle_battle_success(game_state, response_text);
+                return self.handle_battle_success(player, game_state, response_text);
             }
 
             self.player_last_attack_time = current_epoch_milli;

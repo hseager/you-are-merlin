@@ -1,5 +1,7 @@
 use rand::Rng;
 
+use crate::utilities::roll;
+
 pub trait Fighter {
     fn name(&self) -> String;
     fn life(&self) -> i16;
@@ -30,9 +32,7 @@ pub fn calculate_damage(power: u16) -> u16 {
 }
 
 pub fn is_critical(crit_chance: f32) -> bool {
-    let roll = rand::thread_rng().gen_range(0.0..=100.0);
-
-    roll <= crit_chance
+    roll() <= crit_chance
 }
 
 pub fn handle_block(damage: u16, block: u16) -> u16 {
@@ -50,13 +50,9 @@ pub fn handle_block(damage: u16, block: u16) -> u16 {
 }
 
 pub fn is_dodge(dodge_chance: f32) -> bool {
-    let roll = rand::thread_rng().gen_range(0.0..=100.0);
-
-    roll <= dodge_chance
+    roll() <= dodge_chance
 }
 
 pub fn is_parry(parry_chance: f32) -> bool {
-    let roll = rand::thread_rng().gen_range(0.0..=100.0);
-
-    roll <= parry_chance
+    roll() <= parry_chance
 }
