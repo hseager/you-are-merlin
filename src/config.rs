@@ -35,5 +35,5 @@ pub const ITEM_GEN_CRIT_CHANCE: (f32, f32) = (4.0, 20.0);
 
 pub const ITEM_GEN_MAX_LIFE: (i16, i16) = (10, 50);
 pub const ITEM_GEN_BLOCK: (u16, u16) = (1, 8);
-pub const ITEM_GEN_PARRY_CHANCE: (f32, f32) = (4.0, 12.0);
-pub const ITEM_GEN_DODGE_CHANCE: (f32, f32) = (2.0, 10.0);
+pub const ITEM_GEN_PARRY_CHANCE: (f32, f32) = (4.0, 30.0);
+pub const ITEM_GEN_DODGE_CHANCE: (f32, f32) = (2.0, 15.0);

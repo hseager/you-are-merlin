@@ -106,7 +106,8 @@ impl Event for ManageEvent {
     ) -> EventResponse {
         match action.class {
             ActionType::Equip => {
-                if !player.inventory.is_empty() {
+                let equipable_items = self.get_inventory_as_actions();
+                if !equipable_items.is_empty() {
                     self.state = ManageState::Equip;
                     EventResponse::new(None, None)
                 } else {
