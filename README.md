@@ -25,17 +25,19 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 ## To do
 
 ### v0.2
-- Adjust items gen
-    - Can't get common items at the moment
-- Add more weapon data for each theme so we don't run out
-- Balance changes
-    - Add stats to enemies
-- Display text rather than enemy stats
-
-- More types of encounters like puzzles and riddles etc
-    - Choice encounter with reward or damage
+- [ ] Adjust items gen. Can't get common items at the moment
+- [ ] Add more weapon data for each theme so we don't run out
+- [ ] Balance changes
+- [ ] Add stats to enemies
+- [ ] More types of encounters like puzzles and riddles like Choice encounter with reward or damage
+- [x] Added attack speed mechanic
+- [x] Added stats: Power, Crit, Block, Parry, Dodge
+- [x] Added random loot > weapons with rarity and stats
+- [x] Added "Manage" event for Inventory and Equipment management
+- [x] Changed Enemy stats text to descriptive text
 
 ### later
+- Add more locations with 2 safe zones
 - Manage during battles
 - Change rest to only partially heal
     - Gain life/potions from some encounters

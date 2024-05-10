@@ -14,14 +14,6 @@ pub struct Enemy {
     pub stats: Stats,
 }
 
-#[derive(Clone, Copy, Debug)]
-pub enum EnemyDifficulty {
-    Easy,
-    Normal,
-    Hard,
-    Boss,
-}
-
 impl Enemy {
     pub fn new(
         name: String,
@@ -155,5 +147,28 @@ impl Fighter for Enemy {
     }
     fn dodge(&self) -> f32 {
         self.stats.dodge
+    }
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum EnemyDifficulty {
+    Easy,
+    Normal,
+    Hard,
+    Boss,
+}
+
+impl EnemyDifficulty {
+    pub fn description(&self) -> String {
+        match self {
+            EnemyDifficulty::Easy => {
+                String::from("They pose little threat and should be dispatched with ease.")
+            }
+            EnemyDifficulty::Normal => {
+                String::from("A moderate challenge, requiring some skill to overcome.")
+            }
+            EnemyDifficulty::Hard => String::from("A formidable opponent, testing your abilities."),
+            EnemyDifficulty::Boss => String::from("Victory will not come easily."),
+        }
     }
 }
