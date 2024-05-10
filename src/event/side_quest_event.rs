@@ -3,6 +3,7 @@ use crate::{
     characters::player::Player,
     game_data::entities::SideQuest,
     game_state::GameState,
+    item::reward_type::RewardType,
     text_format::TextFormatter,
 };
 
@@ -88,8 +89,7 @@ impl Event for SideQuestEvent {
                     .completed_locations
                     .push(game_state.get_current_location().clone());
 
-                let item = game_state.get_random_item();
-                // player.equip_item(&item);
+                let item = game_state.get_reward_item(RewardType::QuestReward);
 
                 let mut response_text = String::from(
                     "\"Your assistance in retrieving this has been invaluable.\

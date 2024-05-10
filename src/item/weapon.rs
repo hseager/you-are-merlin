@@ -7,8 +7,7 @@ use crate::config::{
 use crate::utilities::round_to_single_decimal;
 
 use super::{
-    get_rarity_property_count, get_rarity_text_color, get_reward_item_rarity, Item, ItemRarity,
-    ItemStat, ItemType,
+    get_rarity_property_count, get_rarity_text_color, Item, ItemRarity, ItemStat, ItemType,
 };
 
 #[derive(Clone)]
@@ -22,7 +21,7 @@ pub struct Weapon {
 }
 
 impl Weapon {
-    pub fn new(name: String) -> Weapon {
+    pub fn new(name: String, rarity: ItemRarity) -> Weapon {
         let mut rng = thread_rng();
 
         let mut properties = [
@@ -33,8 +32,6 @@ impl Weapon {
         ];
 
         properties.shuffle(&mut rng);
-
-        let rarity = get_reward_item_rarity();
 
         let selected_properties = properties.iter().take(get_rarity_property_count(&rarity));
 

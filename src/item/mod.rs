@@ -2,8 +2,8 @@ use crate::{text_format::TextFormatter, utilities::roll};
 
 pub mod armour;
 pub mod artifact;
-pub mod item_builder;
 pub mod quest_item;
+pub mod reward_type;
 pub mod weapon;
 
 pub trait Item {

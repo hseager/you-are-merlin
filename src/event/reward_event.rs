@@ -3,7 +3,7 @@ use crate::{
     characters::player::Player,
     game_data::entities::{Location, SideQuest},
     game_state::GameState,
-    item::quest_item::QuestItem,
+    item::{quest_item::QuestItem, reward_type::RewardType},
     text_format::TextFormatter,
 };
 
@@ -72,7 +72,7 @@ impl Event for RewardEvent {
             ActionType::Open => {
                 let mut response_text: String;
 
-                let item = game_state.get_random_item();
+                let item = game_state.get_reward_item(RewardType::ChestReward);
 
                 response_text = format!("You find: {}", item.display_info());
 

@@ -1,18 +1,23 @@
 use rand::Rng;
 
+use crate::item::armour::Armour;
+use crate::item::artifact::Artifact;
+use crate::item::reward_type::RewardType;
+use crate::item::weapon::Weapon;
+use crate::theme::ThemeItem;
 use crate::{
     game_data::{
         entities::{Encounter, Location, SideQuest},
         GameData,
     },
-    item::{item_builder, Item},
+    item::{Item, ItemType},
 };
 
 pub struct GameState {
     current_location: usize,
     current_encounter: usize,
     pub game_data: GameData,
-    pub items: Vec<Box<dyn Item>>,
+    pub items: Vec<ThemeItem>,
     pub accepted_quests: Vec<SideQuest>,
     pub completed_locations: Vec<Location>,
     pub is_running: bool,
@@ -20,12 +25,10 @@ pub struct GameState {
 
 impl GameState {
     pub fn new(game_data: GameData) -> GameState {
-        let items = item_builder::build_items(&game_data.items);
-
         GameState {
             current_location: 0,
             current_encounter: 0,
-            items,
+            items: game_data.items.clone(),
             game_data,
             accepted_quests: Vec::new(),
             completed_locations: Vec::new(),
@@ -82,7 +85,18 @@ impl GameState {
         }
     }
 
-    pub fn get_random_item(&mut self) -> Box<dyn Item> {
+    // pub fn get_random_item(&mut self) -> Box<dyn Item> {
+    //     // TODO create generic items after running out
+    //     assert!(!self.items.is_empty(), "Out of items..");
+
+    //     let mut rng = rand::thread_rng();
+    //     let index = rng.gen_range(0..self.items.len());
+
+    //     // Remove the item from the list so that it's unique
+    //     self.items.remove(index)
+    // }
+
+    fn get_random_item(&mut self) -> ThemeItem {
         // TODO create generic items after running out
         assert!(!self.items.is_empty(), "Out of items..");
 
@@ -91,5 +105,18 @@ impl GameState {
 
         // Remove the item from the list so that it's unique
         self.items.remove(index)
+    }
+
+    pub fn get_reward_item(&mut self, reward_type: RewardType) -> Box<dyn Item> {
+        let item = self.get_random_item();
+
+        let rarity = reward_type.roll_rarity();
+
+        match item.item_type {
+            ItemType::Weapon => Box::new(Weapon::new(item.name.to_string(), rarity)),
+            ItemType::Armour => Box::new(Armour::new(item.name.to_string(), rarity)),
+            ItemType::Artifact => Box::new(Artifact::new(item.name.to_string(), rarity)),
+            _ => panic!("Unsupported reward item type"),
+        }
     }
 }

@@ -6,8 +6,7 @@ use rand::{thread_rng, Rng};
 use crate::config::{ITEM_GEN_BLOCK, ITEM_GEN_DODGE_CHANCE, ITEM_GEN_MAX_LIFE};
 
 use super::{
-    get_rarity_property_count, get_rarity_text_color, get_reward_item_rarity, Item, ItemRarity,
-    ItemStat, ItemType,
+    get_rarity_property_count, get_rarity_text_color, Item, ItemRarity, ItemStat, ItemType,
 };
 
 #[derive(Clone)]
@@ -21,7 +20,7 @@ pub struct Armour {
 }
 
 impl Armour {
-    pub fn new(name: String) -> Armour {
+    pub fn new(name: String, rarity: ItemRarity) -> Armour {
         let mut rng = thread_rng();
 
         let mut properties = [
@@ -32,8 +31,6 @@ impl Armour {
         ];
 
         properties.shuffle(&mut rng);
-
-        let rarity = get_reward_item_rarity();
 
         let selected_properties = properties.iter().take(get_rarity_property_count(&rarity));
 

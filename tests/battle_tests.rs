@@ -9,9 +9,7 @@ mod tests {
     use you_are_merlin::item::{armour::Armour, weapon::Weapon};
 
     const PLAYER_LIFE_VALUE: i16 = 100;
-
     const ENEMY_ATTACK: u16 = 10;
-
     const BLOCK_VALUE: u16 = 5;
 
     fn setup_player() -> Player {
@@ -114,6 +112,19 @@ mod tests {
 
         println!("{:?}", blocked_attack_value);
         println!("{}", player.life());
+
+        assert_eq!(player.life(), PLAYER_LIFE_VALUE);
+    }
+
+    #[test]
+    fn test_overflow_damage() {
+        let mut player = setup_player();
+        let mut enemy = setup_enemy();
+
+        player.stats.block = 10;
+        player.stats.parry = 100.0;
+
+        enemy.attack(&mut player);
 
         assert_eq!(player.life(), PLAYER_LIFE_VALUE);
     }

@@ -9,7 +9,7 @@ use crate::{
     },
     game_data::entities::{Encounter, LocationType},
     game_state::GameState,
-    item::quest_item::QuestItem,
+    item::{quest_item::QuestItem, reward_type::RewardType},
     utilities::roll,
 };
 
@@ -125,7 +125,7 @@ impl BattleEventLoop {
         game_state: &mut GameState,
         message: String,
     ) -> String {
-        let item = game_state.get_random_item();
+        let item = game_state.get_reward_item(RewardType::BattleReward);
         let message = format!(
             "{}\nYour keen eye catches sight of something amidst the debris of the battle:\n{}",
             message,
