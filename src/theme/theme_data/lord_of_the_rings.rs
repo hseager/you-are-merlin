@@ -138,8 +138,8 @@ pub const THEME_DATA: Theme = Theme {
                     difficulty: EnemyDifficulty::Normal
                 },
                 ThemeEnemy {
-                    name: "The Eye of Sauron",
-                    description: "The watchful gaze of the Dark Lord, ever seeking the bearer of the One Ring.",
+                    name: "White Hand Captain",
+                    description: "Leaders of Saruman's army, skilled tacticians and formidable fighters.",
                     difficulty: EnemyDifficulty::Hard
                 }
             ])
@@ -185,6 +185,46 @@ pub const THEME_DATA: Theme = Theme {
         ThemeItem {
             name:  "Plated Rohan Greeves",
             item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Narsil",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Elven Cloak",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Palantír",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Helm of Durin",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Orcrist",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Galadhrim Bow",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Nenya, Ring of Water",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Gondor Shield",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Aeglos, Spear of Gil-galad",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Elessar, Elfstone",
+            item_type: ItemType::Artifact
         },
     ]
 };

@@ -158,7 +158,7 @@ pub const THEME_DATA: Theme = Theme {
             item_type: ItemType::Artifact
         },
         ThemeItem {
-            name:  "Mordred's Sword",
+            name:  "Mordred's Dagger",
             item_type: ItemType::Weapon
         },
         ThemeItem {
@@ -180,6 +180,46 @@ pub const THEME_DATA: Theme = Theme {
         ThemeItem {
             name:  "Lancelot's Armor",
             item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Avalon Bow",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Merlin's Robe",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Guinevere's Tiara",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Pendragon Shield",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Camelot Helm",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Nimue's Grimoire",
+            item_type: ItemType::Artifact
+        },        
+        ThemeItem {
+            name: "Dragon's Bane (Sword)",
+            item_type: ItemType::Weapon
+        },        
+        ThemeItem {
+            name: "Uther's Ruby Ring",
+            item_type: ItemType::Artifact
+        },        
+        ThemeItem {
+            name: "Clarent - Sword of Mercy",
+            item_type: ItemType::Weapon
+        },        
+        ThemeItem {
+            name: "Durandal, Paladin Sword",
+            item_type: ItemType::Weapon
         },
     ]    
 };

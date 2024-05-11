@@ -25,13 +25,14 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 ## To do
 
 ### v0.2
-- [ ] Add more weapon data for each theme so we don't run out
 - [ ] Balance changes
 - [ ] Add stats to enemies
 - [ ] More types of encounters like puzzles and riddles like Choice encounter with reward or damage
+- [x] Added item types: Weapon, Armour and Artifacts
 - [x] Added attack speed mechanic
-- [x] Added stats: Power, Crit, Block, Parry, Dodge
-- [x] Added random loot > weapons, armour and artifacts with rarity and stats
+- [x] Added stats: Power, Attack Speed, Crit Chance, Crit Multiplier, Block, Parry, Dodge
+- [x] Added random loot
+- [x] Added loot rarities: Common, Rare, Epic, Legendary
 - [x] Added "Manage" event for Inventory and Equipment management
 - [x] Changed Enemy stats text to descriptive text
 

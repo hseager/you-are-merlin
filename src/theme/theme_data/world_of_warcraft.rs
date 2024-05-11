@@ -179,5 +179,45 @@ pub const THEME_DATA: Theme = Theme {
             name:  "Hand of Justice (Trinket)",
             item_type: ItemType::Artifact
         },
+        ThemeItem {
+            name: "The Lich King's Crown",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Warglaives of Azzinoth",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Leather Hood of the Scavenger",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Ring of the Iron Lord",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Staff of the Arcane Apprentice",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Bracelets of the Wolf",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Chainmail Vest of the Protector",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Amulet of the Forest Guardian",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "The Head of Onyxia",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "The Eye of Sulfuras",
+            item_type: ItemType::Artifact
+        },
     ]    
 };

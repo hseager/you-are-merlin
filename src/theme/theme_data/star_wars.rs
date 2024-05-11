@@ -168,12 +168,51 @@ pub const THEME_DATA: Theme = Theme {
             item_type: ItemType::Armour
         },
         ThemeItem {
-            name:  "Thermal Detonator",
+            name: "Jedi Knight Robes",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Lightsaber of Luke Skywalker",
             item_type: ItemType::Weapon
         },
         ThemeItem {
-            name:  "Comlink",
+            name: "E-11 Blaster Rifle",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Jedi Temple Guard Armor",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Rebel Alliance Medal of Bravery",
             item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Bowcaster of Chewbacca",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Sith Mask of Darth Revan",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Rebel Alliance Flight Suit",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Jabba the Hutt's Vibroblade",
+            item_type: ItemType::Weapon
+        },ThemeItem {
+            name: "Watto's Lucky Dice",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Yoda's Wrist Holoprojector",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Rancor Bone Armor",
+            item_type: ItemType::Armour
         },
     ]
     

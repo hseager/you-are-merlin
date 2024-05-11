@@ -162,6 +162,46 @@ pub const THEME_DATA: Theme = Theme {
             name:  "Super Sledge",
             item_type: ItemType::Weapon
         },
+        ThemeItem {
+            name: "Vault Suit",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Vault-Tec Pip-Boy 3000",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Fat Man Mini Nuke Launcher",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "RadAway",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "T-51 Power Armor",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Nuka-Cola Quantum",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Nuka-Cola Victory",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Combat Shotgun",
+            item_type: ItemType::Weapon
+        },        
+        ThemeItem {
+            name: "Garbage Gun",
+            item_type: ItemType::Weapon
+        },        
+        ThemeItem {
+            name: "Red Dress",
+            item_type: ItemType::Armour
+        },
     ]
     
 };

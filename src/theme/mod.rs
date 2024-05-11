@@ -12,7 +12,7 @@ pub struct Theme {
     pub world_name: &'static str,
     pub friendly_characters: [&'static str; 6],
     pub locations: [ThemeLocation; 6],
-    pub items: [ThemeItem; 10],
+    pub items: [ThemeItem; 20],
     pub boss: ThemeEnemy,
 }
 

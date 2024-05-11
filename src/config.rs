@@ -40,5 +40,5 @@ pub const ITEM_GEN_DODGE_CHANCE: (f32, f32) = (5.0, 20.0);
 
 // % chance / common, rare, epic, legendary
 pub const REWARD_CHANCE_BATTLE: (f32, f32, f32, f32) = (60.0, 30.0, 10.0, 0.0);
-pub const REWARD_CHANCE_CHEST: (f32, f32, f32, f32) = (0.0, 60.0, 30.0, 10.0);
+pub const REWARD_CHANCE_CHEST: (f32, f32, f32, f32) = (0.0, 70.0, 20.0, 10.0);
 pub const REWARD_CHANCE_QUEST: (f32, f32, f32, f32) = (0.0, 45.0, 35.0, 20.0);

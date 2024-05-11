@@ -175,5 +175,45 @@ pub const THEME_DATA: Theme = Theme {
             name:  "The Mirror Shield",
             item_type: ItemType::Armour
         },
+        ThemeItem {
+            name: "Zora Scale",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Goron Tunic",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Fairy in a Bottle",
+            item_type: ItemType::Artifact
+        },        
+        ThemeItem {
+            name: "Hover Boots",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Biggoron's Sword",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Iron Boots",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Bomb Bag",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Golden Gauntlets",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Triforce",
+            item_type: ItemType::Artifact
+        },        
+        ThemeItem {
+            name: "The Slingshot",
+            item_type: ItemType::Weapon
+        },
     ]
 };
