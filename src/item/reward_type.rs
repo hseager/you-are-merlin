@@ -1,4 +1,7 @@
-use crate::utilities::roll;
+use crate::{
+    config::{REWARD_CHANCE_BATTLE, REWARD_CHANCE_CHEST, REWARD_CHANCE_QUEST},
+    utilities::roll,
+};
 
 use super::ItemRarity;
 
@@ -13,35 +16,20 @@ impl RewardType {
     pub fn roll_rarity(&self) -> ItemRarity {
         let chance = roll();
 
-        // TODO move these to config as tuple
-        match self {
-            RewardType::BattleReward => {
-                if chance <= 10.0 {
-                    ItemRarity::Epic
-                } else if chance <= 40.0 {
-                    ItemRarity::Rare
-                } else {
-                    ItemRarity::Common
-                }
-            }
-            RewardType::ChestReward => {
-                if chance <= 10.0 {
-                    ItemRarity::Legendary
-                } else if chance <= 40.0 {
-                    ItemRarity::Epic
-                } else {
-                    ItemRarity::Rare
-                }
-            }
-            RewardType::QuestReward => {
-                if chance <= 10.0 {
-                    ItemRarity::Legendary
-                } else if chance <= 40.0 {
-                    ItemRarity::Epic
-                } else {
-                    ItemRarity::Rare
-                }
-            }
+        let reward_chance = match self {
+            RewardType::BattleReward => REWARD_CHANCE_BATTLE,
+            RewardType::ChestReward => REWARD_CHANCE_CHEST,
+            RewardType::QuestReward => REWARD_CHANCE_QUEST,
+        };
+
+        if chance < reward_chance.0 {
+            ItemRarity::Common
+        } else if chance < reward_chance.0 + reward_chance.1 {
+            ItemRarity::Rare
+        } else if chance < reward_chance.0 + reward_chance.1 + reward_chance.2 {
+            ItemRarity::Epic
+        } else {
+            ItemRarity::Legendary
         }
     }
 }

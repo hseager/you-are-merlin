@@ -10,7 +10,6 @@ use super::{
     get_rarity_property_count, get_rarity_text_color, Item, ItemRarity, ItemStat, ItemType,
 };
 
-// TODO Change these to more interesting stats
 #[derive(Clone)]
 pub struct Artifact {
     pub name: String,
