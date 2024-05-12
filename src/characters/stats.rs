@@ -12,14 +12,20 @@ pub struct Stats {
 }
 
 impl Stats {
-    pub fn new(life: i16, power: u16, attack_speed: u16) -> Stats {
+    pub fn new(
+        life: i16,
+        power: u16,
+        attack_speed: u16,
+        crit_multiplier: f32,
+        crit_chance: f32,
+    ) -> Stats {
         Stats {
             life,
             max_life: life,
             power,
             attack_speed,
-            crit_multiplier: 0.0,
-            crit_chance: 0.0,
+            crit_multiplier,
+            crit_chance,
             block: 0,
             parry: 0.0,
             dodge: 0.0,

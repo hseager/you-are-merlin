@@ -32,10 +32,10 @@ impl Event for BattleEvent {
     fn prompt(&self) -> Option<String> {
         println!("Stats: {:?}", &self.enemy.stats);
         Some(format!(
-            "A wild {} appears! {}\n{}",
+            "A {} appears! {}\n{}",
             &self.enemy.name,
-            &self.enemy.difficulty.description(),
-            &self.enemy.description
+            &self.enemy.description,
+            &self.enemy.difficulty.description()
         ))
     }
 

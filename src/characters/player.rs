@@ -176,10 +176,10 @@ impl Fighter for Player {
         if !is_dodge {
             blocked_damage = handle_block(damage, target.block());
 
-            damage = damage.saturating_sub(parry_damage);
-            damage = damage.saturating_sub(blocked_damage);
+            let mut hit = damage.saturating_sub(parry_damage);
+            hit = hit.saturating_sub(blocked_damage);
 
-            target.take_damage(damage);
+            target.take_damage(hit);
         }
 
         if !is_dodge {

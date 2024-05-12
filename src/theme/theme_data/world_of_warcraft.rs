@@ -71,17 +71,17 @@ pub const THEME_DATA: Theme = Theme {
             enemies: Some([
                 ThemeEnemy {
                     name: "Bloodscalp Troll",
-                    description: "Savage trolls lurking within the dense jungles of Stranglethorn Vale, known for their brutality and dark rituals.",
+                    description: "A Savage troll lurking within the dense jungles of Stranglethorn Vale, known for their brutality and dark rituals.",
                     difficulty: EnemyDifficulty::Normal
                 },
                 ThemeEnemy {
                     name: "Bloodsail Pirate",
-                    description: "Ruthless pirates sailing the waters of Stranglethorn Vale, preying upon unwary travelers and rival factions.",
+                    description: "Ruthless pirate sailing the waters of Stranglethorn Vale, preying upon unwary travelers and rival factions.",
                     difficulty: EnemyDifficulty::Hard
                 },
                 ThemeEnemy {
                     name: "Panther",
-                    description: "Stealthy predators stalking the shadows of Stranglethorn Vale, hunting for prey amidst the dense foliage.",
+                    description: "A stealthy predator stalking the shadows of Stranglethorn Vale, hunting for prey amidst the dense foliage.",
                     difficulty: EnemyDifficulty::Easy
                 },
             ]),

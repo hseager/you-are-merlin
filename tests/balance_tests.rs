@@ -49,7 +49,13 @@ mod tests {
         ];
 
         for enemy_type in enemy_types {
-            let stats = Stats::new(enemy_type.0 .0, enemy_type.0 .1, enemy_type.0 .2);
+            let stats = Stats::new(
+                enemy_type.0 .0,
+                enemy_type.0 .1,
+                enemy_type.0 .2,
+                enemy_type.0 .3,
+                enemy_type.0 .4,
+            );
 
             let enemy = Enemy::new(format!("Enemy {}", enemy_type.1), "", enemy_type.2, stats);
 

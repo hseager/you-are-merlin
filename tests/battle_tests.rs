@@ -84,9 +84,9 @@ mod tests {
 
         enemy.attack(&mut player);
 
-        let blocked_attack_value = (PLAYER_LIFE - (ENEMY_ATTACK as i16 - BLOCK_VALUE as i16) - 2)
+        let blocked_attack_value = (PLAYER_LIFE - (ENEMY_ATTACK as i16 - BLOCK_VALUE as i16) - 3)
             as i16
-            ..=(PLAYER_LIFE - (ENEMY_ATTACK as i16 - BLOCK_VALUE as i16) + 2) as i16;
+            ..=(PLAYER_LIFE - (ENEMY_ATTACK as i16 - BLOCK_VALUE as i16) + 3) as i16;
 
         println!("{:?}", blocked_attack_value);
         println!("{}", player.life());

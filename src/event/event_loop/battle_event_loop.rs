@@ -10,6 +10,7 @@ use crate::{
     game_data::entities::{Encounter, LocationType},
     game_state::GameState,
     item::{quest_item::QuestItem, reward_type::RewardType},
+    text_format::TextFormatter,
     utilities::roll,
 };
 
@@ -97,8 +98,10 @@ impl BattleEventLoop {
 
         EventLoopResponse::Complete(
             format!(
-                "You defeated {}! {} is saved!\nYou win!",
-                &self.enemy.name, game_state.game_data.world_name
+                "You defeated {}! {} is saved!\n{}!",
+                &self.enemy.name,
+                game_state.game_data.world_name,
+                "You win".text_green_bold()
             ),
             Box::new(GameOverEvent {}),
         )
@@ -114,7 +117,12 @@ impl BattleEventLoop {
         game_state.is_running = false;
 
         EventLoopResponse::Complete(
-            format!("{}\n{} died!\nGame Over...", response_text, player.name),
+            format!(
+                "{}\n{} died!\n{}...",
+                response_text,
+                player.name,
+                "Game Over".text_red_bold()
+            ),
             Box::new(GameOverEvent {}),
         )
     }

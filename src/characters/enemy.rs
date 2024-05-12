@@ -79,10 +79,10 @@ impl Fighter for Enemy {
         if !is_dodge {
             blocked_damage = handle_block(damage, target.block());
 
-            damage = damage.saturating_sub(parry_damage);
-            damage = damage.saturating_sub(blocked_damage);
+            let mut hit = damage.saturating_sub(parry_damage);
+            hit = hit.saturating_sub(blocked_damage);
 
-            target.take_damage(damage);
+            target.take_damage(hit);
         }
 
         if !is_dodge {
@@ -164,9 +164,9 @@ impl EnemyDifficulty {
                 String::from("They pose little threat and should be dispatched with ease.")
             }
             EnemyDifficulty::Normal => {
-                String::from("A moderate challenge, requiring some skill to overcome.")
+                String::from("A formidable opponent, testing your abilities.")
             }
-            EnemyDifficulty::Hard => String::from("A formidable opponent, testing your abilities."),
+            EnemyDifficulty::Hard => String::from("The battlefield awaits with bated breath, offering a stern test for those bold enough to step forward."),
             EnemyDifficulty::Boss => String::from("Victory will not come easily."),
         }
     }
@@ -189,8 +189,8 @@ impl EnemyDifficulty {
 
         match self {
             EnemyDifficulty::Easy => {
-                let (life, power, attack_speed) = ENEMY_EASY_STATS;
-                let mut stats = Stats::new(life, power, attack_speed);
+                let (life, power, attack_speed, crit_multi, crit_chance) = ENEMY_EASY_STATS;
+                let mut stats = Stats::new(life, power, attack_speed, crit_multi, crit_chance);
 
                 let selected_stats = possible_stats.iter().take(ENEMY_EASY_STAT_COUNT);
                 self.add_enemy_stats(&mut stats, selected_stats);
@@ -198,9 +198,9 @@ impl EnemyDifficulty {
                 stats
             }
             EnemyDifficulty::Normal => {
-                let (life, power, attack_speed) = ENEMY_MEDIUM_STATS;
+                let (life, power, attack_speed, crit_multi, crit_chance) = ENEMY_MEDIUM_STATS;
 
-                let mut stats = Stats::new(life, power, attack_speed);
+                let mut stats = Stats::new(life, power, attack_speed, crit_multi, crit_chance);
 
                 let selected_stats = possible_stats.iter().take(ENEMY_MEDIUM_STAT_COUNT);
                 self.add_enemy_stats(&mut stats, selected_stats);
@@ -208,9 +208,9 @@ impl EnemyDifficulty {
                 stats
             }
             EnemyDifficulty::Hard => {
-                let (life, power, attack_speed) = ENEMY_HARD_STATS;
+                let (life, power, attack_speed, crit_multi, crit_chance) = ENEMY_HARD_STATS;
 
-                let mut stats = Stats::new(life, power, attack_speed);
+                let mut stats = Stats::new(life, power, attack_speed, crit_multi, crit_chance);
 
                 let selected_stats = possible_stats.iter().take(ENEMY_HARD_STAT_COUNT);
                 self.add_enemy_stats(&mut stats, selected_stats);
@@ -218,9 +218,9 @@ impl EnemyDifficulty {
                 stats
             }
             EnemyDifficulty::Boss => {
-                let (life, power, attack_speed) = ENEMY_BOSS_STATS;
+                let (life, power, attack_speed, crit_multi, crit_chance) = ENEMY_BOSS_STATS;
 
-                let mut stats = Stats::new(life, power, attack_speed);
+                let mut stats = Stats::new(life, power, attack_speed, crit_multi, crit_chance);
 
                 let selected_stats = possible_stats.iter().take(ENEMY_BOSS_STAT_COUNT);
                 self.add_enemy_stats(&mut stats, selected_stats);
