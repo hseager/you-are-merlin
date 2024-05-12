@@ -4,6 +4,7 @@ pub mod event_loop;
 pub mod event_response;
 pub mod game_over_event;
 pub mod main_quest_event;
+pub mod manage_event;
 pub mod rest_event;
 pub mod reward_event;
 pub mod side_quest_event;

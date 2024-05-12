@@ -1,4 +1,4 @@
-use crate::text_format::TextFormatter;
+use crate::{text_format::TextFormatter, theme::ThemeItem};
 
 use self::entities::Location;
 use crate::theme::Theme;
@@ -6,11 +6,13 @@ use crate::theme::Theme;
 pub mod entities;
 mod world_builder;
 
+// TODO Check GameState and see if we still need this separation of static world data
+// or if we can mut locations now that we are cloning everything
 pub struct GameData {
     pub world_name: &'static str,
     pub main_character: String,
     pub locations: Vec<Location>,
-    pub items: Vec<&'static str>,
+    pub items: Vec<ThemeItem>,
 }
 
 impl GameData {

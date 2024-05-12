@@ -3,11 +3,12 @@ use crate::{
     characters::player::Player,
     game_data::entities::SideQuest,
     game_state::GameState,
-    items::create_item,
+    item::reward_type::RewardType,
     text_format::TextFormatter,
 };
 
 use super::{event_loop::EventLoop, event_response::EventResponse, visit_event::VisitEvent, Event};
+use crate::item::Item;
 
 pub struct SideQuestEvent {
     side_quest: SideQuest,
@@ -41,13 +42,15 @@ impl Event for SideQuestEvent {
             Some(format!(
                 "You find a calm area. {} wants to ask you something.\n\
                 \"Do you have it? Please, bring me {} back from {}.\"",
-                self.side_quest.character, self.side_quest.item, self.side_quest.location_name
+                self.side_quest.character,
+                self.side_quest.item.display_name(),
+                self.side_quest.location_name
             ))
         } else {
             Some(format!(
                 "You find a calm area. {} wants to ask you something.\n\
                 \"Will you find {} from {} and bring it back to me? I will make it worth your while!\"",
-                self.side_quest.character, self.side_quest.item, self.side_quest.location_name
+                self.side_quest.character, self.side_quest.item.display_name(), self.side_quest.location_name
             ))
         }
     }
@@ -78,7 +81,7 @@ impl Event for SideQuestEvent {
 
                 EventResponse::new(
                     Some(VisitEvent::build(game_state)),
-                    Some("You accept their request.".to_string()),
+                    Some(String::from("You accept their request.")),
                 )
             }
             ActionType::GiveItem => {
@@ -86,15 +89,21 @@ impl Event for SideQuestEvent {
                     .completed_locations
                     .push(game_state.get_current_location().clone());
 
-                let item = create_item(&mut game_state.items);
-                player.equip_item(&item);
+                let item = game_state.get_reward_item(RewardType::QuestReward);
 
-                let mut response_text = "\"Your assistance in retrieving this has been invaluable. Thank you for your help! Please take this.\"".to_string();
+                let mut response_text = String::from(
+                    "\"Your assistance in retrieving this has been invaluable.\
+                 Thank you for your help! Please take this.\"",
+                );
 
                 response_text = format!(
-                    "{}\nYou recieve {}! Your attack power increases by {}, and your maximum life grows by {} points.",
-                    response_text, item.name, item.attack, item.max_life
+                    "{}\n\
+                    You recieve: {}",
+                    response_text,
+                    item.display_info()
                 );
+
+                player.add_item_to_inventory(item);
 
                 EventResponse::new(Some(VisitEvent::build(game_state)), Some(response_text))
             }

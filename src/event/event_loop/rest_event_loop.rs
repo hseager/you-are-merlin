@@ -1,5 +1,7 @@
 use crate::{
-    characters::player::Player, config::REST_INTERVAL_MILLIS, event::visit_event::VisitEvent,
+    characters::{fighter::Fighter, player::Player},
+    config::REST_INTERVAL_MILLIS,
+    event::visit_event::VisitEvent,
     game_state::GameState,
 };
 
@@ -30,11 +32,11 @@ impl EventLoop for RestEventLoop {
         player: &mut Player,
         game_state: &mut GameState,
     ) -> EventLoopResponse {
-        if player.life < player.max_life {
+        if player.stats.life < player.max_life() {
             EventLoopResponse::InProgress(Some(player.rest()))
         } else {
             EventLoopResponse::Complete(
-                "You fully recover your health.".to_string(),
+                String::from("You fully recover your health."),
                 VisitEvent::build(game_state),
             )
         }

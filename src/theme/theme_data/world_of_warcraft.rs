@@ -1,5 +1,5 @@
 use crate::{
-    game_data::entities::{EnemyDifficulty, LocationType},
+    game_data::entities::LocationType,
     theme::*,
 };
 
@@ -71,17 +71,17 @@ pub const THEME_DATA: Theme = Theme {
             enemies: Some([
                 ThemeEnemy {
                     name: "Bloodscalp Troll",
-                    description: "Savage trolls lurking within the dense jungles of Stranglethorn Vale, known for their brutality and dark rituals.",
+                    description: "A Savage troll lurking within the dense jungles of Stranglethorn Vale, known for their brutality and dark rituals.",
                     difficulty: EnemyDifficulty::Normal
                 },
                 ThemeEnemy {
                     name: "Bloodsail Pirate",
-                    description: "Ruthless pirates sailing the waters of Stranglethorn Vale, preying upon unwary travelers and rival factions.",
+                    description: "Ruthless pirate sailing the waters of Stranglethorn Vale, preying upon unwary travelers and rival factions.",
                     difficulty: EnemyDifficulty::Hard
                 },
                 ThemeEnemy {
                     name: "Panther",
-                    description: "Stealthy predators stalking the shadows of Stranglethorn Vale, hunting for prey amidst the dense foliage.",
+                    description: "A stealthy predator stalking the shadows of Stranglethorn Vale, hunting for prey amidst the dense foliage.",
                     difficulty: EnemyDifficulty::Easy
                 },
             ]),
@@ -139,15 +139,85 @@ pub const THEME_DATA: Theme = Theme {
         },        
     ],
     items: [
-        "The Ashbringer",
-        "Thunderfury, Blessed Blade of the Windseeker",
-        "Sulfuras, Hand of Ragnaros",
-        "Atiesh, Greatstaff of the Guardian",
-        "Shadowfang",
-        "Teebu's Blazing Longsword",
-        "Warden's Staff",
-        "Arugal's Fist",
-        "Quel'Serrar",
-        "Ironfoe",
-    ]
+        ThemeItem {
+            name:  "Ashkandi, Greatsword of the Brotherhood",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Judgement Armor",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Thunderfury, Blessed Blade of the Windseeker",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Nightslayer Armor",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Sulfuras, Hand of Ragnaros",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Arcanist Regalia",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Rhok'delar, Longbow of the Ancient Keepers",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Benediction",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Onyxia Scale Cloak",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name:  "Hand of Justice (Trinket)",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "The Lich King's Crown",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Warglaives of Azzinoth",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Leather Hood of the Scavenger",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Ring of the Iron Lord",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Staff of the Arcane Apprentice",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Bracelets of the Wolf",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Chainmail Vest of the Protector",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Amulet of the Forest Guardian",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "The Head of Onyxia",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "The Eye of Sulfuras",
+            item_type: ItemType::Artifact
+        },
+    ]    
 };

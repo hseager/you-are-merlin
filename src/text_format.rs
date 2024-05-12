@@ -4,8 +4,12 @@ pub trait TextFormatter {
     fn text_red(self) -> String;
     fn text_cyan(self) -> String;
     fn text_green(self) -> String;
+    fn text_green_bold(self) -> String;
     fn text_yellow(self) -> String;
     fn text_blue(self) -> String;
+    fn text_blue_bold(self) -> String;
+    fn text_purple_bold(self) -> String;
+    fn text_orange_bold(self) -> String;
     fn text_color(self, i: usize) -> String;
 }
 
@@ -31,7 +35,9 @@ const AMBER: &str = "var(--theme-amber)";
 #[allow(dead_code)]
 const INDIGO: &str = "var(--theme-indigo)";
 #[allow(dead_code)]
-const EMERALD: &str = "var(--theme-emerald)";
+const PURPLE: &str = "var(--theme-purple)";
+#[allow(dead_code)]
+const ORANGE: &str = "var(--theme-orange)";
 
 impl TextFormatter for &str {
     #[cfg(target_arch = "wasm32")]
@@ -95,6 +101,18 @@ impl TextFormatter for &str {
     }
 
     #[cfg(target_arch = "wasm32")]
+    fn text_green_bold(self) -> String {
+        format!("<strong style='color: {};'>{}</strong>", GREEN, self)
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    fn text_green_bold(self) -> String {
+        use colored::Colorize;
+
+        self.green().bold().to_string()
+    }
+
+    #[cfg(target_arch = "wasm32")]
     fn text_yellow(self) -> String {
         format!("<span style='color: {};'>{}</span>", YELLOW, self)
     }
@@ -119,9 +137,21 @@ impl TextFormatter for &str {
     }
 
     #[cfg(target_arch = "wasm32")]
+    fn text_blue_bold(self) -> String {
+        format!("<strong style='color: {};'>{}</strong>", BLUE, self)
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    fn text_blue_bold(self) -> String {
+        use colored::Colorize;
+
+        self.blue().bold().to_string()
+    }
+
+    #[cfg(target_arch = "wasm32")]
     fn text_color(self, index: usize) -> String {
         let colors = [
-            RED, BLUE, GREEN, YELLOW, INDIGO, CYAN, MAGENTA, EMERALD, AMBER, SKY, PINK,
+            RED, BLUE, GREEN, YELLOW, INDIGO, CYAN, MAGENTA, AMBER, SKY, PINK, PURPLE, ORANGE,
         ];
 
         let color = colors
@@ -154,5 +184,29 @@ impl TextFormatter for &str {
             .expect("Failed to get color for text. Proabably ran out of colors (12)");
 
         self.color(*color).to_string()
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    fn text_purple_bold(self) -> String {
+        format!("<strong style='color: {};'>{}</strong>", PURPLE, self)
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    fn text_purple_bold(self) -> String {
+        use colored::Colorize;
+
+        self.truecolor(91, 33, 182).bold().to_string()
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    fn text_orange_bold(self) -> String {
+        format!("<strong style='color: {};'>{}</strong>", ORANGE, self)
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    fn text_orange_bold(self) -> String {
+        use colored::Colorize;
+
+        self.truecolor(154, 52, 18).bold().to_string()
     }
 }

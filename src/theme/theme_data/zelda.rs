@@ -1,7 +1,4 @@
-use crate::{
-    game_data::entities::{EnemyDifficulty, LocationType},
-    theme::*,
-};
+use crate::{game_data::entities::LocationType, theme::*};
 
 pub const THEME_DATA: Theme = Theme {
     main_character: "Link",
@@ -138,15 +135,85 @@ pub const THEME_DATA: Theme = Theme {
         },
     ],
     items: [
-        "The Master Sword",
-        "The Hylian Shield",
-        "The Ocarina of Time",
-        "The Fairy Bow",
-        "The Bomb Bag",
-        "The Hookshot",
-        "The Boomerang",
-        "The Lens of Truth",
-        "Some Magic Beans",
-        "The Megaton Hammer",
+        ThemeItem {
+            name:  "The Master Sword",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "The Hylian Shield",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "The Ocarina of Time",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name:  "The Fairy Bow",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "The Bomb Bag",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name:  "The Hookshot",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name:  "Zora's Tunic",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "The Megaton Hammer",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "The Boomerang",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "The Mirror Shield",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Zora Scale",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Goron Tunic",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Fairy in a Bottle",
+            item_type: ItemType::Artifact
+        },        
+        ThemeItem {
+            name: "Hover Boots",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Biggoron's Sword",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Iron Boots",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Bomb Bag",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Golden Gauntlets",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Triforce",
+            item_type: ItemType::Artifact
+        },        
+        ThemeItem {
+            name: "The Slingshot",
+            item_type: ItemType::Weapon
+        },
     ]
 };

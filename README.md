@@ -9,11 +9,12 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 ## Game Features
 
 - Main quest with a final world boss, try to beat them!
-- Different Themes
+- Themes like Zelda, Star Wars and Fallout
 - Side quests
-- Items
+- Random loot generation and rewards
 - Battles
 - Recovery
+- Inventory
 
 ### Tips
 
@@ -24,18 +25,25 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 ## To do
 
 ### v0.2
-
-- Better item stats (crit chance/multi/ lifegain on hit)
-- Split items into types like weapons, armor, utilities with unique stats
-- Inventory
-- Usable items
-    - Use items/potions during a battle loop
-- More types of encounters like puzzles and riddles etc
-    - Choice encounter with reward or damage
-- Display text rather than enemy stats
+- [x] Add stats to enemies
+- [x] Added item types: Weapon, Armour and Artifacts
+- [x] Added attack speed mechanic
+- [x] Added stats: Power, Attack Speed, Crit Chance, Crit Multiplier, Block, Parry, Dodge
+- [x] Added random loot
+- [x] Added loot rarities: Common, Rare, Epic, Legendary
+- [x] Added "Manage" event for Inventory and Equipment management
+- [x] Changed Enemy stats text to descriptive text
+- [x] Balance changes
 
 ### later
-
+- More types of encounters like puzzles and riddles like Choice encounter with reward or damage
+- Add more locations with 2 safe zones and side quests
+- Change rest to only partially heal
+    - Gain life/potions from some encounters
+- Usable items
+    - Use items/potions during a battle loop
+- Change battle loop to be interactive
+    - Parry just in time of enemies attack to get bonus damage etc
 - Rewards (gold) and trade
 - Boss quote
 - chatGPT API
@@ -48,7 +56,6 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 ### Refactor
 
 - Stop cloning everything... try to reference locations etc
-- Unit tests
 
 ## Building
 

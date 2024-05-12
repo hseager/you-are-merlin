@@ -10,6 +10,9 @@ pub enum ActionType {
     Continue,
     GiveItem,
     Open,
+    Manage,
+    Equip,
+    EquipItem,
 }
 
 #[derive(Clone)]

@@ -1,7 +1,4 @@
-use crate::{
-    game_data::entities::{EnemyDifficulty, LocationType},
-    theme::*,
-};
+use crate::{game_data::entities::LocationType, theme::*};
 
 pub const THEME_DATA: Theme = Theme {
     main_character: "Vincent",
@@ -95,7 +92,7 @@ pub const THEME_DATA: Theme = Theme {
         ThemeLocation {
             name: "Mia's House",
             description: "A stylish suburban home where Mia Wallace resides, hosting extravagant parties and secret rendezvous behind closed doors.",
-            class: LocationType::Dungeon("The Royale with Cheese"),
+            class: LocationType::Dungeon("A Royale with Cheese"),
             enemies: Some([
                 ThemeEnemy {
                     name: "Drug Dealer",
@@ -138,15 +135,80 @@ pub const THEME_DATA: Theme = Theme {
         },
     ],
     items: [
-        "Vincent's 1911 Pistol",
-        "Jules' 9mm Pistol",
-        "Butch's Katana",
-        "Marsellus' Briefcase",
-        "Mia's Hypodermic Syringe",
-        "Vincent's Wallet",
-        "Butch's Brass Knuckles",
-        "Marcellus' Gold Watch",
-        "Vincent's Leather Jacket",
-        "Zed's Chopper",
-    ]
+    ThemeItem {
+        name:  "Vincent's Revolver",
+        item_type: ItemType::Weapon
+    },
+    ThemeItem {
+        name:  "Butch's Katana",
+        item_type: ItemType::Weapon
+    },
+    ThemeItem {
+        name:  "Marvin's Boots",
+        item_type: ItemType::Armour
+    },
+    ThemeItem {
+        name:  "Marsellus' Briefcase",
+        item_type: ItemType::Artifact
+    },
+    ThemeItem {
+        name:  "Jules's Wallet",
+        item_type: ItemType::Artifact
+    },
+    ThemeItem {
+        name:  "Winston Wolf's Suit",
+        item_type: ItemType::Armour
+    },
+    ThemeItem {
+        name:  "Zed's Chopper",
+        item_type: ItemType::Weapon
+    },
+    ThemeItem {
+        name:  "The Gold Watch",
+        item_type: ItemType::Artifact
+    },
+    ThemeItem {
+        name:  "Butch's Brass Knuckles",
+        item_type: ItemType::Weapon
+    },
+    ThemeItem {
+        name:  "Pumpkin's Leather Jacket",
+        item_type: ItemType::Armour
+    },
+    ThemeItem {
+        name: "Vincent's Zippo Lighter",
+        item_type: ItemType::Artifact
+    },ThemeItem {
+        name: "Winston Wolf's Business Card",
+        item_type: ItemType::Artifact
+    },
+    ThemeItem {
+        name: "The Gimp Suit",
+        item_type: ItemType::Armour
+    },ThemeItem {
+        name: "Vincent's MAC-10",
+        item_type: ItemType::Weapon
+    },ThemeItem {
+        name: "Jules's Nickel-Plated Colt .45",
+        item_type: ItemType::Weapon
+    },ThemeItem {
+        name: "Mia's Gold-Plated Colt Cobra",
+        item_type: ItemType::Weapon
+    },ThemeItem {
+        name: "Zed's S&M Ball Gag",
+        item_type: ItemType::Weapon
+    },
+    ThemeItem {
+        name: "Mia's Sequined Disco Dress",
+        item_type: ItemType::Armour
+    },
+    ThemeItem {
+        name: "Jules's Bulletproof Vest",
+        item_type: ItemType::Armour
+    },
+    ThemeItem {
+        name: "Jimmie's Plaid Bathrobe",
+        item_type: ItemType::Armour
+    }],
+    
 };

@@ -1,7 +1,4 @@
-use crate::{
-    game_data::entities::{EnemyDifficulty, LocationType},
-    theme::*,
-};
+use crate::{game_data::entities::LocationType, theme::*};
 
 pub const THEME_DATA: Theme = Theme {
     main_character: "Mario",
@@ -138,15 +135,85 @@ pub const THEME_DATA: Theme = Theme {
         }
     ],
     items: [
-        "Super Mushroom",
-        "Fire Flower",
-        "Ice Flower",
-        "Super Star",
-        "1-Up Mushroom",
-        "Gold Coin",
-        "Power Moon",
-        "Bob-omb",
-        "Green Shell",
-        "Super Leaf",
+        ThemeItem {
+            name:  "Fire Flower",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Luigi's Overalls",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Starman",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name:  "Super Leaf",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Mega Mushroom",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Cape Feather",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Tanooki Suit",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Bob-omb",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "1-Up Mushroom",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name:  "Gold Coin",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Yoshi's Egg",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Toad's Boots",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Luigi's Poltergust 3000",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Wario's Garlic Clove",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Princess Peach's Royal Crown",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Toadette's Super Pickaxe",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "King Boo's Crown",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Captain Toad's Explorer Hat",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Donkey Kong's Barrel",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Bowser Jr.'s Paintbrush",
+            item_type: ItemType::Artifact
+        },
     ]
 };

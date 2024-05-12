@@ -1,4 +1,4 @@
-use crate::{game_data::entities::{EnemyDifficulty, LocationType}, theme::*};
+use crate::{game_data::entities::LocationType, theme::*};
 
 // Please ChatGPT, fill in the below Rust struct values with the lore from
 // "Merlin"
@@ -141,15 +141,85 @@ pub const THEME_DATA: Theme = Theme {
         },
     ],
     items: [
-        "Merlin's Robes of the Old Religion",
-        "Mordred's Shadow Sword",
-        "Guinevere's Locket of Protection",
-        "Lancelot's Shield of Valor",
-        "Morgana's Veil of Illusion",
-        "The Cauldron of Arianrhod",
-        "The Staff of Avalon",
-        "The Crystal Cave's Whispering Gem",
-        "The Helm of Dragon's Breath",
-        "The Grail of Destiny",
-    ]
+        ThemeItem {
+            name:  "Excalibur",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Morgana's Staff",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Dragon Scale Armor",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Gaius's Amulet",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name:  "Mordred's Dagger",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Nimueh's Potion",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name:  "Camelot Shield",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Merlin's Wand",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Kilgharrah's Scale",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name:  "Lancelot's Armor",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Avalon Bow",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Merlin's Robe",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Guinevere's Tiara",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Pendragon Shield",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Camelot Helm",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Nimue's Grimoire",
+            item_type: ItemType::Artifact
+        },        
+        ThemeItem {
+            name: "Dragon's Bane (Sword)",
+            item_type: ItemType::Weapon
+        },        
+        ThemeItem {
+            name: "Uther's Ruby Ring",
+            item_type: ItemType::Artifact
+        },        
+        ThemeItem {
+            name: "Clarent - Sword of Mercy",
+            item_type: ItemType::Weapon
+        },        
+        ThemeItem {
+            name: "Durandal, Paladin Sword",
+            item_type: ItemType::Weapon
+        },
+    ]    
 };

@@ -2,7 +2,7 @@ use rand::{seq::SliceRandom, thread_rng};
 
 use crate::{
     characters::enemy::Enemy,
-    config::{ENEMY_BOSS_STATS, ENEMY_EASY_STATS, ENEMY_HARD_STATS, ENEMY_MEDIUM_STATS},
+    item::quest_item::QuestItem,
     text_format::TextFormatter,
     theme::{Theme, ThemeLocation},
 };
@@ -13,15 +13,11 @@ pub fn build_world(theme: Theme) -> Vec<Location> {
     let mut characters = theme.friendly_characters.to_vec();
     let mut locations = build_locations(&theme, &mut characters);
 
-    // TODO move this somewhere better
-    let (boss_life, boss_attack, boss_attack_speed) =
-        map_theme_enemy_difficulty_to_stats(theme.boss.difficulty);
     let boss = Enemy::new(
         theme.boss.name.text_red_bold(),
         theme.boss.description,
-        boss_life,
-        boss_attack,
-        boss_attack_speed,
+        theme.boss.difficulty,
+        theme.boss.difficulty.stats(),
     );
 
     let mut rng = thread_rng();
@@ -85,11 +81,11 @@ fn build_side_quest(theme: &Theme, characters: &mut Vec<&str>) -> Vec<Encounter>
         .position(|l| l.name == dungeon.name)
         .expect("Unable to get dungeon index when building side quest");
 
-    if let LocationType::Dungeon(item) = &dungeon.class {
+    if let LocationType::Dungeon(item) = dungeon.class {
         vec![Encounter::Quest(Quest::SideQuest(SideQuest {
             character: character.text_bold(),
             location_name: dungeon.name.text_color(dungeon_index),
-            item: item.text_bold(),
+            item: QuestItem::new(String::from(item)),
         }))]
     } else {
         panic!("Unexpected class when creating a sidequest. Should be a dungeon");
@@ -106,14 +102,12 @@ fn build_battles(theme_location: &ThemeLocation) -> Vec<Encounter> {
     );
 
     for enemy in enemies {
-        let (life, attack, attack_speed) = map_theme_enemy_difficulty_to_stats(enemy.difficulty);
         let battle: Battle = Battle {
             enemy: Enemy::new(
                 enemy.name.text_bold(),
                 enemy.description,
-                life,
-                attack,
-                attack_speed,
+                enemy.difficulty,
+                enemy.difficulty.stats(),
             ),
         };
 
@@ -161,13 +155,4 @@ fn add_main_quest(
     location
         .encounters
         .push(Encounter::BossFight(Battle { enemy: boss }));
-}
-
-fn map_theme_enemy_difficulty_to_stats(difficulty: EnemyDifficulty) -> (i16, u16, u16) {
-    match difficulty {
-        EnemyDifficulty::Easy => ENEMY_EASY_STATS,
-        EnemyDifficulty::Normal => ENEMY_MEDIUM_STATS,
-        EnemyDifficulty::Hard => ENEMY_HARD_STATS,
-        EnemyDifficulty::Boss => ENEMY_BOSS_STATS,
-    }
 }

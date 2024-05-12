@@ -1,5 +1,5 @@
 use crate::{
-    game_data::entities::{EnemyDifficulty, LocationType},
+    game_data::entities::LocationType,
     theme::*,
 };
 
@@ -122,15 +122,86 @@ pub const THEME_DATA: Theme = Theme {
         },
     ],
     items: [
-        "Courier's Duster",
-        "Lucky Shades",
-        "Arcade Gannon's Enclave Remnants Power Armor",
-        "Ranger Sequoia",
-        "Thorn's Thorn",
-        "Stealth Suit Mk II",
-        "Gannon Family Tesla Armor",
-        "Guns and Bullets Skill Magazine",
-        "La Longue Carabine",
-        "YCS/186"
+        ThemeItem {
+            name:  "10mm Pistol",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Combat Armor",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Frag Grenade",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name:  "Plasma Rifle",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "Power Armor",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Stealth Boy",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name:  "Gatling Laser",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name:  "NCR Ranger Combat Armor",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name:  "Plasma Grenade",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name:  "Super Sledge",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "Vault Suit",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Vault-Tec Pip-Boy 3000",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Fat Man Mini Nuke Launcher",
+            item_type: ItemType::Weapon
+        },
+        ThemeItem {
+            name: "RadAway",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "T-51 Power Armor",
+            item_type: ItemType::Armour
+        },
+        ThemeItem {
+            name: "Nuka-Cola Quantum",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Nuka-Cola Victory",
+            item_type: ItemType::Artifact
+        },
+        ThemeItem {
+            name: "Combat Shotgun",
+            item_type: ItemType::Weapon
+        },        
+        ThemeItem {
+            name: "Garbage Gun",
+            item_type: ItemType::Weapon
+        },        
+        ThemeItem {
+            name: "Red Dress",
+            item_type: ItemType::Armour
+        },
     ]
+    
 };

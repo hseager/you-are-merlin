@@ -3,13 +3,15 @@ use crate::{
     characters::player::Player,
     game_data::entities::{Location, SideQuest},
     game_state::GameState,
-    items::create_item,
+    item::{quest_item::QuestItem, reward_type::RewardType},
     text_format::TextFormatter,
 };
 
 use super::{
     event_loop::EventLoop, event_response::EventResponse, travel_event::TravelEvent, Event,
 };
+
+use crate::item::Item;
 
 enum RewardState {
     Discover,
@@ -18,12 +20,12 @@ enum RewardState {
 
 pub struct RewardEvent {
     location: Location,
-    quest_item: String,
+    quest_item: QuestItem,
     state: RewardState,
 }
 
 impl RewardEvent {
-    pub fn new(location: Location, quest_item: String) -> RewardEvent {
+    pub fn new(location: Location, quest_item: QuestItem) -> RewardEvent {
         RewardEvent {
             location,
             quest_item,
@@ -32,8 +34,10 @@ impl RewardEvent {
     }
 
     pub fn is_on_side_quest(&self, accepted_quests: &[SideQuest], player: &Player) -> bool {
-        accepted_quests.iter().any(|q| q.item == self.quest_item)
-            && !player.has_item_in_inventory(&self.quest_item)
+        accepted_quests
+            .iter()
+            .any(|q| q.item.name() == self.quest_item.name())
+            && !player.has_item_in_inventory(Box::new(self.quest_item.clone()))
     }
 }
 
@@ -68,19 +72,21 @@ impl Event for RewardEvent {
             ActionType::Open => {
                 let mut response_text: String;
 
-                let item = create_item(&mut game_state.items);
-                player.equip_item(&item);
+                let item = game_state.get_reward_item(RewardType::ChestReward);
 
-                response_text = format!(
-                    "You find {}! Your attack power increases by {}, and your maximum life grows by {} points.",
-                    item.name, item.attack, item.max_life
-                );
+                response_text = format!("You find: {}", item.display_info());
 
                 if self.is_on_side_quest(&game_state.accepted_quests, player) {
-                    response_text =
-                        format!("{}\nYou also find {}!", response_text, self.quest_item);
-                    player.add_item_to_inventory(self.quest_item.clone());
+                    response_text = format!(
+                        "{}\n\
+                        You also find: {}",
+                        response_text,
+                        self.quest_item.display_info()
+                    );
+                    player.add_item_to_inventory(Box::new(self.quest_item.clone()));
                 }
+
+                player.add_item_to_inventory(item);
 
                 game_state.reset_encounters();
 

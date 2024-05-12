@@ -6,20 +6,19 @@ use theme::theme_data::get_themes;
 use wasm_bindgen::prelude::*;
 
 use crate::{
-    config::{PLAYER_ATTACK, PLAYER_ATTACK_SPEED, PLAYER_LIFE},
     event::{event_response::EventResponse, visit_event::VisitEvent},
     game_data::GameData,
     theme::get_theme,
 };
 
 mod actions;
-mod characters;
+pub mod characters;
 pub mod config;
 mod event;
 mod game_data;
 mod game_state;
-mod items;
-mod text_format;
+pub mod item;
+pub mod text_format;
 pub mod theme;
 pub mod utilities;
 
@@ -37,12 +36,7 @@ impl Game {
     pub fn new(theme: String) -> Game {
         let theme_data = get_theme(theme);
         let game_data = GameData::new(theme_data);
-        let player = Player::new(
-            game_data.main_character.clone(),
-            PLAYER_LIFE,
-            PLAYER_ATTACK,
-            PLAYER_ATTACK_SPEED,
-        );
+        let player = Player::new(game_data.main_character.clone());
         let mut game_state = GameState::new(game_data);
         let current_event = VisitEvent::build(&mut game_state);
 

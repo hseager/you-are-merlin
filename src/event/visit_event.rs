@@ -8,8 +8,8 @@ use crate::{
 
 use super::{
     battle_event::BattleEvent, event_loop::EventLoop, main_quest_event::MainQuestEvent,
-    rest_event::RestEvent, side_quest_event::SideQuestEvent, travel_event::TravelEvent, Event,
-    EventResponse,
+    manage_event::ManageEvent, rest_event::RestEvent, side_quest_event::SideQuestEvent,
+    travel_event::TravelEvent, Event, EventResponse,
 };
 
 pub struct VisitEvent {
@@ -36,13 +36,15 @@ impl VisitEvent {
 impl Event for VisitEvent {
     fn prompt(&self) -> Option<String> {
         Some(format!(
-            "You are currently visiting {}. {}\nWhat would you like to do?",
+            "You are currently visiting {}.\n\
+            {}\n\
+            What would you like to do?",
             &self.current_location.name, &self.current_location.description
         ))
     }
 
     fn actions(&self) -> Vec<Action> {
-        let mut actions = vec![Action::new(ActionType::Travel, "Travel".text_yellow())];
+        let mut actions = vec![];
 
         if !self
             .completed_locations
@@ -55,6 +57,9 @@ impl Event for VisitEvent {
         if let LocationType::SafeZone = &self.current_location.class {
             actions.push(Action::new(ActionType::Rest, "Rest".text_green()));
         }
+
+        actions.push(Action::new(ActionType::Manage, "Manage".text_cyan()));
+        actions.push(Action::new(ActionType::Travel, "Travel".text_yellow()));
 
         actions
     }
@@ -74,6 +79,14 @@ impl Event for VisitEvent {
                 let next_event = Box::new(RestEvent::new());
                 EventResponse::new(Some(next_event), None)
             }
+            ActionType::Manage => {
+                let next_event = Box::new(ManageEvent::new(
+                    player.stats.clone(),
+                    player.equipment.clone(),
+                    player.get_cloned_inventory(),
+                ));
+                EventResponse::new(Some(next_event), None)
+            }
             ActionType::Explore => match game_state.get_current_encounter() {
                 Encounter::Battle(battle) => {
                     let next_event = Box::new(BattleEvent::new(battle.clone()));
@@ -84,7 +97,7 @@ impl Event for VisitEvent {
                         let next_event = Box::new(SideQuestEvent::new(
                             quest.clone(),
                             game_state.accepted_quests.clone(),
-                            player.has_item_in_inventory(&quest.item),
+                            player.has_item_in_inventory(Box::new(quest.item.clone())),
                         ));
                         EventResponse::new(Some(next_event), None)
                     }
