@@ -66,7 +66,7 @@ impl ItemType {
     }
 }
 
-pub enum ItemStat {
+pub enum Stat {
     Power,
     AttackSpeed,
     CritMultiplier,

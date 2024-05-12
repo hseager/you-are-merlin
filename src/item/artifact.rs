@@ -7,7 +7,7 @@ use crate::config::{
 use crate::utilities::round_to_single_decimal;
 
 use super::{
-    get_rarity_property_count, get_rarity_text_color, Item, ItemRarity, ItemStat, ItemType,
+    get_rarity_property_count, get_rarity_text_color, Item, ItemRarity, Stat, ItemType,
 };
 
 #[derive(Clone)]
@@ -25,10 +25,10 @@ impl Artifact {
         let mut rng = thread_rng();
 
         let mut properties = [
-            ItemStat::Power,
-            ItemStat::AttackSpeed,
-            ItemStat::MaxLife,
-            ItemStat::DodgeChance,
+            Stat::Power,
+            Stat::AttackSpeed,
+            Stat::MaxLife,
+            Stat::DodgeChance,
         ];
 
         properties.shuffle(&mut rng);
@@ -46,17 +46,17 @@ impl Artifact {
 
         for property in selected_properties {
             match property {
-                ItemStat::Power => {
+                Stat::Power => {
                     artifact.power = rng.gen_range(ITEM_GEN_POWER.0..=ITEM_GEN_POWER.1)
                 }
-                ItemStat::AttackSpeed => {
+                Stat::AttackSpeed => {
                     artifact.attack_speed =
                         rng.gen_range(ITEM_GEN_ATTACK_SPEED.0..=ITEM_GEN_ATTACK_SPEED.1)
                 }
-                ItemStat::MaxLife => {
+                Stat::MaxLife => {
                     artifact.max_life = rng.gen_range(ITEM_GEN_MAX_LIFE.0..=ITEM_GEN_MAX_LIFE.1)
                 }
-                ItemStat::DodgeChance => {
+                Stat::DodgeChance => {
                     artifact.dodge = round_to_single_decimal(
                         rng.gen_range(ITEM_GEN_DODGE_CHANCE.0..=ITEM_GEN_DODGE_CHANCE.1),
                     )

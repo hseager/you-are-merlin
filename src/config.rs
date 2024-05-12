@@ -27,6 +27,24 @@ pub const ENEMY_MEDIUM_STATS: (i16, u16, u16) = (25, 9, 50);
 pub const ENEMY_HARD_STATS: (i16, u16, u16) = (28, 12, 80);
 pub const ENEMY_BOSS_STATS: (i16, u16, u16) = (100, 20, 100);
 
+// We add random defensive stats for each enemy type
+pub const ENEMY_EASY_STAT_COUNT: usize = 1;
+pub const ENEMY_MEDIUM_STAT_COUNT: usize = 2;
+pub const ENEMY_HARD_STAT_COUNT: usize = 3;
+pub const ENEMY_BOSS_STAT_COUNT: usize = 4;
+
+// For each enemy stat we get a random range, min - max
+// TODO do enemy offensive stats
+pub const ENEMY_STAT_POWER_RANGE: (u16, u16) = (2, 4);
+pub const ENEMY_STAT_ATTACK_SPEED_RANGE: (u16, u16) = (20, 100);
+pub const ENEMY_STAT_CRIT_MULTI_RANGE: (f32, f32) = (0.2, 0.5);
+pub const ENEMY_STAT_CRIT_CHANCE_RANGE: (f32, f32) = (4.0, 10.0);
+
+pub const ENEMY_STAT_MAX_LIFE_RANGE: (i16, i16) = (10, 50);
+pub const ENEMY_STAT_BLOCK_RANGE: (u16, u16) = (2, 8);
+pub const ENEMY_STAT_PARRY_CHANCE: (f32, f32) = (10.0, 20.0);
+pub const ENEMY_STAT_DODGE_CHANCE: (f32, f32) = (5.0, 10.0);
+
 // min, max
 pub const ITEM_GEN_POWER: (u16, u16) = (2, 12);
 pub const ITEM_GEN_ATTACK_SPEED: (u16, u16) = (50, 250);

@@ -6,9 +6,7 @@ use crate::config::{
 };
 use crate::utilities::round_to_single_decimal;
 
-use super::{
-    get_rarity_property_count, get_rarity_text_color, Item, ItemRarity, ItemStat, ItemType,
-};
+use super::{get_rarity_property_count, get_rarity_text_color, Item, ItemRarity, ItemType, Stat};
 
 #[derive(Clone)]
 pub struct Weapon {
@@ -25,10 +23,10 @@ impl Weapon {
         let mut rng = thread_rng();
 
         let mut properties = [
-            ItemStat::Power,
-            ItemStat::AttackSpeed,
-            ItemStat::CritMultiplier,
-            ItemStat::CritChance,
+            Stat::Power,
+            Stat::AttackSpeed,
+            Stat::CritMultiplier,
+            Stat::CritChance,
         ];
 
         properties.shuffle(&mut rng);
@@ -46,19 +44,17 @@ impl Weapon {
 
         for property in selected_properties {
             match property {
-                ItemStat::Power => {
-                    weapon.power = rng.gen_range(ITEM_GEN_POWER.0..=ITEM_GEN_POWER.1)
-                }
-                ItemStat::AttackSpeed => {
+                Stat::Power => weapon.power = rng.gen_range(ITEM_GEN_POWER.0..=ITEM_GEN_POWER.1),
+                Stat::AttackSpeed => {
                     weapon.attack_speed =
                         rng.gen_range(ITEM_GEN_ATTACK_SPEED.0..=ITEM_GEN_ATTACK_SPEED.1)
                 }
-                ItemStat::CritMultiplier => {
+                Stat::CritMultiplier => {
                     weapon.crit_multiplier = round_to_single_decimal(
                         rng.gen_range(ITEM_GEN_CRIT_MULTI.0..=ITEM_GEN_CRIT_MULTI.1),
                     )
                 }
-                ItemStat::CritChance => {
+                Stat::CritChance => {
                     weapon.crit_chance = round_to_single_decimal(
                         rng.gen_range(ITEM_GEN_CRIT_CHANCE.0..=ITEM_GEN_CRIT_CHANCE.1),
                     )

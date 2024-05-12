@@ -26,7 +26,7 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 
 ### v0.2
 - [ ] Balance changes
-- [ ] Add stats to enemies
+- [x] Add stats to enemies
 - [ ] More types of encounters like puzzles and riddles like Choice encounter with reward or damage
 - [x] Added item types: Weapon, Armour and Artifacts
 - [x] Added attack speed mechanic
@@ -37,8 +37,7 @@ A text adventure game, built with Rust. Compiles to CLI and WASM.
 - [x] Changed Enemy stats text to descriptive text
 
 ### later
-- Add more locations with 2 safe zones
-- Manage during battles
+- Add more locations with 2 safe zones and side quests
 - Change rest to only partially heal
     - Gain life/potions from some encounters
 - Usable items

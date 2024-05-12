@@ -202,6 +202,7 @@ impl Fighter for Player {
             }
         }
 
+        // TODO show attack damage before block
         format!(
             "You {} {} for {} damage. {}(Enemy life: {})",
             action_message,

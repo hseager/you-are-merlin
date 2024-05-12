@@ -1,7 +1,17 @@
+use std::{iter::Take, slice::Iter};
+
 use crate::{
     characters::fighter::{calculate_damage, handle_block, is_critical, is_dodge, is_parry},
-    config::FIGHTER_BASE_ATTACK_SPEED,
+    config::{
+        ENEMY_BOSS_STATS, ENEMY_BOSS_STAT_COUNT, ENEMY_EASY_STATS, ENEMY_EASY_STAT_COUNT,
+        ENEMY_HARD_STATS, ENEMY_HARD_STAT_COUNT, ENEMY_MEDIUM_STATS, ENEMY_MEDIUM_STAT_COUNT,
+        ENEMY_STAT_ATTACK_SPEED_RANGE, ENEMY_STAT_BLOCK_RANGE, ENEMY_STAT_CRIT_CHANCE_RANGE,
+        ENEMY_STAT_CRIT_MULTI_RANGE, ENEMY_STAT_DODGE_CHANCE, ENEMY_STAT_MAX_LIFE_RANGE,
+        ENEMY_STAT_PARRY_CHANCE, ENEMY_STAT_POWER_RANGE, FIGHTER_BASE_ATTACK_SPEED,
+    },
+    item::Stat,
 };
+use rand::{prelude::SliceRandom, thread_rng, Rng};
 
 use super::{fighter::Fighter, stats::Stats};
 use crate::text_format::TextFormatter;
@@ -19,22 +29,8 @@ impl Enemy {
         name: String,
         description: &'static str,
         difficulty: EnemyDifficulty,
-        life: i16,
-        power: u16,
-        attack_speed: u16,
+        stats: Stats,
     ) -> Enemy {
-        let stats = Stats {
-            life,
-            max_life: 0,
-            power,
-            attack_speed,
-            block: 0,
-            crit_multiplier: 0.0,
-            crit_chance: 0.0,
-            parry: 0.0,
-            dodge: 0.0,
-        };
-
         Enemy {
             name,
             description,
@@ -172,6 +168,107 @@ impl EnemyDifficulty {
             }
             EnemyDifficulty::Hard => String::from("A formidable opponent, testing your abilities."),
             EnemyDifficulty::Boss => String::from("Victory will not come easily."),
+        }
+    }
+
+    pub fn stats(&self) -> Stats {
+        let mut possible_stats = [
+            Stat::Power,
+            Stat::AttackSpeed,
+            Stat::CritMultiplier,
+            Stat::CritChance,
+            Stat::MaxLife,
+            Stat::Block,
+            Stat::ParryChance,
+            Stat::DodgeChance,
+        ];
+
+        let mut rng = thread_rng();
+
+        possible_stats.shuffle(&mut rng);
+
+        match self {
+            EnemyDifficulty::Easy => {
+                let (life, power, attack_speed) = ENEMY_EASY_STATS;
+                let mut stats = Stats::new(life, power, attack_speed);
+
+                let selected_stats = possible_stats.iter().take(ENEMY_EASY_STAT_COUNT);
+                self.add_enemy_stats(&mut stats, selected_stats);
+
+                stats
+            }
+            EnemyDifficulty::Normal => {
+                let (life, power, attack_speed) = ENEMY_MEDIUM_STATS;
+
+                let mut stats = Stats::new(life, power, attack_speed);
+
+                let selected_stats = possible_stats.iter().take(ENEMY_MEDIUM_STAT_COUNT);
+                self.add_enemy_stats(&mut stats, selected_stats);
+
+                stats
+            }
+            EnemyDifficulty::Hard => {
+                let (life, power, attack_speed) = ENEMY_HARD_STATS;
+
+                let mut stats = Stats::new(life, power, attack_speed);
+
+                let selected_stats = possible_stats.iter().take(ENEMY_HARD_STAT_COUNT);
+                self.add_enemy_stats(&mut stats, selected_stats);
+
+                stats
+            }
+            EnemyDifficulty::Boss => {
+                let (life, power, attack_speed) = ENEMY_BOSS_STATS;
+
+                let mut stats = Stats::new(life, power, attack_speed);
+
+                let selected_stats = possible_stats.iter().take(ENEMY_BOSS_STAT_COUNT);
+                self.add_enemy_stats(&mut stats, selected_stats);
+
+                stats
+            }
+        }
+    }
+
+    fn add_enemy_stats(&self, stats: &mut Stats, selected_stats: Take<Iter<Stat>>) {
+        let mut rng = thread_rng();
+
+        for selected_stat in selected_stats {
+            match selected_stat {
+                Stat::Power => {
+                    stats.power +=
+                        rng.gen_range(ENEMY_STAT_POWER_RANGE.0..=ENEMY_STAT_POWER_RANGE.1)
+                }
+                Stat::AttackSpeed => {
+                    stats.attack_speed += rng.gen_range(
+                        ENEMY_STAT_ATTACK_SPEED_RANGE.0..=ENEMY_STAT_ATTACK_SPEED_RANGE.1,
+                    )
+                }
+                Stat::CritMultiplier => {
+                    stats.crit_multiplier +=
+                        rng.gen_range(ENEMY_STAT_CRIT_MULTI_RANGE.0..=ENEMY_STAT_CRIT_MULTI_RANGE.1)
+                }
+                Stat::CritChance => {
+                    stats.crit_chance += rng
+                        .gen_range(ENEMY_STAT_CRIT_CHANCE_RANGE.0..=ENEMY_STAT_CRIT_CHANCE_RANGE.1)
+                }
+                Stat::MaxLife => {
+                    stats.max_life +=
+                        rng.gen_range(ENEMY_STAT_MAX_LIFE_RANGE.0..=ENEMY_STAT_MAX_LIFE_RANGE.1)
+                }
+                Stat::Block => {
+                    stats.block +=
+                        rng.gen_range(ENEMY_STAT_BLOCK_RANGE.0..=ENEMY_STAT_BLOCK_RANGE.1)
+                }
+                Stat::ParryChance => {
+                    stats.parry +=
+                        rng.gen_range(ENEMY_STAT_PARRY_CHANCE.0..=ENEMY_STAT_PARRY_CHANCE.1)
+                }
+                Stat::DodgeChance => {
+                    stats.dodge +=
+                        rng.gen_range(ENEMY_STAT_DODGE_CHANCE.0..=ENEMY_STAT_DODGE_CHANCE.1)
+                }
+            }
         }
     }
 }

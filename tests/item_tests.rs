@@ -4,7 +4,6 @@ mod tests {
     use you_are_merlin::item::{
         armour::Armour, artifact::Artifact, quest_item::QuestItem, weapon::Weapon,
     };
-    use you_are_merlin::text_format::TextFormatter;
 
     #[test]
     fn test_common_item_display_info() {
@@ -36,21 +35,24 @@ mod tests {
 
     #[test]
     fn test_armour_generation_display_info() {
-        let item = Armour::new("Judgement Armor".to_string());
+        let item = Armour::new("Judgement Armor".to_string(), ItemRarity::Epic);
 
         print!("{}", item.display_info());
     }
 
     #[test]
     fn test_weapon_generation_display_info() {
-        let item = Weapon::new("Thunderfury, Blessed Blade of the Windseeker".to_string());
+        let item = Weapon::new(
+            "Thunderfury, Blessed Blade of the Windseeker".to_string(),
+            ItemRarity::Epic,
+        );
 
         print!("{}", item.display_info());
     }
 
     #[test]
     fn test_artifact_generation_display_info() {
-        let item = Artifact::new("Onyxia Scale Cloak".to_string());
+        let item = Artifact::new("Onyxia Scale Cloak".to_string(), ItemRarity::Epic);
 
         print!("{}", item.display_info());
     }

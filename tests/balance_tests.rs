@@ -2,7 +2,12 @@ mod tests {
 
     use colored::Colorize;
     use you_are_merlin::{
-        characters::{enemy::Enemy, fighter::Fighter, player::Player},
+        characters::{
+            enemy::{Enemy, EnemyDifficulty},
+            fighter::Fighter,
+            player::Player,
+            stats::Stats,
+        },
         config::{ENEMY_BOSS_STATS, ENEMY_EASY_STATS, ENEMY_HARD_STATS, ENEMY_MEDIUM_STATS},
     };
 
@@ -28,7 +33,7 @@ mod tests {
 
         display_stats(
             &player.name,
-            player.life(),
+            &player.life(),
             &player.stats.power,
             &player.attack_speed_as_milliseconds(),
         );
@@ -37,24 +42,20 @@ mod tests {
     #[test]
     fn test_enemy_dps() {
         let enemy_types = [
-            (ENEMY_EASY_STATS, "Easy"),
-            (ENEMY_MEDIUM_STATS, "Medium"),
-            (ENEMY_HARD_STATS, "Hard"),
-            (ENEMY_BOSS_STATS, "Boss"),
+            (ENEMY_EASY_STATS, "Easy", EnemyDifficulty::Easy),
+            (ENEMY_MEDIUM_STATS, "Medium", EnemyDifficulty::Normal),
+            (ENEMY_HARD_STATS, "Hard", EnemyDifficulty::Hard),
+            (ENEMY_BOSS_STATS, "Boss", EnemyDifficulty::Boss),
         ];
 
         for enemy_type in enemy_types {
-            let enemy = Enemy::new(
-                format!("Enemy {}", enemy_type.1),
-                "",
-                enemy_type.0 .0,
-                enemy_type.0 .1,
-                enemy_type.0 .2,
-            );
+            let stats = Stats::new(enemy_type.0 .0, enemy_type.0 .1, enemy_type.0 .2);
+
+            let enemy = Enemy::new(format!("Enemy {}", enemy_type.1), "", enemy_type.2, stats);
 
             display_stats(
                 &enemy.name,
-                enemy.life(),
+                &enemy.life(),
                 &enemy.stats.power,
                 &enemy.attack_speed_as_milliseconds(),
             );

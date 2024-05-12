@@ -6,7 +6,7 @@ use rand::{thread_rng, Rng};
 use crate::config::{ITEM_GEN_BLOCK, ITEM_GEN_DODGE_CHANCE, ITEM_GEN_MAX_LIFE};
 
 use super::{
-    get_rarity_property_count, get_rarity_text_color, Item, ItemRarity, ItemStat, ItemType,
+    get_rarity_property_count, get_rarity_text_color, Item, ItemRarity, Stat, ItemType,
 };
 
 #[derive(Clone)]
@@ -24,10 +24,10 @@ impl Armour {
         let mut rng = thread_rng();
 
         let mut properties = [
-            ItemStat::MaxLife,
-            ItemStat::Block,
-            ItemStat::ParryChance,
-            ItemStat::DodgeChance,
+            Stat::MaxLife,
+            Stat::Block,
+            Stat::ParryChance,
+            Stat::DodgeChance,
         ];
 
         properties.shuffle(&mut rng);
@@ -45,18 +45,18 @@ impl Armour {
 
         for property in selected_properties {
             match property {
-                ItemStat::MaxLife => {
+                Stat::MaxLife => {
                     armour.max_life = rng.gen_range(ITEM_GEN_MAX_LIFE.0..=ITEM_GEN_MAX_LIFE.1)
                 }
-                ItemStat::Block => {
+                Stat::Block => {
                     armour.block = rng.gen_range(ITEM_GEN_BLOCK.0..=ITEM_GEN_BLOCK.1)
                 }
-                ItemStat::ParryChance => {
+                Stat::ParryChance => {
                     armour.parry = round_to_single_decimal(
                         rng.gen_range(ITEM_GEN_PARRY_CHANCE.0..=ITEM_GEN_PARRY_CHANCE.1),
                     )
                 }
-                ItemStat::DodgeChance => {
+                Stat::DodgeChance => {
                     armour.dodge = round_to_single_decimal(
                         rng.gen_range(ITEM_GEN_DODGE_CHANCE.0..=ITEM_GEN_DODGE_CHANCE.1),
                     )
