@@ -59,7 +59,7 @@ pub const THEME_DATA: Theme = Theme {
         ThemeLocation {
             name: "Moria",
             description: "An ancient dwarven kingdom deep beneath the Misty Mountains, now overrun by orcs and goblins.",
-            class: LocationType::Dungeon("Mithril Vest"),
+            class: LocationType::Dungeon("a Mithril Vest"),
             enemies: Some([
                 ThemeEnemy {
                     name: "Orc Grunt",
@@ -81,7 +81,7 @@ pub const THEME_DATA: Theme = Theme {
         ThemeLocation {
             name: "Gondor",
             description: "A realm of noble warriors and ancient cities, standing as a bulwark against the darkness of Mordor.",
-            class: LocationType::Dungeon("Gondorian Shield"),
+            class: LocationType::Dungeon("The Gondorian Shield"),
             enemies: Some([
                 ThemeEnemy {
                     name: "Haradrim Warrior",
@@ -103,7 +103,7 @@ pub const THEME_DATA: Theme = Theme {
         ThemeLocation {
             name: "Helm's Deep",
             description: "A fortress of Rohan, carved into the rock and defended by the brave warriors of the Riddermark.",
-            class: LocationType::Dungeon("Horn of Helm Hammerhand"),
+            class: LocationType::Dungeon("The Horn of Helm Hammerhand"),
             enemies: Some([
                 ThemeEnemy {
                     name: "Uruk-hai Berserker",
@@ -203,7 +203,7 @@ pub const THEME_DATA: Theme = Theme {
             item_type: ItemType::Armour
         },
         ThemeItem {
-            name: "Orcrist",
+            name: "Orcrist, Goblin-cleaver",
             item_type: ItemType::Weapon
         },
         ThemeItem {
