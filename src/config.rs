@@ -47,7 +47,7 @@ pub const ENEMY_STAT_DODGE_CHANCE: (f32, f32) = (4.0, 10.0);
 
 // min, max
 pub const ITEM_GEN_POWER: (u16, u16) = (2, 12);
-pub const ITEM_GEN_ATTACK_SPEED: (u16, u16) = (50, 250);
+pub const ITEM_GEN_ATTACK_SPEED: (u16, u16) = (50, 175);
 pub const ITEM_GEN_CRIT_MULTI: (f32, f32) = (0.2, 1.8);
 pub const ITEM_GEN_CRIT_CHANCE: (f32, f32) = (4.0, 20.0);
 
