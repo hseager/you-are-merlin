@@ -20,8 +20,8 @@ use super::{event_loop_response::EventLoopResponse, EventLoop};
 pub struct BattleEventLoop {
     pub is_active: bool,
     pub enemy: Enemy,
-    pub player_last_attack_time: i32,
-    pub enemy_last_attack_time: i32,
+    pub player_last_attack_time: u64,
+    pub enemy_last_attack_time: u64,
 }
 
 impl BattleEventLoop {
@@ -163,7 +163,7 @@ impl EventLoop for BattleEventLoop {
 
     fn progress_event_loop(
         &mut self,
-        current_epoch_milli: i32,
+        current_epoch_milli: u64,
         player: &mut Player,
         game_state: &mut GameState,
     ) -> EventLoopResponse {

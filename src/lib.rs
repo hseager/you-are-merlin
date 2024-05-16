@@ -98,7 +98,7 @@ impl Game {
         self.current_event = next_event;
     }
 
-    pub fn progress_event_loop(&mut self, current_epoch_milli: i32) -> Option<String> {
+    pub fn progress_event_loop(&mut self, current_epoch_milli: u64) -> Option<String> {
         let mut result = None;
         if let Some(event_loop) = self.current_event.get_event_loop() {
             let response = event_loop.progress_event_loop(

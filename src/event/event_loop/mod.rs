@@ -11,7 +11,7 @@ pub trait EventLoop {
     fn get_event_loop_interval(&self) -> u32;
     fn progress_event_loop(
         &mut self,
-        current_epoch_milli: i32,
+        current_epoch_milli: u64,
         player: &mut Player,
         game_state: &mut GameState,
     ) -> EventLoopResponse;

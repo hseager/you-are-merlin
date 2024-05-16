@@ -28,7 +28,7 @@ impl EventLoop for RestEventLoop {
 
     fn progress_event_loop(
         &mut self,
-        _current_epoch_milli: i32,
+        _current_epoch_milli: u64,
         player: &mut Player,
         game_state: &mut GameState,
     ) -> EventLoopResponse {
