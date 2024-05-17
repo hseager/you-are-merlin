@@ -25,7 +25,7 @@ fn main() {
         }
 
         if let Some(actions) = game.get_actions() {
-            println!("{}", actions);
+            println!("{}", actions.join(", "));
 
             io::stdin()
                 .read_line(&mut input)

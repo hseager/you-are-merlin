@@ -59,7 +59,7 @@ impl Game {
         self.current_event.prompt()
     }
 
-    pub fn get_actions(&self) -> Option<String> {
+    pub fn get_actions(&self) -> Option<Vec<String>> {
         let actions = self.current_event.actions();
 
         if !actions.is_empty() {
@@ -67,8 +67,7 @@ impl Game {
                 actions
                     .iter()
                     .map(|action| action.name.to_string())
-                    .collect::<Vec<String>>()
-                    .join(", "),
+                    .collect::<Vec<String>>(),
             )
         } else {
             None
