@@ -10,6 +10,7 @@ mod tests {
 
     const PLAYER_LIFE_VALUE: i16 = 100;
     const ENEMY_ATTACK: u16 = 10;
+    const ENEMY_LIFE: i16 = 100;
     const BLOCK_VALUE: u16 = 5;
 
     fn setup_player() -> Player {
@@ -58,8 +59,8 @@ mod tests {
 
     fn setup_enemy() -> Enemy {
         let stats = Stats {
-            max_life: 100,
-            life: 100,
+            max_life: ENEMY_LIFE,
+            life: ENEMY_LIFE,
             power: ENEMY_ATTACK,
             attack_speed: 50,
             block: 0,
@@ -127,5 +128,17 @@ mod tests {
         enemy.attack(&mut player);
 
         assert_eq!(player.life(), PLAYER_LIFE_VALUE);
+    }
+
+    #[test]
+    fn test_attack_speed_cant_exceed_attack_speed_cap() {
+        let mut player = setup_player();
+
+        player.stats.attack_speed = 999;
+
+        assert_eq!(
+            player.attack_speed_as_milliseconds(),
+            FIGHTER_ATTACK_SPEED_CAP
+        );
     }
 }

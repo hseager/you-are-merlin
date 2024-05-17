@@ -202,7 +202,6 @@ impl Fighter for Player {
             }
         }
 
-        // TODO show attack damage before block
         format!(
             "You {} {} for {} damage. {}(Enemy life: {})",
             action_message,
@@ -218,7 +217,15 @@ impl Fighter for Player {
     }
 
     fn attack_speed_as_milliseconds(&self) -> u16 {
-        FIGHTER_BASE_ATTACK_SPEED - (self.attack_speed() * 10)
+        let attack_speed_as_ms = self.attack_speed() * 10;
+
+        let mut attack_speed = FIGHTER_BASE_ATTACK_SPEED.saturating_sub(attack_speed_as_ms);
+
+        if attack_speed < FIGHTER_ATTACK_SPEED_CAP {
+            attack_speed = FIGHTER_ATTACK_SPEED_CAP
+        }
+
+        attack_speed
     }
 
     fn power(&self) -> u16 {

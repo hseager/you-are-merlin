@@ -7,7 +7,8 @@ use crate::{
         ENEMY_HARD_STATS, ENEMY_HARD_STAT_COUNT, ENEMY_MEDIUM_STATS, ENEMY_MEDIUM_STAT_COUNT,
         ENEMY_STAT_ATTACK_SPEED_RANGE, ENEMY_STAT_BLOCK_RANGE, ENEMY_STAT_CRIT_CHANCE_RANGE,
         ENEMY_STAT_CRIT_MULTI_RANGE, ENEMY_STAT_DODGE_CHANCE, ENEMY_STAT_MAX_LIFE_RANGE,
-        ENEMY_STAT_PARRY_CHANCE, ENEMY_STAT_POWER_RANGE, FIGHTER_BASE_ATTACK_SPEED,
+        ENEMY_STAT_PARRY_CHANCE, ENEMY_STAT_POWER_RANGE, FIGHTER_ATTACK_SPEED_CAP,
+        FIGHTER_BASE_ATTACK_SPEED,
     },
     item::Stat,
 };
@@ -120,7 +121,14 @@ impl Fighter for Enemy {
     }
 
     fn attack_speed_as_milliseconds(&self) -> u16 {
-        FIGHTER_BASE_ATTACK_SPEED - (self.attack_speed() * 10)
+        let attack_speed_as_ms = self.attack_speed() * 10;
+
+        let mut attack_speed = FIGHTER_BASE_ATTACK_SPEED.saturating_sub(attack_speed_as_ms);
+        if attack_speed < FIGHTER_ATTACK_SPEED_CAP {
+            attack_speed = FIGHTER_ATTACK_SPEED_CAP
+        }
+
+        attack_speed
     }
 
     fn power(&self) -> u16 {

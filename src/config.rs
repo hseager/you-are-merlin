@@ -11,6 +11,7 @@ pub const PLAYER_DODGE_CHANCE: f32 = 0.0;
 // stat as a number. Attack speed is calculated by (base_attack - (x * 10)). So
 // 20 attack speed makes attacks 200ms quicker
 pub const FIGHTER_BASE_ATTACK_SPEED: u16 = 4200;
+pub const FIGHTER_ATTACK_SPEED_CAP: u16 = 200; // in ms
 
 pub const REST_HEAL_AMOUNT: i16 = 10;
 pub const REST_INTERVAL_MILLIS: u32 = 2000;
